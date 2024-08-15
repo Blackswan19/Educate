@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Educate</title>
+    <title>Educate- A learning space</title>
     <link rel="icon" type="image/x-icon" href="https://cdn3.iconfinder.com/data/icons/social-network-30/512/social-06-512.png">
     <style>
         body {
@@ -12,23 +12,66 @@
             padding: 0;
             background-color: #000000;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             min-height: 100vh;
+            color: white;
         }
-        img{
+        .login-container {
+            background-color: #1E1E1E;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            max-width: 300px;
             width: 100%;
         }
+
+        .login-container input[type="password"] {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #3a3a3a;
+            margin-bottom: 15px;
+            width: 92%;
+            font-size: 16px;
+            background-color: #000000;
+            color: white;
+        }
+
+        .login-container button {
+            padding: 10px 20px;
+            background-color: #3a3a3a;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+
+        .login-container button:hover {
+            background-color: #555555;
+        }
+
         .content {
+            display: none; /* Hide content initially */
             flex: 1;
             padding: 20px;
-            padding-bottom: 60px;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo img {
+            width: 100%;
+            max-width: 200px;
+            margin-bottom: 20px;
         }
 
         .video-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             grid-gap: 15px;
-            margin-top: 20px;
         }
 
         .video-card {
@@ -64,10 +107,26 @@
             color: #AAAAAA;
         }
     </style>
+    <script>
+        function checkCode() {
+            const correctCode = "12345"; // Set your correct code here
+            const userCode = document.getElementById("access-code").value;
+            if (userCode === correctCode) {
+                document.querySelector('.login-container').style.display = 'none';
+                document.querySelector('.content').style.display = 'block';
+                document.body.style.justifyContent = 'flex-start'; // Adjust body alignment after login
+            } else {
+                alert("Incorrect code. Please try again.");
+            }
+        }
+    </script>
 </head>
 <body>
-    <div class="logo">
-        <img src="https://i.ibb.co/zmy6GF4/logo.png" alt="">
+    <div class="login-container">
+        <h2>Educate- A learning space</h2>
+        <input type="password" id="access-code" placeholder="Enter the access code">
+        <br>
+        <button onclick="checkCode()">Submit</button>
     </div>
     <div class="content">
         <div class="video-grid">
@@ -75,98 +134,98 @@
                 <img src="https://img.youtube.com/vi/4TpW-Qfjd-0/0.jpg" alt="Video Title 1">
                 <div class="video-info">
                     <h3>Chitti Chilakamma Amma Kottinda</h3>
-                    <p>Educate</p>
+                    <p>Educate- A learning space</p>
                 </div>
             </div>
             <div class="video-card" onclick="window.location.href='play.html?videoId=zrRjJllUYpw'">
                 <img src="https://img.youtube.com/vi/zrRjJllUYpw/0.jpg" alt="Video Title 2">
                 <div class="video-info">
                     <h3> Chuk Chuk Railu, Enugamma Enugu</h3>
-                    <p>Educate</p>
+                    <p>Educate- A learning space</p>
                 </div>
             </div>
             <div class="video-card" onclick="window.location.href='play.html?videoId=SZhTR-kowVI'">
                 <img src="https://img.youtube.com/vi/SZhTR-kowVI/0.jpg" alt="Video Title 3">
                 <div class="video-info">
                     <h3>Aakesi Pappesi</h3>
-                    <p>Educate</p>
+                    <p>Educate- A learning space</p>
                 </div>
             </div>
             <div class="video-card" onclick="window.location.href='play.html?videoId=j2Jgz6m4doA'">
                 <img src="https://img.youtube.com/vi/j2Jgz6m4doA/0.jpg" alt="Video Title 4">
                 <div class="video-info">
                     <h3>Oppula kuppa</h3>
-                    <p>Educate</p>
+                    <p>Educate- A learning space</p>
                 </div>
             </div>
             <div class="video-card" onclick="window.location.href='play.html?videoId=V2O8JtuX2Ys'">
                 <img src="https://img.youtube.com/vi/V2O8JtuX2Ys/0.jpg" alt="Video Title 5">
                 <div class="video-info">
                     <h3>Vana Vana Vallappa</h3>
-                    <p>Educate</p>
+                    <p>Educate- A learning space</p>
                 </div>
             </div>
             <div class="video-card" onclick="window.location.href='play.html?videoId=0cYj7HzaKug'">
                 <img src="https://img.youtube.com/vi/0cYj7HzaKug/0.jpg" alt="Video Title 6">
                 <div class="video-info">
                     <h3>Kodiyamma pillalaku bantullechutta</h3>
-                    <p>Educate</p>
+                    <p>Educate- A learning space</p>
                 </div>
             </div>
             <div class="video-card" onclick="window.location.href='play.html?videoId=7c1MhrgtrlY'">
                 <img src="https://img.youtube.com/vi/7c1MhrgtrlY/0.jpg" alt="Video Title 7">
                 <div class="video-info">
                     <h3>Burru Pitta Burru Pitta Turru mannadi</h3>
-                    <p>Educate</p>
+                    <p>Educate- A learning space</p>
                 </div>
             </div>
             <div class="video-card" onclick="window.location.href='play.html?videoId=0F6WRYemPRE'">
                 <img src="https://img.youtube.com/vi/0F6WRYemPRE/0.jpg" alt="Video Title 8">
                 <div class="video-info">
                     <h3>Gundrani Gundrati Laddu</h3>
-                    <p>Educate</p>
+                    <p>Educate- A learning space</p>
                 </div>
             </div>
             <div class="video-card" onclick="window.location.href='play.html?videoId=VsmS35KaUyk'">
                 <img src="https://img.youtube.com/vi/VsmS35KaUyk/0.jpg" alt="Video Title 9">
                 <div class="video-info">
                     <h3>Telugu Rhymes for Children</h3>
-                    <p>Educate</p>
+                    <p>Educate- A learning space</p>
                 </div>
             </div>
             <div class="video-card" onclick="window.location.href='play.html?videoId=ubspZnidcak'">
                 <img src="https://img.youtube.com/vi/ubspZnidcak/0.jpg" alt="Video Title 10">
                 <div class="video-info">
                     <h3> Enugamma Enugu</h3>
-                    <p>Educate</p>
+                    <p>Educate- A learning space</p>
                 </div>
             </div>
             <div class="video-card" onclick="window.location.href='play.html?videoId=Pk5pXiyECEM'">
                 <img src="https://img.youtube.com/vi/Pk5pXiyECEM/0.jpg" alt="Video Title 11">
                 <div class="video-info">
                     <h3>Aakesi Pappesi</h3>
-                    <p>Educate</p>
+                    <p>Educate- A learning space</p>
                 </div>
             </div>
             <div class="video-card" onclick="window.location.href='play.html?videoId=0WcFUZcCDPo'">
                 <img src="https://img.youtube.com/vi/0WcFUZcCDPo/0.jpg" alt="Video Title 12">
                 <div class="video-info">
                     <h3>Ugadi Ugadi Happy Happy Ugadi</h3>
-                    <p>Educate</p>
+                    <p>Educate- A learning space</p>
                 </div>
             </div>
             <div class="video-card" onclick="window.location.href='play.html?videoId=Bw2yHZRJpys'">
                 <img src="https://img.youtube.com/vi/Bw2yHZRJpys/0.jpg" alt="Video Title 14">
                 <div class="video-info">
                     <h3>Chandamama Raave</h3>
-                    <p>Educate</p>
+                    <p>Educate- A learning space</p>
                 </div>
             </div>
             <div class="video-card" onclick="window.location.href='play.html?videoId=sMIWCBaDD0E'">
                 <img src="https://img.youtube.com/vi/sMIWCBaDD0E/0.jpg" alt="Video Title 15">
                 <div class="video-info">
                     <h3>Veeri Veeri Gummadi Pandu </h3>
-                    <p>Educate</p>
+                    <p>Educate- A learning space</p>
                 </div>
             </div>
         </div>
