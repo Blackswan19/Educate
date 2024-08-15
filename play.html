@@ -62,8 +62,8 @@
 <body>
     <div class="content">
         <iframe id="videoPlayer" src="" frameborder="0" allowfullscreen></iframe>
-
-        <div class="recommended-videos" id="recommendedVideos">
+        <hr>
+        <div class="recommended-videos" id="recommendedVideos"> 
             <!-- Recommended videos will be inserted here by JavaScript -->
         </div>
     </div>
@@ -71,21 +71,20 @@
     <script>
         // List of all video data
         var videos = [
-            { videoId: '4TpW-Qfjd-0', title: 'Video Title 1', channel: 'Channel Name' },
-            { videoId: 'zrRjJllUYpw', title: 'Video Title 2', channel: 'Channel Name' },
-            { videoId: 'SZhTR-kowVI', title: 'Video Title 3', channel: 'Channel Name' },
-            { videoId: 'j2Jgz6m4doA', title: 'Video Title 4', channel: 'Channel Name' },
-            { videoId: 'V2O8JtuX2Ys', title: 'Video Title 5', channel: 'Channel Name' },
-            { videoId: '0cYj7HzaKug', title: 'Video Title 6', channel: 'Channel Name' },
-            { videoId: '7c1MhrgtrlY', title: 'Video Title 7', channel: 'Channel Name' },
-            { videoId: '0F6WRYemPRE', title: 'Video Title 8', channel: 'Channel Name' },
-            { videoId: 'VsmS35KaUyk', title: 'Video Title 9', channel: 'Channel Name' },
-            { videoId: 'ubspZnidcak', title: 'Video Title 10', channel: 'Channel Name' },
-            { videoId: 'Pk5pXiyECEM', title: 'Video Title 11', channel: 'Channel Name' },
-            { videoId: '0WcFUZcCDPo', title: 'Video Title 12', channel: 'Channel Name' },
-            { videoId: 'fxtDNDTvW44', title: 'Video Title 13', channel: 'Channel Name' },
-            { videoId: 'Bw2yHZRJpys', title: 'Video Title 14', channel: 'Channel Name' },
-            { videoId: 'sMIWCBaDD0E', title: 'Video Title 15', channel: 'Channel Name' }
+            { videoId: '4TpW-Qfjd-0', title: 'Chitti Chilakamma Amma Kottinda', channel: 'Educate' },
+            { videoId: 'zrRjJllUYpw', title: ' Chuk Chuk Railu, Enugamma Enugu', channel: 'Educate' },
+            { videoId: 'SZhTR-kowVI', title: 'Aakesi Pappesi', channel: 'Educate' },
+            { videoId: 'j2Jgz6m4doA', title: 'Oppula kuppa', channel: 'Educate' },
+            { videoId: 'V2O8JtuX2Ys', title: 'Vana Vana Vallappa', channel: 'Educate' },
+            { videoId: '0cYj7HzaKug', title: 'Kodiyamma pillalaku bantullechutta', channel: 'Educate' },
+            { videoId: '7c1MhrgtrlY', title: 'Burru Pitta Burru Pitta Turru mannadi', channel: 'Educate' },
+            { videoId: '0F6WRYemPRE', title: 'Gundrani Gundrati Laddu', channel: 'Educate' },
+            { videoId: 'VsmS35KaUyk', title: 'Telugu Rhymes for Children', channel: 'Educate' },
+            { videoId: 'ubspZnidcak', title: ' Enugamma Enugu', channel: 'Educate' },
+            { videoId: 'Pk5pXiyECEM', title: 'Aakesi Pappesi', channel: 'Educate' },
+            { videoId: '0WcFUZcCDPo', title: 'Ugadi Ugadi Happy Happy Ugadi', channel: 'Educate' },
+            { videoId: 'Bw2yHZRJpys', title: 'Chandamama Raave', channel: 'Educate' },
+            { videoId: 'sMIWCBaDD0E', title: 'Veeri Veeri Gummadi Pandu ', channel: 'Educate' }
         ];
 
         // Function to get URL query parameter
