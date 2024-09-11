@@ -161,14 +161,28 @@
     border-radius: 35px;
     margin-bottom: 19px;
     text-align: center;
+    position: fixed;
+    bottom: 33px;
+    right: 68px;
+
         }
         .date-display {
             font-size: 18px;
             color: #004cff;
             font-weight: 800;
             position: fixed;
-            right: 272px;
-            top: 75px;
+            right: 15px;
+            top: 85px;
+        }
+        img{
+            width: 13%;
+            position: fixed;
+            top: 1%;
+            left: 20px;
+        }
+        table{
+            position: relative;
+            top: 10em;
         }
         /* Responsive Styles */
         @media (max-width: 600px) {
@@ -182,7 +196,6 @@
             table, th, td {
                 font-size: 14px;
             }
-
             th, td {
                 padding: 10px;
             }
@@ -198,12 +211,25 @@
                 right: 22px;
                 top: 75px;
             }
+            img{
+                width: 25%;
+    position: fixed;
+    top: 1%;
+
+            }
+            #myBtn{
+                z-index: 10;
+    position: fixed;
+    right: 10px;
+    bottom: 0px;
+
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>BsReminder
+        <h2><img src="https://i.ibb.co/h2Q6FJC/remilogo.png" alt="">
             <div class="date-display" style="display: flex;">
                 Today date: <div id="currentDate" class="display" style="color: white;"></div>
             </div>
