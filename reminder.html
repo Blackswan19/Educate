@@ -14,7 +14,7 @@
             list-style: none;
         }
 
-        /* Base Styles */
+    
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
@@ -110,8 +110,8 @@
         }
 
         table {
-    width: 100%; /* Ensure the table takes full width of the container */
-    table-layout: fixed; /* Make sure the columns have fixed width */
+    width: 100%;
+    table-layout: fixed;
     border-collapse: collapse;
     background-color: #fff;
     border-radius: 10px;
@@ -129,17 +129,24 @@ th, td {
     font-size: 15px;
     border: 1px solid #555;
     color: #004cff;
-    width: 33.33%; /* Each column will take up one-third of the table width */
-    word-wrap: break-word; /* Ensure long words or content wraps to the next line */
-    overflow: hidden; /* Hide any overflowing content */
-    text-overflow: ellipsis; /* Add ellipsis (...) for overflowing text */
-    white-space: normal; /* Ensure text wraps onto multiple lines if necessary */
+    width: 33.33%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    position: relative;
+}
+
+td {
+    max-height: 60px;
+    max-width: 100px;
+    overflow: auto;
 }
 
 th {
     background-color: #004cff;
     color: #fff;
 }
+
 
 
         .delete-btn {
@@ -190,7 +197,7 @@ th {
             position: relative;
             top: 10em;
         }
-        /* Responsive Styles */
+    
         @media (max-width: 600px) {
     .modal-content {
         width: 81%;
