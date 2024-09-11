@@ -107,7 +107,7 @@
         }
 
         table {
-            width: 100%;
+            width: 80%;
             table-layout: fixed;
             border-collapse: collapse;
             background-color: #fff;
@@ -193,7 +193,8 @@
 
         table {
             position: relative;
-            top: 10em;
+    top: 10em;
+    left: 13%;
         }
 
         /* Highlight class for upcoming tasks */
@@ -211,10 +212,15 @@
     color: white;
 }
 .help img{
-    width: 15%;
+    width: 9%;
     position: fixed;
-    left: 0px;
-    bottom: 0px;
+    left: 15px;
+    bottom: 23px;
+    border-radius: 14px;
+    opacity: 30%;
+}
+.help img:hover{
+    opacity: 100%;
 }
 
         @media (max-width: 600px) {
@@ -227,6 +233,9 @@
 
             table, th, td {
                 font-size: 14px;
+        width: 100%;
+        position: relative;
+        left: 0;
             }
 
             th, td {
@@ -265,10 +274,12 @@
                 bottom: 0px;
             }
             .help img{
-                width: 30%;
+                width: 16%;
         position: fixed;
-        top: 0px;
-        left: 236px;
+        top: 15px;
+        left: 238px;
+        border-radius: 8px;
+
 }
 
         }
