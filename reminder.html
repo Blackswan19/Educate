@@ -14,7 +14,7 @@
             list-style: none;
         }
 
-        /* Base Styles */
+    
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
@@ -110,8 +110,8 @@
         }
 
         table {
-    width: 100%; /* Ensure the table takes full width of the container */
-    table-layout: fixed; /* Make sure the columns have fixed width */
+    width: 100%;
+    table-layout: fixed;
     border-collapse: collapse;
     background-color: #fff;
     border-radius: 10px;
@@ -119,26 +119,27 @@
     box-shadow: 0 4px 8px rgb(0 0 0 / 19%);
     margin-bottom: 20px;
     border: solid 1px #070707;
+    text-align: center;
 }
 
 th, td {
     border: 1px solid #ddd;
     padding: 12px;
-    text-align: left; /* Align text to the left */
+    text-align: left;
     font-weight: 800;
     font-size: 15px;
     border: 1px solid #555;
     color: #004cff;
-    width: 33.33%; /* Each column will take up one-third of the table width */
-    white-space: nowrap; /* Prevent text from wrapping onto the next line */
-    overflow: auto; /* Enable scrolling if content overflows */
+    width: 33.33%;
+    white-space: nowrap;
+    overflow: auto;
 }
 
 td {
-    max-height: 60px; /* Set a max-height for table cells */
-    max-width: 200px; /* Set a max-width for table cells */
-    overflow: auto; /* Enable both horizontal and vertical scrolling */
-    text-overflow: clip; /* Ensure long text is clipped rather than displaying ellipsis */
+    max-height: 60px;
+    max-width: 200px;
+    overflow: auto;
+    text-overflow: clip;
 }
 
 th {
@@ -195,7 +196,7 @@ th {
             position: relative;
             top: 10em;
         }
-        /* Responsive Styles */
+    
         @media (max-width: 600px) {
     .modal-content {
         width: 81%;
@@ -222,11 +223,15 @@ th {
                 right: 22px;
                 top: 75px;
             }
-            img{
-                width: 25%;
-    position: fixed;
-    top: 1%;
-
+            .delete-btn:hover{
+            background:none;
+            color: red;
+        }
+        img {
+        width: 34%;
+        position: fixed;
+        top: 0%;
+        left: 0px;
             }
             #myBtn{
                 z-index: 10;
