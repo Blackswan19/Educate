@@ -19,7 +19,6 @@
             margin: 0;
             padding: 0;
             background-color: #000000;
-            color: #004cff;
         }
 
         h2 {
@@ -127,7 +126,6 @@
             font-weight: 800;
             font-size: 15px;
             border: 1px solid #555;
-            color: #004cff;
             width: 33.33%;
             white-space: nowrap;
             overflow: auto;
@@ -199,10 +197,20 @@
         }
 
         /* Highlight class for upcoming tasks */
-        .highlight {
-            background-color: #ffeb3b; /* Yellow highlight */
-            color: #000; /* Black text for better readability */
-        }
+        /* Highlight classes */
+.highlight-blue {
+    background-color: #00d0ff6c;color: rgb(0, 0, 0);
+}
+
+.highlight-orange {
+    background-color: #ff800061; color: rgb(0, 0, 0);
+}
+
+.highlight-red {
+    background-color: #7c0000; 
+    color: white;
+}
+
 
         @media (max-width: 600px) {
             .modal-content {
@@ -300,10 +308,10 @@
         function displayCurrentDate() {
             const currentDateElement = document.getElementById('currentDate');
             const today = new Date();
-            const day = today.getDate();
-            const month = today.getMonth() + 1;
+            const day = today.getDate().toString().padStart(2, '0');
+            const month = (today.getMonth() + 1).toString().padStart(2, '0');
             const year = today.getFullYear();
-            const formattedDate = `${day.toString().padStart(2, '0')}-${month.toString().padStart(2, '0')}-${year}`;
+            const formattedDate = `${day}-${month}-${year}`;
             currentDateElement.textContent = formattedDate;
         }
 
@@ -334,7 +342,7 @@
             if (taskInput.value && endDateInput.value) {
                 const task = taskInput.value;
                 const endDate = endDateInput.value;
-                addRowToTable(task, endDate);
+                addRowToTable(task, formatDate(endDate));
                 taskInput.value = '';
                 endDateInput.value = '';
                 saveDataToLocalStorage();
@@ -352,7 +360,7 @@
             const actionCell = newRow.insertCell(2);
 
             taskCell.textContent = task;
-            endDateCell.textContent = formatDate(endDate);
+            endDateCell.textContent = endDate;
 
             actionCell.innerHTML = `<button class="delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-trash"></i></button>`;
 
@@ -401,28 +409,45 @@
         }
 
         // Function to check if a task is due soon and highlight the row
-        function checkUpcomingTasksForRow(row) {
-            const today = new Date();
-            const endDateText = row.cells[1].textContent;
-            const [day, month, year] = endDateText.split('-');
-            const endDate = new Date(`${year}-${month}-${day}`);
+        // Function to check if a task is due soon and highlight the row
+function checkUpcomingTasksForRow(row) {
+    const today = new Date();
+    const endDateText = row.cells[1].textContent;
+    const [day, month, year] = endDateText.split('-');
+    const endDate = new Date(`${year}-${month}-${day}`);
 
-            const timeDiff = endDate - today;
-            const daysLeft = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    const timeDiff = endDate - today;
+    const daysLeft = Math.ceil(timeDiff / (1000 * 3600 * 24));
 
-            if (daysLeft >= 0 && daysLeft <= 3) { // Highlight if task is within 3 days or due today
-                row.classList.add('highlight');
-            }
-        }
+    // Remove any existing highlight classes
+    row.classList.remove('highlight-blue', 'highlight-orange', 'highlight-red');
 
-        // On page load, display current date, load data from localStorage, and start checking for upcoming tasks
-        window.onload = function() {
-            displayCurrentDate();
-            loadDataFromLocalStorage();
-            // Iterate over each row to apply highlighting if necessary
-            const tableBody = document.getElementById('taskTableBody');
-            Array.from(tableBody.rows).forEach(row => checkUpcomingTasksForRow(row));
-        }
+    if (daysLeft === 0) {
+        row.classList.add('highlight-red'); // Today
+    } else if (daysLeft > 0 && daysLeft <= 2) {
+        row.classList.add('highlight-orange'); // 2 days left
+    } else if (daysLeft > 2 && daysLeft <= 5) {
+        row.classList.add('highlight-blue'); // 5 days left
+    }
+}
+
+// Function to load table data from localStorage
+function loadDataFromLocalStorage() {
+    const data = JSON.parse(localStorage.getItem('taskData'));
+    if (data) {
+        data.forEach(item => addRowToTable(item.task, item.endDate, null, item.highlight));
+    }
+}
+
+// On page load, display current date, load data from localStorage, and start checking for upcoming tasks
+window.onload = function() {
+    displayCurrentDate();
+    loadDataFromLocalStorage();
+    // Iterate over each row to apply highlighting if necessary
+    const tableBody = document.getElementById('taskTableBody');
+    Array.from(tableBody.rows).forEach(row => checkUpcomingTasksForRow(row));
+}
+
     </script>
 </body>
 </html>
