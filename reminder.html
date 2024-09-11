@@ -184,7 +184,7 @@
             top: 85px;
         }
 
-        img {
+        .container img {
             width: 13%;
             position: fixed;
             top: 1%;
@@ -210,7 +210,12 @@
     background-color: #7c0000; 
     color: white;
 }
-
+.help img{
+    width: 15%;
+    position: fixed;
+    left: 0px;
+    bottom: 0px;
+}
 
         @media (max-width: 600px) {
             .modal-content {
@@ -246,7 +251,7 @@
                 color: red;
             }
 
-            img {
+            .container img {
                 width: 34%;
                 position: fixed;
                 top: 0%;
@@ -259,6 +264,13 @@
                 right: 10px;
                 bottom: 0px;
             }
+            .help img{
+                width: 30%;
+        position: fixed;
+        top: 0px;
+        left: 236px;
+}
+
         }
     </style>
 </head>
@@ -301,6 +313,9 @@
                 <!-- The initial rows will be dynamically populated from localStorage -->
             </tbody>
         </table>
+    </div>
+    <div class="help">
+        <a href="highcolmean.png"><img src="highcolmean.png" alt=""></a>
     </div>
 
     <script>
