@@ -19,6 +19,7 @@
             margin: 0;
             padding: 0;
             background-color: #000000;
+            color: #004cff;
         }
 
         h2 {
@@ -199,8 +200,8 @@
 
         /* Highlight class for upcoming tasks */
         .highlight {
-            background-color: #700000;
-            color: red;
+            background-color: #ffeb3b; /* Yellow highlight */
+            color: #000; /* Black text for better readability */
         }
 
         @media (max-width: 600px) {
@@ -342,7 +343,7 @@
         }
 
         // Function to add a row to the table with the date in DD-MM-YYYY format
-        function addRowToTable(task, endDate, completionTime = null) {
+        function addRowToTable(task, endDate, completionTime = null, highlight = false) {
             const tableBody = document.getElementById('taskTableBody');
             const newRow = tableBody.insertRow();
 
@@ -360,8 +361,10 @@
                 completionTimeCell.textContent = completionTime;
             }
 
-            // Check if the row should be highlighted
-            checkUpcomingTasksForRow(newRow);
+            // Apply highlighting if necessary
+            if (highlight) {
+                newRow.classList.add('highlight');
+            }
         }
 
         // Function to format date to DD-MM-YYYY
@@ -383,7 +386,8 @@
             const rows = Array.from(tableBody.rows);
             const data = rows.map(row => ({
                 task: row.cells[0].textContent,
-                endDate: row.cells[1].textContent
+                endDate: row.cells[1].textContent,
+                highlight: row.classList.contains('highlight') // Save highlight state
             }));
             localStorage.setItem('taskData', JSON.stringify(data));
         }
@@ -392,7 +396,7 @@
         function loadDataFromLocalStorage() {
             const data = JSON.parse(localStorage.getItem('taskData'));
             if (data) {
-                data.forEach(item => addRowToTable(item.task, item.endDate));
+                data.forEach(item => addRowToTable(item.task, item.endDate, null, item.highlight));
             }
         }
 
@@ -406,7 +410,7 @@
             const timeDiff = endDate - today;
             const daysLeft = Math.ceil(timeDiff / (1000 * 3600 * 24));
 
-            if (daysLeft >= 0 && daysLeft <= 3) { // Highlight if task is within 3 days
+            if (daysLeft >= 0 && daysLeft <= 3) { // Highlight if task is within 3 days or due today
                 row.classList.add('highlight');
             }
         }
