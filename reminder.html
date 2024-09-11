@@ -124,20 +124,21 @@
 th, td {
     border: 1px solid #ddd;
     padding: 12px;
-    text-align: center;
+    text-align: left; /* Align text to the left */
     font-weight: 800;
     font-size: 15px;
     border: 1px solid #555;
     color: #004cff;
     width: 33.33%; /* Each column will take up one-third of the table width */
-    white-space: normal; /* Allow text to wrap onto the next line */
-    overflow: auto; /* Add scrollbars if the content overflows */
+    white-space: nowrap; /* Prevent text from wrapping onto the next line */
+    overflow: auto; /* Enable scrolling if content overflows */
 }
 
 td {
     max-height: 60px; /* Set a max-height for table cells */
-    max-width: 100px; /* Set a max-width for table cells */
-    overflow: auto; /* Add both horizontal and vertical scrollbars if needed */
+    max-width: 200px; /* Set a max-width for table cells */
+    overflow: auto; /* Enable both horizontal and vertical scrolling */
+    text-overflow: clip; /* Ensure long text is clipped rather than displaying ellipsis */
 }
 
 th {
