@@ -110,31 +110,37 @@
         }
 
         table {
-            width: 100%;
-            border-collapse: collapse;
-            background-color: #fff;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 4px 8px rgb(0 0 0 / 19%);
-            margin-bottom: 20px;
-            border: solid 1px #070707;
-        }
+    width: 100%; /* Ensure the table takes full width of the container */
+    table-layout: fixed; /* Make sure the columns have fixed width */
+    border-collapse: collapse;
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgb(0 0 0 / 19%);
+    margin-bottom: 20px;
+    border: solid 1px #070707;
+}
 
-        th, td {
-            border: 1px solid #ddd;
-            padding: 12px;
-            text-align: left;
-            font-weight: 800;
-            font-size: 15px;
-            border: 1px solid #555;
-            color: #004cff;
-            text-align: center;
-        }
+th, td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: center;
+    font-weight: 800;
+    font-size: 15px;
+    border: 1px solid #555;
+    color: #004cff;
+    width: 33.33%; /* Each column will take up one-third of the table width */
+    word-wrap: break-word; /* Ensure long words or content wraps to the next line */
+    overflow: hidden; /* Hide any overflowing content */
+    text-overflow: ellipsis; /* Add ellipsis (...) for overflowing text */
+    white-space: normal; /* Ensure text wraps onto multiple lines if necessary */
+}
 
-        th {
-            background-color: #004cff;
-            color: #fff;
-        }
+th {
+    background-color: #004cff;
+    color: #fff;
+}
+
 
         .delete-btn {
             color: #ff0019;
