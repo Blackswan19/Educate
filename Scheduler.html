@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scheduler</title>
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Orbitron:wght@400..900&family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&family=Strait&display=swap');
+        
+        * {
+            font-family: "Red Hat Display", sans-serif;
+            list-style: none;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1c1c1c;
+            color: white;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            white-space: nowrap;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #2e2e2e;
+        }
+
+        .header img {
+            width: 10%;
+    position: relative;
+    left: 25px;
+    }
+
+        .day {
+            text-align: center;
+            color: #014dff;
+            font-size: 32px;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 65%;
+            margin: 0 auto;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid white;
+            padding: 10px;
+            text-align: center;
+            font-size: 16px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        th {
+            background-color: #333;
+            font-size: 15px;
+            white-space: nowrap;
+        }
+
+        td {
+            max-width: 200px; /* Adjust based on your needs */
+        }
+
+        .scrollable-content {
+            display: inline-block;
+            overflow-x: auto;
+            white-space: nowrap;
+            max-width: 100%; /* Ensure content does not overflow */
+        }
+        .scrollable-content {
+            scrollbar-width: thin; /* Width of the scrollbar */
+            scrollbar-color: #88888800 #1c1c1c00; /* Scrollbar thumb color and track color */
+        }
+        .delete-icon, .edit-icon {
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .edit-icon {
+            color: rgb(255, 255, 255);
+            margin-right: 30px;
+        }
+
+        .delete-icon {
+            color: red;
+        }
+
+        .add-btn {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .add-btn button {
+            background-color: #014dff;
+            color: white;
+            font-size: 35px;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+        }
+        .add-btn button:hover{
+            background: #001f74;
+        }
+        input {
+            background-color: transparent;
+            color: white;
+            border: 1px solid white;
+            text-align: center;
+            padding: 10px 25px;
+    border: solid 2px #014dff;
+    border-radius: 8px;
+    font-size: 16px;
+        }
+
+        .week-day {
+            display: flex;
+            justify-content: space-around;
+            background-color: #000000;
+            padding: 20px 0;
+            margin-top: auto;
+            position: fixed;
+            bottom: -2px;
+            border-top: solid 1px #787878;
+            width: 20%;
+            border-radius: 12px;
+            right: 0px;
+        }
+
+        .week-day div {
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .week-day div:hover {
+           color: #014dff;
+           font-weight: 600;
+           text-decoration: overline;
+        }
+
+        /* Highlighting the active row */
+        .highlight-row {
+            background-color: rgb(0, 81, 255); /* Light blue background */
+        }
+
+        /* Mobile styles */
+       /* Mobile styles */
+@media screen and (max-width: 480px) {
+    .day {
+        font-size: 24px;
+    }
+
+    table {
+        width: 100%; /* Adjust width to 100% for mobile */
+        display: block; /* Ensure the table is treated as a block for overflow control */
+        overflow-x: auto; /* Allow horizontal scrolling */
+    }
+
+    th, td {
+        font-size: 14px;
+        padding: 5px; /* Reduce padding to fit content on smaller screens */
+        word-break: break-word; /* Ensure long words break within the table cell */
+    }
+    td {
+    max-width: 155px;
+}
+    .header img {
+        width: 45%;
+        position: relative;
+        left: 12px;
+    }
+
+    .edit-icon {
+        margin-right: 20px;
+    }
+
+    .delete-icon, .edit-icon {
+        font-size: 15px;
+    }
+
+    .week-day {
+        font-size: 16px;
+        width: 100%;
+    }
+}
+
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <img src="schedulogo.png" alt="BsScheduler Logo">
+    </div>
+
+    <div class="day" id="dayTitle">Monday</div>
+
+    <table id="scheduleTable">
+        <thead>
+            <tr>
+                <th>From</th>
+                <th>To</th>
+                <th>Schedule Subject</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Rows will be dynamically generated -->
+        </tbody>
+    </table>
+
+    <div class="add-btn">
+        <button onclick="addRow()">+</button>
+    </div>
+
+    <div class="week-day">
+        <div onclick="changeDay(1)">1</div>
+        <div onclick="changeDay(2)">2</div>
+        <div onclick="changeDay(3)">3</div>
+        <div onclick="changeDay(4)">4</div>
+        <div onclick="changeDay(5)">5</div>
+        <div onclick="changeDay(6)">6</div>
+        <div onclick="changeDay(7)">7</div>
+    </div>
+
+    <div id="timeDisplay"></div>
+
+    <script>
+        let currentDay = 1;
+        let scheduleData = {
+            1: [],  // Monday
+            2: [],  // Tuesday
+            3: [],  // Wednesday
+            4: [],  // Thursday
+            5: [],  // Friday
+            6: [],  // Saturday
+            7: []   // Sunday
+        };
+
+        // Function to convert 24-hour time to 12-hour format with AM/PM
+        function formatTime(time) {
+            const [hours, minutes] = time.split(':');
+            const hoursInt = parseInt(hours, 10);
+            const ampm = hoursInt >= 12 ? 'PM' : 'AM';
+            const adjustedHours = hoursInt % 12 || 12;  // Adjust hours to 12-hour format
+            return `${adjustedHours}:${minutes} ${ampm}`;
+        }
+
+        // Function to highlight rows that match the current hour
+        function highlightCurrentTimeRows() {
+            const now = new Date();
+            const currentHour = now.getHours(); // Get current hour (0-23)
+
+            const rows = document.querySelectorAll('#scheduleTable tbody tr');
+            rows.forEach(row => {
+                const fromTime = row.querySelectorAll('input[type="time"]')[0].value;
+                const toTime = row.querySelectorAll('input[type="time"]')[1].value;
+
+                const fromHour = parseInt(fromTime.split(':')[0]);
+                const toHour = parseInt(toTime.split(':')[0]);
+
+                if (currentHour === fromHour || currentHour === toHour) {
+                    row.classList.add('highlight-row'); // Highlight the row
+                } else {
+                    row.classList.remove('highlight-row'); // Remove highlight if time doesn't match
+                }
+            });
+        }
+
+        // Function to automatically take inputs and add new row
+        function addRow() {
+            const tableBody = document.querySelector('#scheduleTable tbody');
+            const row = tableBody.insertRow();
+            row.innerHTML = `
+                <td><div class="scrollable-content"><span class="time-text"></span><input type="time" value="09:00" style="display:none;" onchange="saveData()"></div></td>
+                <td><div class="scrollable-content"><span class="time-text"></span><input type="time" value="10:00" style="display:none;" onchange="saveData()"></div></td>
+                <td><div class="scrollable-content"><span class="subject-text"></span><input type="text" placeholder="Enter subject" style="display:none;" onchange="saveData()"></div></td>
+                <td>
+                    <span class="edit-icon" onclick="toggleEdit(this)"><i class="fas fa-edit"></i></span>
+                    <span class="delete-icon" onclick="deleteRow(this)"><i class="fas fa-trash"></i></span>
+                </td>
+            `;
+            toggleEdit(row.querySelector('.edit-icon'));
+            saveData();
+        }
+
+        // Function to switch between days
+        function changeDay(day) {
+            currentDay = day;
+            const dayNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+            document.getElementById('dayTitle').textContent = dayNames[day - 1];
+            
+            const tableBody = document.querySelector('#scheduleTable tbody');
+            tableBody.innerHTML = '';
+
+            scheduleData[day].forEach((rowData, index) => {
+                const row = tableBody.insertRow();
+                row.innerHTML = `
+                    <td><div class="scrollable-content"><span class="time-text">${formatTime(rowData.from)}</span><input type="time" value="${rowData.from}" style="display:none;" onchange="saveData()"></div></td>
+                    <td><div class="scrollable-content"><span class="time-text">${formatTime(rowData.to)}</span><input type="time" value="${rowData.to}" style="display:none;" onchange="saveData()"></div></td>
+                    <td><div class="scrollable-content"><span class="subject-text">${rowData.subject}</span><input type="text" value="${rowData.subject}" style="display:none;" onchange="saveData()"></div></td>
+                    <td>
+                        <span class="edit-icon" onclick="toggleEdit(this)"><i class="fas fa-edit"></i></span>
+                        <span class="delete-icon" onclick="deleteRow(this)"><i class="fas fa-trash"></i></span>
+                    </td>
+                `;
+            });
+
+            highlightCurrentTimeRows();
+        }
+
+        // Function to toggle edit/save mode for a row
+        function toggleEdit(element) {
+            const row = element.parentNode.parentNode;
+            const timeInputs = row.querySelectorAll('input[type="time"]');
+            const textInputs = row.querySelectorAll('input[type="text"]');
+            const timeTexts = row.querySelectorAll('.time-text');
+            const subjectText = row.querySelector('.subject-text');
+            
+            const isEditing = timeInputs[0].style.display === 'none';
+
+            if (isEditing) {
+                timeInputs.forEach(input => input.style.display = 'block');
+                textInputs.forEach(input => input.style.display = 'block');
+                timeTexts.forEach(text => text.style.display = 'none');
+                subjectText.style.display = 'none';
+                element.innerHTML = '<i class="fas fa-save"></i>';
+            } else {
+                timeInputs.forEach(input => input.style.display = 'none');
+                textInputs.forEach(input => input.style.display = 'none');
+                timeTexts.forEach((text, i) => text.textContent = formatTime(timeInputs[i].value));
+                subjectText.textContent = textInputs[0].value;
+                element.innerHTML = '<i class="fas fa-edit"></i>';
+                saveData();
+            }
+        }
+
+        // Function to delete a row
+        function deleteRow(element) {
+            const row = element.parentNode.parentNode;
+            row.remove();
+            saveData();
+        }
+
+        // Function to save data in localStorage
+        function saveData() {
+            const tableRows = document.querySelectorAll('#scheduleTable tbody tr');
+            const dayData = [];
+
+            tableRows.forEach(row => {
+                const from = row.querySelectorAll('input[type="time"]')[0].value;
+                const to = row.querySelectorAll('input[type="time"]')[1].value;
+                const subject = row.querySelector('input[type="text"]').value;
+                dayData.push({ from, to, subject });
+            });
+
+            scheduleData[currentDay] = dayData;
+            localStorage.setItem('scheduleData', JSON.stringify(scheduleData));
+
+            highlightCurrentTimeRows();
+        }
+
+        // Load saved data from localStorage
+        function loadData() {
+            const data = localStorage.getItem('scheduleData');
+            if (data) {
+                scheduleData = JSON.parse(data);
+            }
+            changeDay(currentDay);
+        }
+
+        // Load the schedule when the page loads
+        window.onload = loadData;
+
+        // Highlight the row based on the current time every minute
+        setInterval(highlightCurrentTimeRows, 60000);
+    </script>
+
+</body>
+</html>
