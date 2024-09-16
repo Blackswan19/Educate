@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BsHider</title>
     <link rel="icon" type="image/x-icon" href="hidelogo.png">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Orbitron:wght@400..900&family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&family=Strait&display=swap');
         
@@ -20,11 +22,11 @@
             margin: 0;
             padding: 20px;
         }
-        
+
         h1, h2 {
             color: #014dff;
         }
-        
+
         #mediaContainer {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -45,6 +47,7 @@
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             opacity: 65%;
         }
+
         .media-item:hover {
             border: solid 1px #014dff;
             opacity: 100%;
@@ -72,12 +75,15 @@
             font-size: 20px;
             color: #ffffff;
         }
+
         .icon-container a:hover {
             color: #014dff;
         }
+
         .icon-container button:hover {
             color: #014dff;
         }
+
         /* Modal styling */
         .modal {
             display: none;
@@ -107,7 +113,6 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            /* background-color: #1e1e1e; */
             border-radius: 10px;
             padding: 20px;
         }
@@ -145,78 +150,85 @@
 
         button {
             border: none;
-    padding: 10px 14px;
-    border-radius: 5px;
-    color: white;
-    font-size: 15px;
-    background-color: #014dff;
+            padding: 10px 14px;
+            border-radius: 5px;
+            color: white;
+            font-size: 15px;
+            background-color: #014dff;
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
-        .logo img{
-            width: 15%;
-    position: relative;
-    top: -51px;
-    left: -42px;
-        }
-        .inputs{
-            position: relative;
-    top: -125px;
 
-        }
-        @media screen and (max-width: 480px) {
         .logo img {
-    width: 68%;
-    position: relative;
-    top: -51px;
-    left: -42px;
-}
-.inputs {
-    position: relative;
-    top: -167px;
-}
-#mediaContainer {
-    margin-top: -95px;
-}
-h1, h2 {
-    color: #014dff;
-    position: relative;
-    top: -100px;
-}
-@media screen and (max-width: 480px) {
-    #mediaContainer {
-        grid-template-columns: repeat(2, 1fr); /* Two columns on mobile */
-    }
-    .media-item img,
-        .media-item video {
-            width: 100%;
-    height: -webkit-fill-available;
-    max-height: 65px;
-    border-radius: 8px;
-
+            width: 15%;
+            position: relative;
+            top: -51px;
+            left: -42px;
         }
-        .close {
-    position: absolute;
-    top: 14px;
-    right: 20px;
-    color: white;
-    font-size: 30px;
-    cursor: pointer;
-    transition: color 0.2s ease-in-out;
-    z-index: 1;
-    background: #014dff;
-            padding: 0px 11px;
-            border-radius: 5px;
-        }
-}
 
+        .inputs {
+            position: relative;
+            top: -125px;
+        }
+
+        @media screen and (max-width: 480px) {
+            .logo img {
+                width: 68%;
+                position: relative;
+                top: -51px;
+                left: -42px;
+            }
+
+            .inputs {
+                position: relative;
+                top: -167px;
+            }
+
+            #mediaContainer {
+                margin-top: -95px;
+            }
+
+            h1, h2 {
+                color: #014dff;
+                position: relative;
+                top: -100px;
+            }
+
+            @media screen and (max-width: 480px) {
+                #mediaContainer {
+                    grid-template-columns: repeat(2, 1fr); /* Two columns on mobile */
+                }
+
+                .media-item img,
+                .media-item video {
+                    width: 100%;
+                    height: -webkit-fill-available;
+                    max-height: 65px;
+                    border-radius: 8px;
+                }
+
+                .close {
+                    position: absolute;
+                    top: 14px;
+                    right: 20px;
+                    color: white;
+                    font-size: 30px;
+                    cursor: pointer;
+                    transition: color 0.2s ease-in-out;
+                    z-index: 1;
+                    background: #014dff;
+                    padding: 0px 11px;
+                    border-radius: 5px;
+                }
+            }
         }
     </style>
 </head>
+
 <body>
     <div class="logo">
         <img src="hidelogo.png" alt="">
-        <p>A place where you can save both images and videos privately.</p>
+        <p>A place where you can save both images and videos(Below 3500KB) privately.</p>
     </div>
     <div class="inputs">
         <input type="file" id="fileInput" accept="image/*,video/*" multiple>
@@ -234,37 +246,36 @@ h1, h2 {
 
     <script>
         function saveMedia() {
-    const fileInput = document.getElementById('fileInput');
-    const files = fileInput.files;
+            const fileInput = document.getElementById('fileInput');
+            const files = fileInput.files;
 
-    if (files.length === 0) {
-        alert('Select files to upload.');
-        return;
-    }
+            if (files.length === 0) {
+                alert('Select files to upload.');
+                return;
+            }
 
-    let mediaList = JSON.parse(localStorage.getItem('mediaList')) || [];
+            let mediaList = JSON.parse(localStorage.getItem('mediaList')) || [];
 
-    // Loop through all selected files
-    Array.from(files).forEach(file => {
-        const reader = new FileReader();
-        reader.onloadend = function () {
-            const base64Data = reader.result;
-            mediaList.push(base64Data);  // Add new file to mediaList
-            localStorage.setItem('mediaList', JSON.stringify(mediaList));  // Save updated list
-            displayMedia();  // Refresh the display
-        };
+            // Loop through all selected files
+            Array.from(files).forEach(file => {
+                const reader = new FileReader();
+                reader.onloadend = function () {
+                    const base64Data = reader.result;
+                    mediaList.push(base64Data);  // Add new file to mediaList
+                    localStorage.setItem('mediaList', JSON.stringify(mediaList));  // Save updated list
+                    displayMedia();  // Refresh the display
+                };
 
-        reader.onerror = function (error) {
-            console.error('Error reading file:', error);
-            alert('Failed to read file.');
-        };
+                reader.onerror = function (error) {
+                    console.error('Error reading file:', error);
+                    alert('Failed to read file.');
+                };
 
-        reader.readAsDataURL(file);
-    });
+                reader.readAsDataURL(file);
+            });
 
-    fileInput.value = '';  // Clear the input field after saving
-}
-
+            fileInput.value = '';  // Clear the input field after saving
+        }
 
         function displayMedia() {
             const mediaContainer = document.getElementById('mediaContainer');
@@ -361,4 +372,5 @@ h1, h2 {
         window.onload = displayMedia;
     </script>
 </body>
+
 </html>
