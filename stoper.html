@@ -13,7 +13,6 @@
             color: rgb(255, 255, 255);
             font-family: "Red Hat Display", sans-serif;
         }
-        /* Google-inspired dark theme */
         body {
             background-color: #202124;
             color: #e8eaed;
@@ -26,20 +25,17 @@
             height: 100vh;
             text-align: center;
         }
-
         .container {
-    text-align: center;
-    width: 100%;
-    position: fixed;
+            text-align: center;
+            width: 100%;
+            position: fixed;
         }
-
         h2 {
             color: #9aa0a6;
             font-size: 50px;
             font-weight: 400;
             margin-bottom: 40px;
         }
-
         input[type="text"] {
             width: 100%;
             max-width: 600px;
@@ -53,11 +49,9 @@
             text-align: center;
             box-shadow: 0 1px 6px rgba(32, 33, 36, 0.28);
         }
-
         input[type="text"]::placeholder {
             color: #9aa0a6;
         }
-
         button {
             margin-top: 30px;
             padding: 14px 24px;
@@ -69,110 +63,136 @@
             font-size: 16px;
             font-weight: 500;
         }
-
         button:hover {
             background-color:  #00ffff5d;
         }
-
         #result {
             margin-top: 0px;
             font-size: 18px;
         }
-
         /* Play button styling */
         #result button {
-    padding: 12px 30px;
-    border: none;
-    border-radius: 24px;
-    background-color:  #004cff;
-    color: rgb(197 197 197);
-    cursor: pointer;
-    font-size: 16px;
-    width: 16%;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 24px;
+            background-color:  #004cff;
+            color: rgb(197 197 197);
+            cursor: pointer;
+            font-size: 16px;
+            width: 16%;
         }
         #result button:hover {
             background-color:#004cff7d;
         }
+
+        /* Fullscreen button styling */
+        .fullscreen-btn {
+            position: fixed;
+    top: -30px;
+    left: -10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: white;
+    font-size: 20px;
+        }
+        .fullscreen-btn:hover {
+            background: none;
+        }
+
         p{
             position: fixed;
-    bottom: 0px;
-    color: #767676;
-    width: 92%;
-    border-radius: 10px;
-    border: solid 1px #4b4b4b;
-    padding: 13px;
+            bottom: 0px;
+            color: #767676;
+            width: 92%;
+            border-radius: 10px;
+            border: solid 1px #4b4b4b;
+            padding: 13px;
         }
+
         @media (max-width: 768px) {
             input[type="text"] {
                 width: 90%;
             }
-
             button {
                 width: 35%;
                 max-width: 300px;
             }
             p{
                 position: fixed;
-        bottom: 0px;
-        color: #767676;
-        width: 86%;
-        border-radius: 10px;
-        border: solid 1px #4b4b4b;
-        padding: 13px;
-        font-size: 14px;
-
+                bottom: 0px;
+                color: #767676;
+                width: 86%;
+                border-radius: 10px;
+                border: solid 1px #4b4b4b;
+                padding: 13px;
+                font-size: 14px;
             }
             #result button {
-            padding: 12px 30px;
-    border: none;
-    border-radius: 24px;
-    background-color: #005e56;
-    color: rgb(197 197 197);
-    cursor: pointer;
-    font-size: 16px;
-    width: 65%;
-        }
-        .container {
-    text-align: center;
-    width: 100%;
-    position: fixed;
-    top: 30%;
-        }
-        h2 {
-            color: #9aa0a6;
-            font-size: 40px;
-        }
+                padding: 12px 30px;
+                border: none;
+                border-radius: 24px;
+                background-color: #005e56;
+                color: rgb(197 197 197);
+                cursor: pointer;
+                font-size: 16px;
+                width: 65%;
+            }
+            .container {
+                text-align: center;
+                width: 100%;
+                position: fixed;
+                top: 30%;
+            }
+            h2 {
+                color: #9aa0a6;
+                font-size: 40px;
+            }
         }
     </style>
     <script>
         function modifyLink() {
             const userInput = document.getElementById("userLink").value;
             let modifiedLink = userInput;
-    
-            // Check if the link contains 'youtube' or 'youtu.be'
-            if (userInput.toLowerCase().includes("youtube") || userInput.toLowerCase().includes("youtu.be")) {
-                // Replace 'youtube' with 'yout-ube' and ensure 'youtu.be' links are correctly formatted
-                if (userInput.toLowerCase().includes("youtube")) {
-                    modifiedLink = userInput.replace(/youtube/i, "yout-ube");
-                } else if (userInput.toLowerCase().includes("youtu.be")) {
-                    modifiedLink = userInput.replace(/youtu\.be/i, "yout-ube");
-                }
-    
-                // Show the Play button
+            
+            // Check if the link is a 'youtu.be' short link
+            if (userInput.toLowerCase().includes("youtu.be")) {
+                // Extract video ID from youtu.be link and format it as youtube.com/watch?v=VIDEO_ID
+                const videoId = userInput.split("youtu.be/")[1].split("?")[0]; // Get the video ID
+                modifiedLink = `https://www.yout-ube.com/watch?v=${videoId}`;
+                
+            } else if (userInput.toLowerCase().includes("youtube.com")) {
+                // For youtube.com links, replace 'youtube' with 'yout-ube'
+                modifiedLink = userInput.replace(/youtube/i, "yout-ube");
+            }
+
+            // Check if the modified link is valid (must be a proper YouTube link)
+            if (modifiedLink.includes("yout-ube.com/watch?v=")) {
+                // Show the Play button and Fullscreen button
                 document.getElementById("result").innerHTML = `
                     <button onclick="window.open('${modifiedLink}', '_self')">Play in full screen</button>
                 `;
             } else {
-                document.getElementById("result").innerHTML = "Invalid URL";
+                document.getElementById("result").innerHTML = "Invalid URL. Please use a valid YouTube link.";
+            }
+        }
+
+        // Function to set the page into fullscreen mode
+        function setFullscreen() {
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen();
+            } else if (document.documentElement.mozRequestFullScreen) { // Firefox
+                document.documentElement.mozRequestFullScreen();
+            } else if (document.documentElement.webkitRequestFullscreen) { // Chrome, Safari, and Opera
+                document.documentElement.webkitRequestFullscreen();
+            } else if (document.documentElement.msRequestFullscreen) { // IE/Edge
+                document.documentElement.msRequestFullscreen();
             }
         }
     </script>
-    
 </head>
 <body>
-    <div class="a" style="position: fixed;
-    top: 14px;
-    right: 16px;">
+    <div class="a" style="position: fixed; top: 14px; right: 16px;">
         <a href="how.png">Which Link?</a>
     </div>
     <div class="container">
@@ -181,8 +201,13 @@
         <br>
         <button onclick="modifyLink()">Submit</button>
         <div id="result"></div>
-        
     </div>
+
+    <!-- Fullscreen button with a symbol -->
+    <button class="fullscreen-btn" onclick="setFullscreen()">
+        <i class="fas fa-expand"></i>
+    </button>
+
     <p>You can create a playlist of your favorite songs, movies, or any other videos on YouTube and then share the link here. We will play them without any interruptions from ads.</p>
 </body>
 </html>
