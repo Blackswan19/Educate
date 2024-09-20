@@ -67,8 +67,10 @@
             background-color:  #00ffff5d;
         }
         #result {
-            margin-top: 0px;
-            font-size: 18px;
+            margin-top: 19px;
+    font-size: 15px;
+    font-weight: 800;
+    color: #ff0000;
         }
         /* Play button styling */
         #result button {
@@ -179,7 +181,7 @@
                     <button onclick="window.open('${modifiedLink}', '_self')">Play in full screen</button>
                 `;
             } else {
-                document.getElementById("result").innerHTML = "Invalid URL. Please use a valid YouTube link.";
+                document.getElementById("result").innerHTML = "Invalid URl";
             }
         }
 
@@ -203,7 +205,7 @@
     </div>
     <div class="container">
         <h2>BsAdstoper</h2>
-        <input type="text" id="userLink" placeholder="Paste the Youtube link here...">
+        <input type="text" id="userLink" placeholder="Paste the youtube link here...">
         <br>
         <button onclick="modifyLink()">Submit</button>
         <div id="result"></div>
