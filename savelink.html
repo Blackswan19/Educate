@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BsYtsaver</title>
+    <link rel="icon" type="image/x-icon" href="https://i.ibb.co/gW8Py0B/BS.png">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Orbitron:wght@400..900&family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&family=Strait&display=swap');
+        
+        * {
+            font-family: "Red Hat Display", sans-serif;
+            list-style: none;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #121212;
+            color: #E0E0E0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            background-color: #1F1F1F;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0px;
+            color: #004cff;
+        }
+
+        .input-section {
+            margin-bottom: 20px;
+        }
+
+        input[type="text"], input[type="url"] {
+            padding: 10px;
+            margin: 10px 0;
+            width: 100%;
+            background-color: #333;
+            color: #E0E0E0;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        button {
+            padding: 12px;
+            background-color: #004cff;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            border-radius: 8px;
+            width: 100%;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        button:hover {
+            background-color: #004cffc5;
+        }
+
+        .link-list {
+            margin-top: 20px;
+            max-height: 250px;
+            overflow-y: auto;
+            padding: 10px;
+            border: 1px solid #333;
+            border-radius: 8px;
+        }
+
+        .link-item {
+            background-color: #000000;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        a {
+            color: #004cff;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            text-transform: uppercase;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 0px;
+        }
+
+        .action-buttons button {
+            padding: 8px;
+            background-color: #004cff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .copy-btn:hover {
+            background-color: #004cffcc;
+        }
+
+        .delete-btn {
+            background-color: #FF3B30;
+        }
+
+        .delete-btn:hover {
+            background-color: #d9342c;
+        }
+
+        .clear-btn {
+            margin-top: 20px;
+            background-color: #560400;
+            font-size: 1rem;
+            padding: 12px;
+            border-radius: 8px;
+            width: 100%;
+        }
+
+        .clear-btn:hover {
+            background-color: #ff0d00;
+        }
+
+        /* Scrollbar styling for the link list */
+        .link-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .link-list::-webkit-scrollbar-thumb {
+            background-color: #004cff;
+            border-radius: 10px;
+        }
+
+        /* Pop-up modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #1F1F1F;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            width: 80%;
+            max-width: 400px;
+            color: #fff;
+        }
+
+        .modal-content p {
+            margin-bottom: 20px;
+        }
+
+        .close-btn {
+            background-color: #004cff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .close-btn:hover {
+            background-color: #004cff;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="s" style="position: fixed;
+    top: 14px;
+    text-align: end;
+    right: 16px;">
+        <a href="https://blackswan19.github.io/Educate/websave.html" style="text-transform: none;
+    color: white;text-decoration: underline;">BsWebsaver?</a><br><br>
+    </div>
+    <div class="container">
+        <h1>BsYtsaver</h1>
+
+        <div class="input-section">
+            <input type="text" id="titleInput" placeholder="Enter title" required>
+            <input type="url" id="urlInput" placeholder="Enter YouTube URL" required>
+            <button onclick="addLink()">Add Link</button>
+        </div>
+
+        <div class="link-list" id="linkList"></div>
+
+        <button class="clear-btn" onclick="clearLinks()">Clear All Links</button>
+    </div>
+
+    <!-- Pop-up modal for notifications -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <p id="modalMessage"></p>
+            <button class="close-btn" onclick="closeModal()">OK</button>
+        </div>
+    </div>
+
+    <script>
+        // Load links from localStorage on page load
+        window.onload = function() {
+            loadLinks();
+        };
+
+        // Show the modal with a custom message
+        function showModal(message) {
+            document.getElementById('modalMessage').innerText = message;
+            document.getElementById('modal').style.display = 'flex';
+        }
+
+        // Close the modal
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
+        // Add a new link and store it in localStorage
+        function addLink() {
+            const title = document.getElementById('titleInput').value;
+            const url = document.getElementById('urlInput').value;
+
+            if (title && url) {
+                const links = JSON.parse(localStorage.getItem('youtubeLinks')) || [];
+                const newLink = { title, url };
+                links.push(newLink);
+                localStorage.setItem('youtubeLinks', JSON.stringify(links));
+
+                displayLink(newLink, links.length - 1);
+
+                // Clear the inputs after adding
+                document.getElementById('titleInput').value = '';
+                document.getElementById('urlInput').value = '';
+
+                showModal('Link added!');
+            } else {
+                showModal('Enter both a title and a YouTube URL.');
+            }
+        }
+
+        // Display a link on the page with Copy and Delete buttons
+        function displayLink(link, index) {
+            const linkList = document.getElementById('linkList');
+            const linkItem = document.createElement('div');
+            linkItem.className = 'link-item';
+            linkItem.innerHTML = `
+                <a href="${link.url}" target="_blank">${link.title}</a>
+                <div class="action-buttons">
+                    <button class="copy-btn" onclick="copyLink(${index})">Copy</button>
+                    <button class="delete-btn" onclick="deleteLink(${index})">Delete</button>
+                </div>`;
+            linkList.appendChild(linkItem);
+        }
+
+        // Load all links from localStorage and display them
+        function loadLinks() {
+            const links = JSON.parse(localStorage.getItem('youtubeLinks')) || [];
+            links.forEach((link, index) => displayLink(link, index));
+        }
+
+        // Copy the link to clipboard
+        function copyLink(index) {
+            const links = JSON.parse(localStorage.getItem('youtubeLinks'));
+            const link = links[index].url;
+
+            navigator.clipboard.writeText(link).then(() => {
+                showModal('Link copied to clipboard!');
+            }, () => {
+                showModal('Failed to copy link.');
+            });
+        }
+
+        // Delete a link from localStorage and the UI
+        function deleteLink(index) {
+            const links = JSON.parse(localStorage.getItem('youtubeLinks'));
+            links.splice(index, 1);  // Remove the link from the array
+            localStorage.setItem('youtubeLinks', JSON.stringify(links));
+            document.getElementById('linkList').innerHTML = '';  // Clear the list
+            loadLinks();  // Reload the remaining links
+            showModal('Link deleted.');
+        }
+
+        // Clear all links from localStorage and the UI
+        function clearLinks() {
+            localStorage.removeItem('youtubeLinks');
+            document.getElementById('linkList').innerHTML = '';  // Clear the UI
+            showModal('All links cleared.');
+        }
+    </script>
+</body>
+</html>
