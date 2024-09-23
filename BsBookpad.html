@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Save and Delete Notes</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Orbitron:wght@400..900&family=Red+Hat+Display:ital,wght@0,300..900&family=Strait&display=swap');
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 95%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #1f1f1f;
+            color: #E0E0E0;
+            font-family: "Red Hat Display", sans-serif;
+        }
+
+        .fullscreen-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            padding: 60px;
+            background-color: #1F1F1F;
+        }
+
+        textarea {
+            width: 100%;
+            height: 50%;
+            padding: 20px;
+            font-size: 1.2rem;
+            background-color: #333;
+            color: #E0E0E0;
+            border: none;
+            border-radius: 10px;
+            resize: none;
+            margin-bottom: 20px;
+        }
+
+        .icon-buttons {
+            display: flex;
+            gap: 20px;
+        }
+
+        .icon-buttons i {
+            font-size: 20px;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .new-input {
+            background-color: #4caf50;
+            color: white;
+        }
+
+        .save-icon {
+            background-color: #004cff;
+            color: white;
+        }
+
+        .open-icon {
+            background-color: #ffa500;
+            color: white;
+        }
+
+        .delete-icon {
+            background-color: #ff3b30;
+            color: white;
+        }
+
+        .new-input:hover {
+            background-color: #4caf50c7;
+        }
+
+        .save-icon:hover {
+            background-color: #004cffc5;
+        }
+
+        .open-icon:hover {
+            background-color: #ffb730;
+        }
+
+        .delete-icon:hover {
+            background-color: #cc2a24;
+        }
+
+        p {
+            font-size: 1.2rem;
+            margin-top: 20px;
+            text-align: center;
+            width: 100%;
+            word-wrap: break-word;
+        }
+
+        .message {
+            margin-top: 10px;
+            color: #00ddff;
+            text-align: center;
+            position: fixed;
+            top: 10px;
+            font-weight: 800;
+            padding: 10px;
+        }
+
+        .saved-items {
+            margin-top: 20px;
+            padding: 10px;
+            max-height: 150px;
+            overflow-y: auto;
+            border-radius: 5px;
+            width: 100%;
+            color: #E0E0E0;
+            border: solid 1px gray;
+        }
+
+        .saved-item {
+            margin-bottom: 10px;
+            background-color: #000000;
+            padding: 10px;
+            border-radius: 8px;
+            word-wrap: break-word;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .delete-btn, .copy-btn {
+            background-color: #ff3b30;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            color: white;
+            font-family: "Red Hat Display", sans-serif;
+        }
+
+        .delete-btn:hover, .copy-btn:hover {
+            background-color: #cc2a24;
+        }
+
+        .copy-btn {
+            background-color: #4caf50;
+        }
+
+        .copy-btn:hover {
+            background-color: #45a049;
+        }
+
+        .saved-items::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .saved-items::-webkit-scrollbar-thumb {
+            background-color: #004cff;
+            border-radius: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .fullscreen-container {
+                padding: 40px;
+            }
+
+            textarea {
+                height: 35%;
+                padding: 15px;
+                font-size: 1rem;
+            }
+
+            .icon-buttons i {
+                font-size: 0.9rem;
+                padding: 8px 16px;
+            }
+
+            .message {
+                font-size: 1rem;
+            }
+
+            p {
+                font-size: 1rem;
+            }
+
+            .saved-item {
+                padding: 8px;
+            }
+
+            .delete-btn, .copy-btn {
+                padding: 6px 10px;
+                font-size: 0.9rem;
+            }
+
+            .button-group {
+                gap: 8px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .fullscreen-container {
+                padding: 20px;
+            }
+
+            textarea {
+                height: 50%;
+                padding: 16px;
+                font-size: 18px;
+            }
+
+            .icon-buttons i {
+                font-size: 20px;
+            }
+
+            .saved-item {
+                padding: 10px;
+            }
+
+            .delete-btn, .copy-btn {
+                padding: 5px 8px;
+                font-size: 0.8rem;
+            }
+
+            .button-group {
+                gap: 5px;
+            }
+
+            .message {
+                font-size: 0.9rem;
+            }
+
+            p {
+                font-size: 0.9rem;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="frombs" style="    position: fixed;
+    top: 5px;
+    right: 9px;">
+    <a href="https://blackswan19.github.io/Educate/savenotes.html" style="
+    color: white;">BsNote</a>
+    </div>
+    <div class="logo" style="position: fixed; top: 20px; left: 40px; font-size: 23px;">
+        BsBookpad
+    </div>
+    <div class="fullscreen-container">
+        <textarea id="paragraphInput" placeholder="Type your paragraph..."></textarea>
+
+        <div class="icon-buttons">
+            <i class="fas fa-save save-icon" onclick="saveInput()" title="Save Input"></i>
+            <i class="fas fa-folder-open open-icon" onclick="openInputs()" title="Open Saved Inputs"></i>
+        </div>
+
+        <div class="message" id="message"></div>
+
+        <div class="saved-items" id="savedItems"></div>
+    </div>
+
+    <script>
+        function newInput() {
+            document.getElementById('paragraphInput').value = '';
+            displayMessage("New input field ready.");
+        }
+
+        function saveInput() {
+            const input = document.getElementById('paragraphInput').value.trim();
+
+            if (input === "") {
+                displayMessage("Enter a paragraph before saving.");
+                return;
+            }
+
+            const savedInputs = JSON.parse(localStorage.getItem('savedInputs')) || [];
+            savedInputs.push(input);
+            localStorage.setItem('savedInputs', JSON.stringify(savedInputs));
+            
+            displayMessage("Input saved!");
+            document.getElementById('paragraphInput').value = '';
+            openInputs();
+        }
+
+        function openInputs() {
+            const savedInputs = JSON.parse(localStorage.getItem('savedInputs')) || [];
+            const savedItemsDiv = document.getElementById('savedItems');
+            savedItemsDiv.innerHTML = '';
+
+            if (savedInputs.length > 0) {
+                savedInputs.forEach((input, index) => {
+                    const item = document.createElement('div');
+                    item.className = 'saved-item';
+                    item.innerHTML = `
+                        ${index + 1}. ${input}
+                        <div class="button-group">
+                            <button class="copy-btn" onclick="copyToClipboard('${input}')">Copy</button>
+                            <button class="delete-btn" onclick="deleteSingleInput(${index})">Delete</button>
+                        </div>
+                    `;
+                    savedItemsDiv.appendChild(item);
+                });
+            } else {
+                savedItemsDiv.innerHTML = '<p>No saved inputs available.</p>';
+            }
+        }
+
+        function deleteSingleInput(index) {
+            const savedInputs = JSON.parse(localStorage.getItem('savedInputs')) || [];
+            savedInputs.splice(index, 1);
+            localStorage.setItem('savedInputs', JSON.stringify(savedInputs));
+            displayMessage("Input deleted!");
+            openInputs();
+        }
+
+        function copyToClipboard(text) {
+            const textarea = document.createElement("textarea");
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand("copy");
+            document.body.removeChild(textarea);
+            displayMessage("Copied to clipboard!");
+        }
+
+        function displayMessage(message) {
+            const messageElement = document.getElementById('message');
+            messageElement.textContent = message;
+            setTimeout(() => {
+                messageElement.textContent = "";
+            }, 2000);
+        }
+    </script>
+
+</body>
+</html
