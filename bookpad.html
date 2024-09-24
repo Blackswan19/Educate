@@ -8,280 +8,274 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Orbitron:wght@400..900&family=Red+Hat+Display:ital,wght@0,300..900&family=Strait&display=swap');
-
-        body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 95%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #1f1f1f;
-            color: #E0E0E0;
-            font-family: "Red Hat Display", sans-serif;
+       @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Orbitron:wght@400..900&family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&family=Strait&display=swap');
+        * {
+            color: rgb(255, 255, 255);
         }
-        .logo{
-            position: fixed; 
-            top: 20px; 
-            left: 40px; 
-            font-size: 23px;
-        }
-        .fullscreen-container {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            height: 100%;
-            padding: 60px;
-            background-color: #1F1F1F;
-        }
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 95%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #1f1f1f;
+    font-family: "Red Hat Display", sans-serif;
+}
+.logo{
+    position: fixed; 
+    top: 20px; 
+    left: 40px; 
+    font-size: 23px;
+}
+.fullscreen-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 60px;
+    background-color: #1F1F1F;
+}
 
-        textarea {
-            width: 100%;
-            height: 50%;
-            padding: 20px;
-            font-size: 1.2rem;
-            background-color: #333;
-            color: #E0E0E0;
-            border: none;
-            border-radius: 10px;
-            resize: none;
-            margin-bottom: 20px;
-        }
+textarea {
+    width: 100%;
+    height: 600px;
+    padding: 20px;
+    font-size: 1.2rem;
+    background-color: #333;
+    color: #E0E0E0;
+    border: none;
+    border-radius: 10px;
+    resize: none;
+    margin-bottom: 20px;
+    position: relative;
+    top: 30px;
+}
 
-        .icon-buttons {
-            display: flex;
-            gap: 20px;
-        }
+.icon-buttons {
+    display: flex;
+    gap: 20px;
+    position: fixed;
+    bottom: 15px;
+}
 
-        .icon-buttons i {
-            font-size: 20px;
-            padding: 10px 20px;
-            border-radius: 10px;
-            cursor: pointer;
-        }
+.icon-buttons i {
+    font-size: 20px;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+}
 
-        .new-input {
-            background-color: #4caf50;
-            color: white;
-        }
+.new-input {
+    background-color: #4caf50;
+    color: white;
+}
 
-        .save-icon {
-            background-color: #004cff;
-            color: white;
-        }
+.save-icon {
+    background-color: #004cff;
+    color: white;
+}
 
-        .open-icon {
-            background-color: #ffa500;
-            color: white;
-        }
+.open-icon {
+    background-color: #ffa500;
+    color: white;
+}
 
-        .delete-icon {
-            background-color: #ff3b30;
-            color: white;
-        }
+.delete-icon {
+    background-color: #ff3b30;
+    color: white;
+}
 
-        .new-input:hover {
-            background-color: #4caf50c7;
-        }
+.new-input:hover {
+    background-color: #4caf50c7;
+}
 
-        .save-icon:hover {
-            background-color: #004cffc5;
-        }
+.save-icon:hover {
+    background-color: #004cffc5;
+}
 
-        .open-icon:hover {
-            background-color: #ffb730;
-        }
+.open-icon:hover {
+    background-color: #ffb730;
+}
 
-        .delete-icon:hover {
-            background-color: #cc2a24;
-        }
+.delete-icon:hover {
+    background-color: #cc2a24;
+}
 
-        p {
-            font-size: 1.2rem;
-            margin-top: 20px;
-            text-align: center;
-            width: 100%;
-            word-wrap: break-word;
-        }
+p {
+    font-size: 1.2rem;
+    margin-top: 20px;
+    text-align: center;
+    width: 100%;
+    word-wrap: break-word;
+}
 
-        .message {
-            margin-top: 10px;
-            color: #00ddff;
-            text-align: center;
-            position: fixed;
-            top: 10px;
-            font-weight: 800;
-            padding: 10px;
-        }
+.message {
+    margin-top: 10px;
+    color: #00ddff;
+    text-align: center;
+    position: fixed;
+    top: 10px;
+    font-weight: 800;
+    padding: 10px;
+    z-index: 10000000;
+}
 
-        .saved-items {
-            margin-top: 20px;
-            padding: 10px;
-            max-height: 150px;
-            overflow-y: auto;
-            border-radius: 5px;
-            width: 100%;
-            color: #E0E0E0;
-            border: solid 1px gray;
-        }
+.saved-items {
+    display: none;
+}
+.saved-item:hover{
+    color: #ffffff;
+    border: solid 1px #004eff;
+    background-color: black;
+    transition: 0.5s;
+}
+.saved-text {
+    flex-grow: 1;
+}
 
-        .saved-item {
-            margin-bottom: 10px;
-            background-color: #000000;
-            padding: 10px;
-            border-radius: 8px;
-            word-wrap: break-word;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+.button-group {
+    display: flex;
+    gap: 10px;
+}
 
-        .button-group {
-            display: flex;
-            gap: 10px;
-        }
+.delete-btn, .copy-btn {
+    background-color: #ff3b30;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    color: white;
+    font-family: "Red Hat Display", sans-serif;
+}
 
-        .delete-btn, .copy-btn {
-            background-color: #ff3b30;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            color: white;
-            font-family: "Red Hat Display", sans-serif;
-        }
+.delete-btn:hover, .copy-btn:hover {
+    background-color: #cc2a24;
+}
 
-        .delete-btn:hover, .copy-btn:hover {
-            background-color: #cc2a24;
-        }
+.copy-btn {
+    background-color: #4caf50;
+}
 
-        .copy-btn {
-            background-color: #4caf50;
-        }
+.copy-btn:hover {
+    background-color: #45a049;
+}
 
-        .copy-btn:hover {
-            background-color: #45a049;
-        }
+.saved-items::-webkit-scrollbar {
+    width: 6px;
+}
 
-        .saved-items::-webkit-scrollbar {
-            width: 6px;
-        }
+.saved-items::-webkit-scrollbar-thumb {
+    background-color: #004cff;
+    border-radius: 10px;
+}
 
-        .saved-items::-webkit-scrollbar-thumb {
-            background-color: #004cff;
-            border-radius: 10px;
-        }
+@media (max-width: 768px) {
+    .fullscreen-container {
+        padding: 40px;
+    }
 
-        @media (max-width: 768px) {
-            .fullscreen-container {
-                padding: 40px;
-            }
+    textarea {
+        height: 35%;
+        padding: 15px;
+        font-size: 1rem;
+    }
 
-            textarea {
-                height: 35%;
-                padding: 15px;
-                font-size: 1rem;
-            }
+    .icon-buttons i {
+        font-size: 0.9rem;
+        padding: 8px 16px;
+    }
 
-            .icon-buttons i {
-                font-size: 0.9rem;
-                padding: 8px 16px;
-            }
+    .message {
+        font-size: 1rem;
+    }
 
-            .message {
-                font-size: 1rem;
-            }
+    p {
+        font-size: 1rem;
+    }
 
-            p {
-                font-size: 1rem;
-            }
+    .saved-item {
+        padding: 8px;
+    }
 
-            .saved-item {
-                padding: 8px;
-            }
+    .delete-btn, .copy-btn {
+        padding: 6px 10px;
+        font-size: 0.9rem;
+    }
 
-            .delete-btn, .copy-btn {
-                padding: 6px 10px;
-                font-size: 0.9rem;
-            }
+    .button-group {
+        gap: 8px;
+    }
+}
 
-            .button-group {
-                gap: 8px;
-            }
-        }
+@media (max-width: 480px) {
+    .fullscreen-container {
+        padding: 20px;
+    }
 
-        @media (max-width: 480px) {
-            .fullscreen-container {
-                padding: 20px;
-            }
+    textarea {
+        height: 50%;
+padding: 10px;
+font-size: 18px;
 
-            textarea {
-                height: 50%;
+    }
+
+    .icon-buttons i {
+        font-size: 20px;
+    }
+
+    .saved-item {
         padding: 10px;
-        font-size: 18px;
+    }
 
-            }
+    .delete-btn, .copy-btn {
+        padding: 5px 8px;
+        font-size: 0.8rem;
+    }
 
-            .icon-buttons i {
-                font-size: 20px;
-            }
+    .button-group {
+        gap: 5px;
+    }
 
-            .saved-item {
-                padding: 10px;
-            }
+    .message {
+        font-size: 0.9rem;
+    }
 
-            .delete-btn, .copy-btn {
-                padding: 5px 8px;
-                font-size: 0.8rem;
-            }
-
-            .button-group {
-                gap: 5px;
-            }
-
-            .message {
-                font-size: 0.9rem;
-            }
-
-            p {
-                font-size: 0.9rem;
-            }
-            .logo{
-                position: fixed;
-        top: 10px;
-        left: 10px;
-        font-size: 18px;
-            }
-        }
+    p {
+        font-size: 0.9rem;
+    }
+    .logo{
+        position: fixed;
+top: 10px;
+left: 10px;
+font-size: 18px;
+    }
+}
 
     </style>
 </head>
 <body>
-    <div class="frombs" style="    position: fixed;
-    top: 5px;
-    right: 9px;">
-    <a href="https://blackswan19.github.io/Educate/savenotes.html" style="
-    color: white;">BsNote?</a>
+    <div class="frombs" style="position: fixed; top: 5px; right: 9px;">
+        <a href="https://blackswan19.github.io/Educate/savenotes.html" style="color: white;">BsNote?</a>
     </div>
-    <div class="logo">
-        BsBookpad
-    </div>
+    <div class="logo">BsBookpad</div>
     <div class="fullscreen-container">
         <textarea id="paragraphInput" placeholder="Type your paragraph..."></textarea>
-
+    
         <div class="icon-buttons">
             <i class="fas fa-save save-icon" onclick="saveInput()" title="Save Input"></i>
             <i class="fas fa-folder-open open-icon" onclick="openInputs()" title="Open Saved Inputs"></i>
         </div>
-
+    
+        <!-- Move the message div here -->
         <div class="message" id="message"></div>
-
+    
         <div class="saved-items" id="savedItems"></div>
     </div>
+    
 
     <script>
         function newInput() {
@@ -303,58 +297,68 @@
             
             displayMessage("Input saved!");
             document.getElementById('paragraphInput').value = '';
-            openInputs();
         }
 
         function openInputs() {
-            const savedInputs = JSON.parse(localStorage.getItem('savedInputs')) || [];
-            const savedItemsDiv = document.getElementById('savedItems');
-            savedItemsDiv.innerHTML = '';
+    window.location.href = "saved_inputs.html"; // Redirect to the new page
+}
 
-            if (savedInputs.length > 0) {
-                savedInputs.forEach((input, index) => {
-                    const item = document.createElement('div');
-                    item.className = 'saved-item';
-                    item.innerHTML = `
-                        ${index + 1}. ${input}
-                        <div class="button-group">
-                            <button class="copy-btn" onclick="copyToClipboard('${input}')">Copy</button>
-                            <button class="delete-btn" onclick="deleteSingleInput(${index})">Delete</button>
-                        </div>
-                    `;
-                    savedItemsDiv.appendChild(item);
-                });
-            } else {
-                savedItemsDiv.innerHTML = '<p>No saved inputs available.</p>';
-            }
-        }
 
-        function deleteSingleInput(index) {
-            const savedInputs = JSON.parse(localStorage.getItem('savedInputs')) || [];
-            savedInputs.splice(index, 1);
-            localStorage.setItem('savedInputs', JSON.stringify(savedInputs));
-            displayMessage("Input deleted!");
-            openInputs();
+    function openFullScreen(element) {
+        if (element.requestFullscreen) {
+            element.requestFullscreen();
+        } else if (element.mozRequestFullScreen) { // Firefox
+            element.mozRequestFullScreen();
+        } else if (element.webkitRequestFullscreen) { // Chrome, Safari, and Opera
+            element.webkitRequestFullscreen();
+        } else if (element.msRequestFullscreen) { // IE/Edge
+            element.msRequestFullscreen();
         }
+    }
+    function displayMessage(message) {
+    const messageDiv = document.getElementById('message');
+    messageDiv.textContent = message;
 
-        function copyToClipboard(text) {
-            const textarea = document.createElement("textarea");
-            textarea.value = text;
-            document.body.appendChild(textarea);
-            textarea.select();
-            document.execCommand("copy");
-            document.body.removeChild(textarea);
-            displayMessage("Copied to clipboard!");
-        }
+    // Ensure the message is added to the fullscreen element (if it exists)
+    const fullscreenElement = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
+    if (fullscreenElement) {
+        fullscreenElement.appendChild(messageDiv);
+    }
 
-        function displayMessage(message) {
-            const messageElement = document.getElementById('message');
-            messageElement.textContent = message;
-            setTimeout(() => {
-                messageElement.textContent = "";
-            }, 2000);
-        }
+    setTimeout(() => {
+        messageDiv.textContent = '';
+    }, 3000);
+}
+
+    function copyInput(index) {
+        const savedInputs = JSON.parse(localStorage.getItem('savedInputs')) || [];
+        const inputToCopy = savedInputs[index];
+
+        const textarea = document.createElement('textarea');
+        textarea.value = inputToCopy;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+
+        displayMessage("Input copied to clipboard.");
+    }
+
+    function deleteInput(index) {
+        const savedInputs = JSON.parse(localStorage.getItem('savedInputs')) || [];
+        savedInputs.splice(index, 1);
+        localStorage.setItem('savedInputs', JSON.stringify(savedInputs));
+        openInputs();
+        displayMessage("Input deleted.");
+    }
+
+    function displayMessage(message) {
+        const messageDiv = document.getElementById('message');
+        messageDiv.textContent = message;
+        setTimeout(() => {
+            messageDiv.textContent = '';
+        }, 3000);
+    }
     </script>
-
 </body>
-</html
+</html>
