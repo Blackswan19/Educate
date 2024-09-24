@@ -43,7 +43,7 @@
         <div class="containers">
             <!-- Left side with recommendation text -->
             <div class="side-section">
-                <button id="showButton" onclick="showRecommendations()">Recommends</button>
+                <button id="showButton" onclick="showRecommendations()">Suggestions</button>
             </div>
     
             <!-- Right side with video list -->
@@ -176,7 +176,7 @@
         if (recommendationSection.style.display === "block") {
             // Hide recommendations
             recommendationSection.style.display = "none";
-            document.getElementById("showButton").textContent = "Recommends";
+            document.getElementById("showButton").textContent = "Suggestions";
         } else {
             // Show recommendations and populate videos
             videoListContainer.innerHTML = ""; // Clear the list before displaying new videos
@@ -200,7 +200,7 @@
             });
     
             recommendationSection.style.display = "block";
-            document.getElementById("showButton").textContent = "Recommends";
+            document.getElementById("showButton").textContent = "Suggestions";
         }
     }
     
