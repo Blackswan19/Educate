@@ -272,18 +272,20 @@
         }
 
         // Display a link on the page with Copy and Delete buttons
-        function displayLink(link, index) {
-            const linkList = document.getElementById('linkList');
-            const linkItem = document.createElement('div');
-            linkItem.className = 'link-item';
-            linkItem.innerHTML = `
-                <a href="${link.url}" target="_blank">${link.title}</a>
-                <div class="action-buttons">
-                    <button class="copy-btn" onclick="copyLink(${index})">Copy</button>
-                    <button class="delete-btn" onclick="deleteLink(${index})">Delete</button>
-                </div>`;
-            linkList.appendChild(linkItem);
-        }
+        // Display a link on the page with Copy and Delete buttons
+function displayLink(link, index) {
+    const linkList = document.getElementById('linkList');
+    const linkItem = document.createElement('div');
+    linkItem.className = 'link-item';
+    linkItem.innerHTML = `
+        <span>${link.title}</span>
+        <div class="action-buttons">
+            <button class="copy-btn" onclick="copyLink(${index})">Copy</button>
+            <button class="delete-btn" onclick="deleteLink(${index})">Delete</button>
+        </div>`;
+    linkList.appendChild(linkItem);
+}
+
 
         // Load all links from localStorage and display them
         function loadLinks() {
