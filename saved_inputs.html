@@ -9,6 +9,7 @@
         * {
             color: rgb(255, 255, 255);
             font-family: "Red Hat Display", sans-serif;
+            letter-spacing: 0.5px;
         }
         body {
             font-family: "Red Hat Display", sans-serif;
@@ -20,7 +21,7 @@
 
         .saved-items {
             padding: 13px;
-            margin-top: 20px;
+            margin-top: 60px;
             max-height: 650px;
             overflow-y: auto;
             border-radius: 5px;
@@ -66,7 +67,7 @@
         }
         
         .message {
-            margin-top: 10px;
+            margin-top: 0px;
             color: #00ddff;
             text-align: center;
             position: fixed;
@@ -80,7 +81,15 @@
             transform: translateX(-50%);
             display: none;
         }
-        
+        .logo{
+    position: fixed; 
+    top: 20px; 
+    left: 40px; 
+    font-size: 23px;
+}
+.saved-text{
+                font-size: 14px;
+            }
         @media (max-width: 768px) {
             .fullscreen-container {
                 padding: 40px;
@@ -124,7 +133,7 @@
     </style>
 </head>
 <body>
-    <h1>Saved Inputs</h1>
+    <div class="logo">BsBookpad</div>
     <div class="saved-items" id="savedItems"></div>
     <div class="message" id="popupMessage"></div> <!-- Popup Message -->
 
