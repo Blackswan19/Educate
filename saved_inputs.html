@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saved Inputs</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Orbitron:wght@400..900&family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&family=Strait&display=swap');
+        * {
+            color: rgb(255, 255, 255);
+            font-family: "Red Hat Display", sans-serif;
+        }
+        body {
+            font-family: "Red Hat Display", sans-serif;
+            background-color: #000000;
+            color: #E0E0E0;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .saved-items {
+            padding: 13px;
+            margin-top: 20px;
+            max-height: 650px;
+            overflow-y: auto;
+            border-radius: 5px;
+            color: #E0E0E0;
+            border: solid 1px gray;
+        }
+
+        .saved-item {
+            margin-bottom: 10px;
+            background-color: #181818;
+            border: solid 1px #ffffff;
+            padding: 10px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #727272;
+        }
+
+        .saved-item:hover {
+            color: #ffffff;
+            border: solid 1px #004eff;
+            background-color: black;
+            transition: 0.5s;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .delete-btn, .copy-btn {
+            background-color: #ff3b30;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            color: white;
+        }
+
+        .copy-btn {
+            background-color: #4caf50;
+        }
+        
+        .message {
+            margin-top: 10px;
+            color: #00ddff;
+            text-align: center;
+            position: fixed;
+            top: 10px;
+            font-weight: 800;
+            padding: 10px;
+            z-index: 10000000;
+            border-radius: 5px;
+            width: 80%;
+            left: 50%;
+            transform: translateX(-50%);
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
+            .fullscreen-container {
+                padding: 40px;
+            }
+
+            .saved-item {
+                padding: 8px;
+            }
+
+            .delete-btn, .copy-btn {
+                padding: 6px 10px;
+                font-size: 0.9rem;
+            }
+
+            .button-group {
+                gap: 8px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .fullscreen-container {
+                padding: 20px;
+            }
+
+            .saved-item {
+                padding: 10px;
+            }
+            .saved-text{
+                width: 65%;
+                font-size: 10px;
+            }
+            .delete-btn, .copy-btn {
+                padding: 5px 8px;
+                font-size: 0.8rem;
+            }
+
+            .button-group {
+                gap: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Saved Inputs</h1>
+    <div class="saved-items" id="savedItems"></div>
+    <div class="message" id="popupMessage"></div> <!-- Popup Message -->
+
+    <script>
+        window.onload = function() {
+            const savedInputs = JSON.parse(localStorage.getItem('savedInputs')) || [];
+            const savedItemsDiv = document.getElementById('savedItems');
+            savedItemsDiv.innerHTML = '';
+
+            if (savedInputs.length > 0) {
+                savedInputs.forEach((input, index) => {
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'saved-item';
+                    itemDiv.innerHTML = `
+                        <div class="saved-text">${input}</div>
+                        <div class="button-group">
+                            <button class="copy-btn" onclick="copyInput(${index})">Copy</button>
+                            <button class="delete-btn" onclick="deleteInput(${index})">Delete</button>
+                        </div>
+                    `;
+                    savedItemsDiv.appendChild(itemDiv);
+                });
+            } else {
+                savedItemsDiv.innerHTML = '<p>No saved inputs found.</p>';
+            }
+        };
+
+        function copyInput(index) {
+            const savedInputs = JSON.parse(localStorage.getItem('savedInputs')) || [];
+            const inputToCopy = savedInputs[index];
+
+            const textarea = document.createElement('textarea');
+            textarea.value = inputToCopy;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+
+            showPopup("Input copied to clipboard.");
+        }
+
+        function deleteInput(index) {
+            const savedInputs = JSON.parse(localStorage.getItem('savedInputs')) || [];
+            savedInputs.splice(index, 1);
+            localStorage.setItem('savedInputs', JSON.stringify(savedInputs));
+            window.location.reload();
+        }
+
+        function showPopup(message) {
+            const popup = document.getElementById('popupMessage');
+            popup.textContent = message;
+            popup.style.display = 'block';
+
+            setTimeout(() => {
+                popup.style.display = 'none';
+            }, 2000); // Popup will disappear after 2 seconds
+        }
+    </script>
+</body>
+</html>
