@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald|Noto+Sans">
+<title>PFM - Iman gadzhi</title>
+    <link rel="icon" type="image/x-icon" href="https://i.ibb.co/NrRQkgh/titlog.png">
+<link rel="stylesheet" href="red.css">
+<style>
+  body {
+    font-family: "Noto Sans", sans-serif;
+  }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #000;
+            color: #fff;
+            margin: 0;
+            background-image: url("https://images.unsplash.com/photo-1710678245344-5293c3b99f6c?q=80&w=2190&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+            background-size: 100%;
+            backdrop-filter: blur(90px);
+        }
+
+
+        .container {
+            text-align: center;
+    background-color: #2e2e2e2b;
+    padding: 30px;
+    border-radius: 10px;
+    border: solid 1px #494949;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 1.3rem;
+            margin-bottom: 30px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 5px;
+            color: #ffffff;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+            border: solid 1px #494949;
+            background-color: #00000000;
+        }
+
+        .quote {
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>MYOOTIVE</h1>
+        <p id="quote" class="quote">Once a greatest persons said!</p>
+        <button onclick="generateQuote()">Quote</button>
+    </div>
+
+    <script>
+        const quotes = [
+           ",The only way to do great work is to love what you do. - Steve Jobs",
+            ",Success is not final, failure is not fatal: It is the courage to continue that counts. - Winston Churchill",
+            ",You miss 100% of the shots you don’t take. - Wayne Gretzky",
+            ",Don't watch the clock; do what it does. Keep going. - Sam Levenson",
+            ",Hardships often prepare ordinary people for an extraordinary destiny. - C.S. Lewis",
+            ",Success is not how high you have climbed, but how you make a positive difference to the world. - Roy T. Bennett",
+            ",Believe you can and you're halfway there. - Theodore Roosevelt",
+            ",Your time is limited, so don’t waste it living someone else’s life. - Steve Jobs",
+            ",Life is 10% what happens to us and 90% how we react to it. - Charles R. Swindoll",
+            ",Do not wait to strike till the iron is hot; but make it hot by striking. - William Butler Yeats",
+    
+            ",Success usually comes to those who are too busy to be looking for it. - Henry David Thoreau",
+            ",Success is walking from failure to failure with no loss of enthusiasm. - Winston Churchill",
+            ",Your time is limited, so don’t waste it living someone else’s life. - Steve Jobs",
+            ",If you are not willing to risk the usual, you will have to settle for the ordinary. - Jim Rohn",
+            ",The best revenge is massive success. - Frank Sinatra",
+            ",Success seems to be connected with action. Successful people keep moving. - Conrad Hilton",
+            ",In order to succeed, your desire for success should be greater than your fear of failure. - Bill Cosby",
+            ",The only place where success comes before work is in the dictionary. - Vidal Sassoon",
+            ",I find that the harder I work, the more luck I seem to have. - Thomas Jefferson",
+            ",Success isn’t just about what you accomplish in your life; it’s about what you inspire others to do. - Unknown",
+            ",Fall seven times and stand up eight. - Japanese Proverb",
+            ",Some people dream of success while others wake up and work. - Unknown",
+            ",If you can dream it, you can do it. - Walt Disney",
+",The way to get started is to quit talking and begin doing. - Walt Disney",
+",Don’t be afraid to give up the good to go for the great. - John D. Rockefeller",
+",I attribute my success to this: I never gave or took any excuse. - Florence Nightingale",
+",Opportunities don't happen. You create them. - Chris Grosser",
+",Success is not the key to happiness. Happiness is the key to success. If you love what you are doing, you will be successful. - Albert Schweitzer",
+",The road to success and the road to failure are almost exactly the same. - Colin R. Davis",
+",I failed my way to success. - Thomas Edison",
+",If you really look closely, most overnight successes took a long time. - Steve Jobs",
+",Success is not in what you have, but who you are. - Bo Bennett",
+",Success is how high you bounce when you hit bottom. - George S. Patton",
+",Don’t count the days; make the days count. - Muhammad Ali",
+",It is our attitude at the beginning of a difficult task which, more than anything else, will affect its successful outcome. - William James",
+",The difference between who you are and who you want to be is what you do. - Unknown",
+",I never dreamed about success. I worked for it. - Estée Lauder",
+",What seems to us as bitter trials are often blessings in disguise. - Oscar Wilde",
+",The only limit to our realization of tomorrow is our doubts of today. - Franklin D. Roosevelt",
+",The successful warrior is the average man, with laser-like focus. - Bruce Lee",
+",Success does not consist in never making mistakes but in never making the same one a second time. - George Bernard Shaw",
+",The biggest risk is not taking any risk. - Mark Zuckerberg",
+",It’s not about ideas. It’s about making ideas happen. - Scott Belsky",
+",Success is the sum of small efforts, repeated day in and day out. - Robert Collier",
+",Act as if what you do makes a difference. It does. - William James",
+",Don’t wish it were easier; wish you were better. - Jim Rohn",
+",What you get by achieving your goals is not as important as what you become by achieving your goals. - Zig Ziglar",
+",The only way to achieve the impossible is to believe it is possible. - Charles Kingsleigh (Alice in Wonderland)",
+",It always seems impossible until it’s done. - Nelson Mandela",
+",Don’t stop when you’re tired. Stop when you’re done. - Unknown",
+",Great things are not done by impulse, but by a series of small things brought together. - Vincent van Gogh",
+",Failure is the condiment that gives success its flavor. - Truman Capote",
+",Action is the foundational key to all success. - Pablo Picasso",
+",The only way to do great work is to love what you do - Steve Jobs",  
+",Success is not final, failure is not fatal: It is the courage to continue that counts - Winston Churchill",  
+",You miss 100% of the shots you don’t take - Wayne Gretzky",  
+",Don't watch the clock; do what it does. Keep going - Sam Levenson",  
+",Hardships often prepare ordinary people for an extraordinary destiny - C.S. Lewis",  
+",Success is not how high you have climbed, but how you make a positive difference to the world - Roy T. Bennett",  
+",Believe you can and you're halfway there - Theodore Roosevelt",  
+",Your time is limited, so don’t waste it living someone else’s life - Steve Jobs",  
+",Life is 10% what happens to us and 90% how we react to it - Charles R. Swindoll",  
+",Do not wait to strike till the iron is hot; but make it hot by striking - William Butler Yeats",  
+",Success usually comes to those who are too busy to be looking for it - Henry David Thoreau",  
+",Success is walking from failure to failure with no loss of enthusiasm - Winston Churchill",  
+",Your time is limited, so don’t waste it living someone else’s life - Steve Jobs",  
+",If you are not willing to risk the usual, you will have to settle for the ordinary - Jim Rohn",  
+",The best revenge is massive success - Frank Sinatra",  
+",Success seems to be connected with action. Successful people keep moving - Conrad Hilton",  
+",In order to succeed, your desire for success should be greater than your fear of failure - Bill Cosby",  
+",The only place where success comes before work is in the dictionary - Vidal Sassoon",  
+",I find that the harder I work, the more luck I seem to have - Thomas Jefferson",  
+",Success isn’t just about what you accomplish in your life; it’s about what you inspire others to do - Unknown",  
+",Fall seven times and stand up eight - Japanese Proverb",  
+",Some people dream of success while others wake up and work - Unknown",  
+",If you can dream it, you can do it - Walt Disney",  
+",The way to get started is to quit talking and begin doing - Walt Disney",  
+",Don’t be afraid to give up the good to go for the great - John D. Rockefeller",  
+",I attribute my success to this: I never gave or took any excuse - Florence Nightingale",  
+",Opportunities don't happen. You create them - Chris Grosser",  
+",Success is not the key to happiness. Happiness is the key to success. If you love what you are doing, you will be successful - Albert Schweitzer",  
+",The road to success and the road to failure are almost exactly the same - Colin R. Davis",  
+",I failed my way to success - Thomas Edison",  
+",If you really look closely, most overnight successes took a long time - Steve Jobs",  
+",Success is not in what you have, but who you are - Bo Bennett",  
+",Success is how high you bounce when you hit bottom - George S. Patton",  
+",Don’t count the days; make the days count - Muhammad Ali",  
+",It is our attitude at the beginning of a difficult task which, more than anything else, will affect its successful outcome - William James",  
+",The difference between who you are and who you want to be is what you do - Unknown",  
+",I never dreamed about success. I worked for it - Estée Lauder",  
+",What seems to us as bitter trials are often blessings in disguise - Oscar Wilde",  
+",The only limit to our realization of tomorrow is our doubts of today - Franklin D. Roosevelt",  
+",The successful warrior is the average man, with laser-like focus - Bruce Lee",  
+",Success does not consist in never making mistakes but in never making the same one a second time - George Bernard Shaw",  
+",The biggest risk is not taking any risk - Mark Zuckerberg",  
+",It’s not about ideas. It’s about making ideas happen - Scott Belsky",  
+",Success is the sum of small efforts, repeated day in and day out - Robert Collier",  
+",Act as if what you do makes a difference. It does - William James",  
+",Don’t wish it were easier; wish you were better - Jim Rohn",  
+",What you get by achieving your goals is not as important as what you become by achieving your goals - Zig Ziglar",  
+",The only way to achieve the impossible is to believe it is possible - Charles Kingsleigh",  
+",It always seems impossible until it’s done - Nelson Mandela",  
+",Don’t stop when you’re tired. Stop when you’re done - Unknown",  
+",Great things are not done by impulse, but by a series of small things brought together - Vincent van Gogh",  
+",Failure is the condiment that gives success its flavor - Truman Capote",  
+",Action is the foundational key to all success - Pablo Picasso",  
+",Success is nothing more than a few simple disciplines, practiced every day - Jim Rohn",  
+",There are no secrets to success. It is the result of preparation, hard work, and learning from failure - Colin Powell",  
+",The only difference between success and failure is the ability to take action - Alexander Graham Bell",  
+",The secret of success is to do the common thing uncommonly well - John D. Rockefeller",  
+",Success is not the absence of failure; it's the persistence through failure - Aisha Tyler",  
+",Don't be pushed around by the fears in your mind. Be led by the dreams in your heart - Roy T. Bennett",  
+",Success is liking yourself, liking what you do, and liking how you do it - Maya Angelou",  
+",The harder you work for something, the greater you’ll feel when you achieve it - Unknown",  
+",The way to get ahead is to start now - William Feather",  
+",Success is walking from failure to failure with no loss of enthusiasm - Winston Churchill",  
+",Success is getting what you want, happiness is wanting what you get - W.P. Kinsella",  
+",Don’t cry because it’s over, smile because it happened - Dr. Seuss",  
+",Success is not the key to happiness. Happiness is the key to success. If you love what you are doing, you will be successful - Albert Schweitzer",  
+",The only limit to our realization of tomorrow is our doubts of today - Franklin D. Roosevelt",  
+",Work like there is someone working 24 hours a day to take it away from you - Mark Cuban",  
+",Success usually comes to those who are too busy to be looking for it - Henry David Thoreau",  
+",Success is walking from failure to failure with no loss of enthusiasm - Winston Churchill",  
+
+        ];
+
+        while (quotes.length < 2000) {
+            quotes.push(...quotes.slice(0, 50));  // Repeat quotes until 2000
+        }
+
+        function generateQuote() {
+            const randomIndex = Math.floor(Math.random() * quotes.length);
+            document.getElementById("quote").innerText = quotes[randomIndex];
+        }
+    </script>
+</body>
+</html>
