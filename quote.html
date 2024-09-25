@@ -2,16 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald|Noto+Sans">
-<title>PFM - Iman gadzhi</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald|Noto+Sans">
+    <title>PFM - Iman gadzhi</title>
     <link rel="icon" type="image/x-icon" href="https://i.ibb.co/NrRQkgh/titlog.png">
-<link rel="stylesheet" href="red.css">
-<style>
-  body {
-    font-family: "Noto Sans", sans-serif;
-  }
-
+    <link rel="stylesheet" href="red.css">
+    <style>
         body {
+            font-family: "Noto Sans", sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -20,10 +17,9 @@
             color: #fff;
             margin: 0;
             background-image: url("https://images.unsplash.com/photo-1710678245344-5293c3b99f6c?q=80&w=2190&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
-            background-size: 100%;
-            backdrop-filter: blur(90px);
+            background-size: cover;
+            backdrop-filter: blur(50px);
         }
-
 
         .container {
             text-align: center;
@@ -31,16 +27,6 @@
     padding: 30px;
     border-radius: 10px;
     border: solid 1px #494949;
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-        }
-
-        p {
-            font-size: 1.3rem;
-            margin-bottom: 30px;
         }
 
         button {
@@ -57,6 +43,33 @@
 
         .quote {
             font-style: italic;
+        }
+
+        /* Mobile specific adjustments */
+        @media (max-width: 600px) {
+
+            h1 {
+                font-size: 7vw; /* Increase font size on smaller screens */
+            }
+
+            p {
+                font-size: 5vw;
+            }
+
+            button {
+                font-size: 4.5vw;
+                padding: 10px 15px;
+            }
+
+            .container {
+                text-align: center;
+    background-color: #2e2e2e2b;
+    padding: 71px;
+    border-radius: 10px;
+    border: solid 1px #494949;
+    font-size: 22px;
+
+            }
         }
     </style>
 </head>
@@ -197,7 +210,7 @@
         ];
 
         while (quotes.length < 2000) {
-            quotes.push(...quotes.slice(0, 50));  // Repeat quotes until 2000
+            quotes.push(...quotes.slice(0, 50)); // Repeat quotes until 2000
         }
 
         function generateQuote() {
