@@ -1,2 +1,231 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>BsWebsaver</title><link rel="icon" type="image/x-icon" href="https://i.ibb.co/gW8Py0B/BS.png"><style>@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Orbitron:wght@400..900&family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&family=Strait&display=swap');* {color: rgb(255, 255, 255);font-family: "Red Hat Display", sans-serif;}body {margin: 0;padding: 0;background: #000000;color: #ffffff;}h2 {color: #ffffff;font-size: 24px;margin-bottom: 20px;text-align: center;}form {background: #00000000;padding: 30px;margin: 65px auto;border-radius: 12px;box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6);max-width: 600px;border: 1px solid #444;}label {display: block;margin-bottom: 10px;font-size: 16px;font-weight: 500;color: #ffffff;}.input1 {width: calc(100% - 22px);padding: 12px;margin-bottom: 20px;border: 1px solid #444;border-radius: 8px;background: #0000009e;color: #ffffff;font-size: 16px;box-sizing: border-box;}::placeholder{color: rgb(0, 229, 255);}.button1 {background: linear-gradient(90deg, #000000, #004cff);color: #ffffff;border: none;padding: 12px 20px;text-align: center;text-decoration: none;display: inline-block;font-size: 15px;border-radius: 8px;cursor: pointer;transition: background 0.3s, transform 0.2s;}.button1:hover {background: linear-gradient(90deg, #004cff, #000000);transform: scale(1.05);}.addedsites {max-width: 800px;margin: 20px auto;background: #00000091;padding: 20px;border-radius: 12px;box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6);border: solid 1px #80808070;}#websiteList {list-style-type: none;padding: 0;}#websiteList li {display: flex;align-items: center;margin-bottom: 15px;padding: 12px;background: #1b1b1b;border-radius: 8px;box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);transition: background 0.3s;}#websiteList li:hover {background: #535353;}#websiteList img {margin-right: 15px;border-radius: 8px;box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);}#websiteList a {display: flex;align-items: center;text-decoration: none;color: #ffffff;flex-grow: 1;}#websiteList button {background: #e74c3c;color: #ffffff;border: none;padding: 8px 15px;font-size: 14px;border-radius: 6px;cursor: pointer;transition: background 0.3s, transform 0.2s;}#websiteList button:hover {background: #c0392b;transform: scale(1.05);}.logo {position: fixed;left: 24px;font-size: 15px;z-index: 1;background: black;top: 24px;border: solid 1.5px #3d3d3d75;padding: 5px 20px;border-radius: 6px;}</style></head><body><img style="position: fixed;width: 100%;z-index: -111;opacity: 90%;" src="https://images.unsplash.com/photo-1662403655546-2610bdbc34dc?q=80&w=2232&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt=""><div class="logo">BsWebsaver</div><form id="websiteForm"><label for="websiteUrl">Website Url:</label><input type="url" class="input1" id="websiteUrl" name="websiteUrl" placeholder="https://example.com" required autocomplete="off"><br><label for="websiteTitle">Title:</label><input type="text" class="input1" id="websiteTitle" name="websiteTitle" placeholder="Example: From Bs" required autocomplete="off"><br><label for="websiteIconUrl">Icon Url:</label><input type="url" class="input1" id="websiteIconUrl" name="websiteIconUrl" placeholder="https://example.com/icon.png" required autocomplete="off"><br><button class="button1" type="submit">Add Website</button></form><div class="addedsites" id="storedWebsites"><h2>Stored Webs</h2><ul id="websiteList"></ul></div><script>document.getElementById("websiteForm").addEventListener("submit", function(event) {event.preventDefault();var title = document.getElementById("websiteTitle").value;var url = document.getElementById("websiteUrl").value;var iconUrl = document.getElementById("websiteIconUrl").value;if (title && url && iconUrl) {var storedWebsites = JSON.parse(localStorage.getItem("websites")) || [];storedWebsites.push({ title: title, url: url, image: iconUrl });localStorage.setItem("websites", JSON.stringify(storedWebsites));alert("Website, title, and icon URL successfully stored..!");displayStoredWebsites();} else {alert("Please provide a title, website URL, and an icon URL.");}});function displayStoredWebsites() {var storedWebsites = JSON.parse(localStorage.getItem("websites")) || [];var websiteList = document.getElementById("websiteList");websiteList.innerHTML = "";storedWebsites.forEach(function(website, index) {var listItem = document.createElement("li");var link = document.createElement("a");link.href = website.url;link.target = "_blank";listItem.appendChild(link);var image = new Image();image.src = website.image;image.alt = "Website Icon";image.style.maxWidth = "40px";image.style.maxHeight = "80px";link.appendChild(image);var titleText = document.createTextNode(" " + website.title);link.appendChild(titleText);var deleteButton = document.createElement("button");deleteButton.textContent = "Delete";deleteButton.addEventListener("click", function() {storedWebsites.splice(index, 1);localStorage.setItem("websites", JSON.stringify(storedWebsites));displayStoredWebsites();});listItem.appendChild(deleteButton);websiteList.appendChild(listItem);});}displayStoredWebsites();</script></body></html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BsWebsaver</title>
+    <link rel="icon" type="image/x-icon" href="https://i.ibb.co/N1krc8v/websave.png">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Orbitron:wght@400..900&family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&family=Strait&display=swap');
+        * {
+            color: rgb(255, 255, 255);
+            font-family: "Red Hat Display", sans-serif;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            background: #000000;
+            color: #ffffff;
+        }
+
+        h2 {
+            color: #ffffff;
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        form {
+            background: #00000000;
+            padding: 30px;
+            margin: 65px auto;
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6);
+            max-width: 600px;
+            border: 1px solid #444;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 16px;
+            font-weight: 500;
+            color: #ffffff;
+        }
+
+        .input1 {
+            width: calc(100% - 22px);
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #444;
+            border-radius: 8px;
+            background: #0000009e;
+            color: #ffffff;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        ::placeholder{
+            color: rgb(0, 229, 255);
+        }
+        .button1 {
+            background: linear-gradient(90deg, #000000, #004cff);
+            color: #ffffff;
+            border: none;
+            padding: 12px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        .button1:hover {
+            background: linear-gradient(90deg, #004cff, #000000);
+            transform: scale(1.05);
+        }
+
+        .addedsites {
+            max-width: 800px;
+            margin: 20px auto;
+            background: #00000091;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6);
+            border: solid 1px #80808070;
+        }
+
+        #websiteList {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #websiteList li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 12px;
+            background: #1b1b1b;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+            transition: background 0.3s;
+        }
+
+        #websiteList li:hover {
+            background: #535353;
+        }
+
+        #websiteList img {
+            margin-right: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+        }
+
+        #websiteList a {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #ffffff;
+            flex-grow: 1;
+        }
+
+        #websiteList button {
+            background: #e74c3c;
+            color: #ffffff;
+            border: none;
+            padding: 8px 15px;
+            font-size: 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        #websiteList button:hover {
+            background: #c0392b;
+            transform: scale(1.05);
+        }
+
+        .logo {
+            position: fixed;
+            left: 24px;
+            font-size: 15px;
+            z-index: 1;
+            background: black;
+            top: 24px;
+            border: solid 1.5px #3d3d3d75;
+            padding: 5px 20px;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+<body>
+    </div>
+    <img style="position: fixed;
+    width: 100%;
+    z-index: -111;
+    opacity: 90%;" src="https://images.unsplash.com/photo-1662403655546-2610bdbc34dc?q=80&w=2232&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="">
+
+<div class="logo">
+    BsWebsaver
+</div>
+<form id="websiteForm">
+    <label for="websiteUrl">Website Url:</label>
+    <input type="url" class="input1" id="websiteUrl" name="websiteUrl" placeholder="https://example.com" required autocomplete="off"><br>
+    <label for="websiteTitle">Title:</label>
+    <input type="text" class="input1" id="websiteTitle" name="websiteTitle" placeholder="Example: From Bs" required autocomplete="off"><br>
+    <label for="websiteIconUrl">Icon Url:</label>
+    <input type="url" class="input1" id="websiteIconUrl" name="websiteIconUrl" placeholder="https://example.com/icon.png" required autocomplete="off"><br>
+    
+    <button class="button1" type="submit">Add Website</button>
+    
+</form>
+
+<div class="addedsites" id="storedWebsites">
+    <h2>Stored Webs</h2>
+    <ul id="websiteList"></ul>
+</div>
+
+<script>
+document.getElementById("websiteForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+    var title = document.getElementById("websiteTitle").value;
+    var url = document.getElementById("websiteUrl").value;
+    var iconUrl = document.getElementById("websiteIconUrl").value;
+    
+    if (title && url && iconUrl) {
+        var storedWebsites = JSON.parse(localStorage.getItem("websites")) || [];
+        storedWebsites.push({ title: title, url: url, image: iconUrl });
+        localStorage.setItem("websites", JSON.stringify(storedWebsites));
+        alert("Website, title, and icon URL successfully stored..!");
+        displayStoredWebsites();
+    } else {
+        alert("Please provide a title, website URL, and an icon URL.");
+    }
+});
+
+function displayStoredWebsites() {
+    var storedWebsites = JSON.parse(localStorage.getItem("websites")) || [];
+    var websiteList = document.getElementById("websiteList");
+    websiteList.innerHTML = "";
+    storedWebsites.forEach(function(website, index) {
+        var listItem = document.createElement("li");
+        var link = document.createElement("a");
+        link.href = website.url;
+        link.target = "_blank";
+        listItem.appendChild(link);
+        var image = new Image();
+        image.src = website.image;
+        image.alt = "Website Icon";
+        image.style.maxWidth = "40px";
+        image.style.maxHeight = "80px";
+        link.appendChild(image);
+        var titleText = document.createTextNode(" " + website.title);
+        link.appendChild(titleText);
+        var deleteButton = document.createElement("button");
+        deleteButton.textContent = "Delete";
+        deleteButton.addEventListener("click", function() {
+            storedWebsites.splice(index, 1);
+            localStorage.setItem("websites", JSON.stringify(storedWebsites));
+            displayStoredWebsites();
+        });
+        listItem.appendChild(deleteButton);
+        websiteList.appendChild(listItem);
+    });
+}
+
+displayStoredWebsites();
+</script>
+
+</body>
+</html>
