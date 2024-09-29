@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BsFesta</title>
+    <link rel="icon" type="image/x-icon" href="">
+    <style>
+        
+        @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Orbitron:wght@400..900&family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&family=Strait&display=swap');
+
+* {
+    color: rgb(255, 255, 255);
+    font-family: "Red Hat Display", sans-serif;
+    list-style: none;
+}
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #181818; /* Dark theme background */
+            color: rgba(255, 255, 255, 0.9); /* Slightly opaque white text */
+            text-align: center;
+        }
+
+        a {
+            text-decoration: none;
+            color: #004dff;
+        }
+
+        h1 {
+            color: #004dff; /* Light blue text for headings */
+            font-size: 2rem;
+            margin: 20px 0;
+        }
+
+        p {
+            font-size: 1rem;
+            line-height: 1.6;
+            margin: 20px;
+            border: solid 1px #80808054;
+            padding: 12px;
+            border-radius: 13px;
+            background-color: #1e1e1e6b;
+        }
+
+        .timedate {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .timedate img {
+            max-width: 20px;
+            height: auto;
+        }
+
+        /* Video Sections */
+        .mobile, .steps {
+            background-color: #1e1e1e6b;
+            padding: 20px;
+            margin: 16px;
+            border-radius: 10px;
+            border: solid 1px #80808042;
+        }
+
+        .mobile h1, .steps h1 {
+            margin-top: 0;
+        }
+
+        video {
+            max-width: 32%; /* Max width for responsive design */
+            border-radius: 10px; /* Rounded corners for videos */
+            margin-top: -53px;
+    outline: none;
+    z-index: -1;
+    position: relative;
+        }
+
+        .steps video {
+            margin-top: 0; /* Adjust margin for better alignment */
+        }
+
+        .step {
+            position: relative;
+    top: 60px;
+
+            margin-bottom: 40px;
+        }
+
+        .step-number {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #004dff; 
+        }
+
+        .step-description {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .step img {
+            max-width: 15%;
+            height: auto;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            p {
+                font-size: 0.9rem;
+                border: solid 1px #80808054;
+                padding: 12px;
+                border-radius: 13px;
+                background-color: #1e1e1e6b;
+            }
+
+            .timedate img {
+                max-width: 20px;
+            }
+            .step img {
+            max-width: 60%;
+            height: auto;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="step">
+        <div class="step-number">Step 1</div>
+        <div class="step-description">Firstly open the link in chrome</div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="step">
+        <div class="step-number">Step 2</div>
+        <div class="step-description">Click on the 3 dots</div>
+        <img src="3dots.png" alt="Step 2 Image">
+    </div>
+
+    <!-- Step 3 -->
+    <div class="step">
+        <div class="step-number">Step 3</div>
+        <div class="step-description">Click on Add to home screen</div>
+        <img src="addhome.png" alt="Step 3 Image">
+    </div>
+    <div class="step">
+        <div class="step-description">Thank you</div>
+    </div>
+    <!-- Step 4 -->
+    <div class="step">
+        <div class="step-number">Do you like play the audio background?</div>
+        <div class="step-description">Then click on Desktop site</div>
+        <img src="destop.png" alt="Step 4 Image"><br>
+        <div class="step-description">By this the audio will keep playing even if you switch between tabs.</div>
+    </div>
+</body>
+</html>
