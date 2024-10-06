@@ -163,8 +163,7 @@ function openModal() {
 function closeModal() {
   const modal = document.getElementById('imageModal');
   modal.style.display = 'none'; // Hide modal
-}
-// Function to handle PDF upload and display
+}// Function to handle PDF upload and display
 function displayPDF() {
   const pdfInput = document.getElementById('pdfInput');
   const pdfContainer = document.getElementById('pdfContainer');
@@ -183,20 +182,30 @@ function displayPDF() {
 
           fileReader.onload = function(e) {
               const objectURL = URL.createObjectURL(file);
+              const containerDiv = document.createElement('div'); // Div container for each PDF
               const pdfElement = document.createElement('embed');
+              const deleteButton = document.createElement('button');
 
-              pdfElement.src = objectURL; // Set the PDF source
-              pdfElement.type = "application/pdf";
-              pdfElement.width = "100%";
-              pdfElement.height = "400px";
+              // Set the PDF source
+              pdfElement.src = objectURL;
 
               // Add click event to open PDF in modal
               pdfElement.onclick = function() {
                   openPDFModal(objectURL); // Open the PDF in modal
               };
 
-              // Append the PDF element to the container
-              pdfContainer.appendChild(pdfElement);
+              // Set up the Delete button
+              deleteButton.innerText = "Delete";
+              deleteButton.classList.add('delete-btn'); // Apply CSS class for styling
+              deleteButton.onclick = function() {
+                  deletePDF(file.name); // Delete the PDF when clicked
+              };
+
+              // Append the PDF and delete button to the container
+              containerDiv.classList.add('pdf-container'); // Apply CSS class for styling
+              containerDiv.appendChild(pdfElement);
+              containerDiv.appendChild(deleteButton);
+              pdfContainer.appendChild(containerDiv);
 
               // Save the file to the savedPDFs array as base64
               savedPDFs.push({
@@ -224,22 +233,46 @@ function loadSavedPDFs() {
   pdfContainer.innerHTML = '';
 
   savedPDFs.forEach(pdf => {
+      const containerDiv = document.createElement('div'); // Div container for each PDF
       const pdfElement = document.createElement('embed');
+      const deleteButton = document.createElement('button');
       const objectURL = pdf.data; // Base64 data
 
-      pdfElement.src = objectURL; // Set the PDF source
-      pdfElement.type = "application/pdf";
-      pdfElement.width = "100%";
-      pdfElement.height = "400px";
+      // Set the PDF source
+      pdfElement.src = objectURL;
 
       // Add click event to open PDF in modal
       pdfElement.onclick = function() {
           openPDFModal(objectURL); // Open the PDF in modal
       };
 
-      // Append the PDF element to the container
-      pdfContainer.appendChild(pdfElement);
+      // Set up the Delete button
+      deleteButton.innerText = "Delete";
+      deleteButton.classList.add('delete-btn'); // Apply CSS class for styling
+      deleteButton.onclick = function() {
+          deletePDF(pdf.name); // Delete the PDF when clicked
+      };
+
+      // Append the PDF and delete button to the container
+      containerDiv.classList.add('pdf-container'); // Apply CSS class for styling
+      containerDiv.appendChild(pdfElement);
+      containerDiv.appendChild(deleteButton);
+      pdfContainer.appendChild(containerDiv);
   });
+}
+
+// Function to delete a PDF
+function deletePDF(pdfName) {
+  let savedPDFs = JSON.parse(localStorage.getItem('uploadedPDFs')) || [];
+
+  // Filter out the PDF that needs to be deleted
+  savedPDFs = savedPDFs.filter(pdf => pdf.name !== pdfName);
+
+  // Save the updated array back to localStorage
+  localStorage.setItem('uploadedPDFs', JSON.stringify(savedPDFs));
+
+  // Reload the PDFs to reflect the deletion
+  loadSavedPDFs();
 }
 
 // Function to open PDF modal
@@ -273,4 +306,3 @@ function toggleFullScreen() {
 
 // Load saved PDFs when the page loads
 document.addEventListener('DOMContentLoaded', loadSavedPDFs);
-
