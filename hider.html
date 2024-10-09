@@ -9,257 +9,22 @@
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Orbitron:wght@400..900&family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&family=Strait&display=swap');
-        
-        * {
-            font-family: "Red Hat Display", sans-serif;
-            list-style: none;
-        }
-
-        body {
-            background-color: #121212;
-            color: white;
-            margin: 0;
-            padding: 20px;
-        }
-
-        h1, h2 {
-            color: #014dff;
-        }
-
-        #mediaContainer {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        .media-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            border: 1px solid #444;
-            padding: 10px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            background-color: #212121;
-            color: white;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            opacity: 65%;
-        }
-
-        .media-item:hover {
-            border: solid 1px #014dff;
-            opacity: 100%;
-        }
-
-        .media-item img,
-        .media-item video {
-            width: 100%;
-            height: -webkit-fill-available;
-            max-height: 200px;
-            border-radius: 8px;
-        }
-
-        .icon-container {
-            margin-top: 10px;
-            display: flow;
-            width: 100%;
-        }
-
-        .icon-container a,
-        .icon-container button {
-            background-color: transparent;
-            border: none;
-            cursor: pointer;
-            font-size: 20px;
-            color: #ffffff;
-        }
-
-        .icon-container a:hover {
-            color: #014dff;
-        }
-
-        .icon-container button:hover {
-            color: #014dff;
-        }
-
-        /* Modal styling */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.87);
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            opacity: 0;
-            transition: opacity 0.3s ease-in-out;
-        }
-
-        .modal.show {
-            display: flex;
-            opacity: 1;
-        }
-
-        .modal-content {
-            position: relative;
-            width: 90%;
-            height: 90%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 10px;
-            padding: 20px;
-        }
-
-        .modal-content img,
-        .modal-content video {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-        }
-
-        .close {
-            position: absolute;
-            top: 10px;
-            right: 20px;
-            color: #ffffff;
-            font-size: 30px;
-            cursor: pointer;
-            transition: color 0.2s ease-in-out;
-        }
-
-        .close:hover {
-            color: #014dff;
-        }
-
-        /* Input and button styles */
-        input[type="file"] {
-            background-color: #3d3d3d;
-            color: white;
-            border: 1px solid #014dff;
-            padding: 8px;
-            border-radius: 5px;
-            margin-bottom: 10px;
-        }
-
-        button {
-            border: none;
-            padding: 10px 14px;
-            border-radius: 5px;
-            color: white;
-            font-size: 15px;
-            background-color: #014dff;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .logo img {
-            width: 15%;
-            position: relative;
-            top: -51px;
-            left: -42px;
-        }
-
-        .inputs {
-            position: relative;
-            top: -125px;
-        }
-
-        @media screen and (max-width: 480px) {
-            .logo img {
-                width: 68%;
-                position: relative;
-                top: -51px;
-                left: -42px;
-            }
-
-            .inputs {
-                position: relative;
-                top: -167px;
-            }
-
-            #mediaContainer {
-                margin-top: -95px;
-            }
-
-            h1, h2 {
-                color: #014dff;
-                position: relative;
-                top: -100px;
-            }
-
-            @media screen and (max-width: 480px) {
-                #mediaContainer {
-                    grid-template-columns: repeat(2, 1fr); /* Two columns on mobile */
-                }
-
-                .media-item img,
-                .media-item video {
-                    width: 100%;
-                    height: -webkit-fill-available;
-                    max-height: 65px;
-                    border-radius: 8px;
-                }
-
-                .close {
-                    position: absolute;
-                    top: 14px;
-                    right: 20px;
-                    color: white;
-                    font-size: 30px;
-                    cursor: pointer;
-                    transition: color 0.2s ease-in-out;
-                    z-index: 1;
-                    background: #014dff;
-                    padding: 0px 11px;
-                    border-radius: 5px;
-                }
-            }
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Orbitron:wght@400..900&family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&family=Strait&display=swap'); *{font-family: "Red Hat Display", sans-serif; list-style: none;}body{background-color: #121212; color: white; margin: 0; padding: 20px;}h1, h2{color: #014dff;}#mediaContainer{display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; margin-top: 20px; padding: 60px; border: solid 1px #3b3b3b; border-radius: 10px;}.media-item{display: flex; flex-direction: column; align-items: center; border: 1px solid #444; padding: 10px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); background-color: #21212100; color: white; transition: transform 0.3s ease, box-shadow 0.3s ease; opacity: 65%;}.media-item:hover{border: solid 1px #404040; background: #282828; opacity: 100%;}.media-item img, .media-item video{width: 50%; height: -webkit-fill-available; max-height: 100px; border-radius: 8px;}.icon-container{margin-top: 15px; display: flow; width: 110%; border-top: solid 1px #464646;}.icon-container a, .icon-container button{background-color: transparent; border: none; cursor: pointer; font-size: 20px; color: #6c6c6c;}.icon-container a:hover{color: white;}.icon-container button:hover{color: white;}/* Modal styling */ .modal{display: none; position: fixed; z-index: 1; left: 0; top: 0; width: 100%; height: 100%; background-color: rgb(0 0 0 / 95%); justify-content: center; align-items: center; overflow: hidden; opacity: 0; transition: opacity 0.3s ease-in-out;}.modal.show{display: flex; opacity: 1;}.modal-content{position: relative; width: 90%; height: 90%; display: flex; justify-content: center; align-items: center; border-radius: 10px; padding: 20px;}.modal-content img, .modal-content video{max-width: 100%; max-height: 100%; object-fit: contain;}.close{position: absolute; top: 10px; right: 20px; color: #ffffff; font-size: 30px; cursor: pointer; transition: color 0.2s ease-in-out;}.close:hover{color: #018dff;}/* Input and button styles */ input[type="file"]{background-color: #3d3d3d; color: white; border: 1px solid #014dff; padding: 8px; border-radius: 5px; margin-bottom: 10px;}button{border: none; padding: 10px 14px; border-radius: 5px; color: white; font-size: 15px; background-color: #014dff; cursor: pointer; transition: background-color 0.3s ease;}.logo img{width: 15%; position: relative; top: -51px; left: -42px;}.inputs{position: relative; top: -125px;}.popup{display: none; position: fixed; top: 0%; left: 0%; background-color: #000000dc; width: 100%; height: 100%;}.containerpop{position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: #333; color: white; padding: 15px 50px; border-radius: 8px; z-index: 100; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); text-align: center;}.popup.show{display: block;}.popup button{background-color: #014dff; border: none; padding: 10px 20px; border-radius: 5px; color: white; cursor: pointer; font-size: 14px; margin-bottom: 11px;}@media screen and (max-width: 480px){.logo img{width: 68%; position: relative; top: -51px; left: -42px;}.inputs{position: relative; top: -167px;}#mediaContainer{margin-top: -95px;}h1, h2{color: #014dff; position: relative; top: -100px;}@media screen and (max-width: 480px){#mediaContainer{grid-template-columns: repeat(2, 1fr); /* Two columns on mobile */}.media-item img, .media-item video{width: 100%; height: -webkit-fill-available; max-height: 65px; border-radius: 8px;}.close{position: absolute; top: 14px; right: 20px; color: white; font-size: 30px; cursor: pointer; transition: color 0.2s ease-in-out; z-index: 1; background: #014dff; padding: 0px 11px; border-radius: 5px;}}}
     </style>
 </head>
 
 <body>
-    <div class="s" style="position: fixed;
-    top: 14px;
-    text-align: end;
-    right: 16px;">
-        <a href="https://blackswan19.github.io/Educate/password.html" style="text-transform: none;
-    color: white;text-decoration: underline;">BsPsgenerater?</a><br><br>
-    </div>
-    <div class="logo">
-        <img src="hidelogo.png" alt="">
-        <p>A place where you can save both images and videos(Below 3500KB) privately.</p>
-    </div>
-    <div class="inputs">
-        <input type="file" id="fileInput" accept="image/*,video/*" multiple>
-        <button onclick="saveMedia()">Save Media</button>
-    </div>
-
-    <h2>Stored Media:</h2>
-    <div id="mediaContainer"></div>
-
-    <!-- Modal for Preview -->
-    <div id="previewModal" class="modal">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <div class="modal-content" id="modalContent"></div>
-    </div>
-
+    <div class="s" style="position: fixed; top: 14px; text-align: end; right: 16px;"> <a href="https://blackswan19.github.io/Educate/password.html" style="text-transform: none; color: white;text-decoration: underline;">BsPsgenerater?</a><br><br></div><div class="logo"> <img src="hidelogo.png" alt=""> <p>A place where you can save both images and videos(Below 3500KB) privately.</p></div><div class="inputs"> <input type="file" id="fileInput" accept="image/*,video/*,pdf/*" multiple> <button onclick="saveMedia()">Save Media</button> </div><h2>Stored Media:</h2> <div id="mediaContainer"></div><div id="previewModal" class="modal"> <span class="close" onclick="closeModal()">&times;</span> <div class="modal-content" id="modalContent"></div></div><div id="popup" class="popup"> <div class="containerpop"> <p>No file has selected.</p><button onclick="closePopup()">OK</button> </div></div>
     <script>
         function saveMedia() {
             const fileInput = document.getElementById('fileInput');
             const files = fileInput.files;
 
             if (files.length === 0) {
-                alert('Select files to upload.');
+                showPopup();
                 return;
             }
+
 
             let mediaList = JSON.parse(localStorage.getItem('mediaList')) || [];
 
@@ -374,7 +139,20 @@
                 displayMedia(); // Refresh the media list on the page
             }
         }
+        function showPopup() {
+            const popup = document.getElementById('popup');
+            popup.classList.add('show');
+        }
 
+        function closePopup() {
+            const popup = document.getElementById('popup');
+            popup.classList.remove('show');
+        }
+
+        // Render stored media on page load
+        window.onload = function () {
+            renderMedia();
+        };
         // Display media when the page loads
         window.onload = displayMedia;
     </script>
