@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BsScheduler</title>
-   <link rel="icon" type="image/x-icon" href="https://i.ibb.co/86LsJvd/scheduler.jpg">
+    <link rel="icon" type="image/x-icon" href="https://i.ibb.co/86LsJvd/scheduler.jpg">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Orbitron:wght@400..900&family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&family=Strait&display=swap');
@@ -15,7 +15,7 @@
         }
         body {
             font-family: Arial, sans-serif;
-            background-color: #1c1c1c;
+            background-color: #282828;
             color: white;
             margin: 0;
             padding: 0;
@@ -29,9 +29,10 @@
 
         .header {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #2e2e2e;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #282828;
+    border-bottom: solid 1px gray;
         }
 
         .header img {
@@ -42,10 +43,10 @@
 
         .day {
             text-align: center;
-            color: #014dff;
-            font-size: 32px;
-            margin: 20px 0;
-            font-weight: 800;
+    color: #ffffff;
+    font-size: 32px;
+    margin: 35px 0;
+    font-weight: 800;
         }
 
         table {
@@ -65,7 +66,7 @@
         }
 
         th {
-            background-color: #333;
+            background-color: #0104ff;
             font-size: 15px;
             white-space: nowrap;
         }
@@ -105,41 +106,39 @@
         }
 
         .add-btn button {
-            background-color: #014dff;
-            color: white;
-            font-size: 35px;
-            border: none;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            cursor: pointer;
+            background-color: #595959;
+    color: white;
+    font-size: 35px;
+    border: solid 1px #ffffff;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
         }
         .add-btn button:hover{
-            background: #001f74;
+            background: #272727;
         }
         input {
             background-color: transparent;
-            color: white;
-            border: 1px solid white;
-            text-align: center;
-            padding: 10px 25px;
-    border: solid 2px #014dff;
-    border-radius: 8px;
-    font-size: 16px;
+    color: white;
+    text-align: center;
+    padding: 10px 25px;
+    border: solid 2px #000000;
+    font-size: 15px;
+    outline: none;
         }
 
         .week-day {
             display: flex;
-            justify-content: space-around;
-            background-color: #000000;
-            padding: 20px 0;
-            margin-top: auto;
-            position: fixed;
-            bottom: -2px;
-            border-top: solid 1px #787878;
-            width: 20%;
-            border-radius: 12px;
-            right: 0px;
+    justify-content: space-around;
+    background-color: #000000;
+    padding: 20px 0;
+    margin-top: auto;
+    position: fixed;
+    top: 45px;
+    width: 20%;
+    border-radius: 5px;
+    right: 5px;
         }
 
         .week-day div {
@@ -215,7 +214,7 @@
             <tr>
                 <th>From</th>
                 <th>To</th>
-                <th>Schedule Subject</th>
+                <th>Schedule For</th>
                 <th>Actions</th>
             </tr>
         </thead>
