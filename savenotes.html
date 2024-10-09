@@ -1,11 +1,11 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BsNote</title>
-       <link rel="icon" type="image/x-icon" href="https://i.ibb.co/j5cg3w3/note.png"><style>
+    <link rel="icon" type="image/x-icon" href="https://i.ibb.co/j5cg3w3/note.png">
+    <style>
         @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Orbitron:wght@400..900&family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&family=Strait&display=swap');
         
         * {
@@ -14,22 +14,22 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            color: #ffffffd4;
         }
         body {
             width: 100%;
-            background-color: #181818;
+            background-color: #0f0f0f;
             padding: 10px;
             margin: 0;
             overflow-x: hidden;
         }
         .container{
             position: relative;
-    left: 30%;
-    width: 40%;
-
+            left: 30%;
+            width: 40%;
         }
         .todo {
-            background-color: white;
+            background-color: #1f1f1f;
             width: 100%;
             margin: 40px auto 20px;
             padding: 20px;
@@ -40,6 +40,7 @@
             display: flex;
             align-items: center;
             font-size: 1.8rem;
+            color: rgb(0 76 255);
             margin-bottom: 20px;
             justify-content: center;
         }
@@ -50,8 +51,8 @@
         .search {
             display: flex;
             align-items: center;
-            background: rgba(0, 0, 0, 0.05);
-            border-radius: 30px;
+            background: rgb(60 60 60);
+            border-radius: 55px;
             margin-bottom: 20px;
         }
         input {
@@ -59,32 +60,35 @@
             flex: 1;
             outline: none;
             background: rgba(255, 105, 180, 0);
-            padding: 12px;
+            padding: 10px 35px;
             font-size: 1rem;
         }
         button {
-            background: rgb(0 76 255);
+            background: rgb(60 60 60);
             border-radius: 31px;
             border: none;
             color: white;
             text-align: center;
             cursor: pointer;
             font-size: 1rem;
-            padding: 10px 45px;
+            padding: 14px 45px;
         }
         button:hover {
-            background-color: rgb(0, 132, 255);
+            transition: 0.5s;
+            background-color: rgb(0, 13, 255);
         }
         ul#list-container {
             margin-top: 10px;
         }
         ul li {
             font-size: 16px;
-            padding: 9px 50px 14px 38px;
-            user-select: none; 
-            position: relative;
-            cursor: pointer;
-            border-bottom: 1px solid #ccc;
+    padding: 16px 49px 14px 38px;
+    user-select: none;
+    position: relative;
+    cursor: pointer;
+    border: 1px solid #595959;
+    border-radius: 6px;
+    margin-bottom: 11px;
         }
         ul li::before {
             content: '';
@@ -95,7 +99,7 @@
             background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5iP9aTTmIkrw9KVS8bWzYCqgXK5XAImAgg_Z9FUdMTMxsRlkb85jIzB_PtV-6m9_CSCk&usqp=CAU");
             background-size: cover;
             background-position: center;
-            top: 12px;
+            top: 18px;
             left: 8px;
         }
         ul li.checked {
@@ -107,27 +111,58 @@
         }
         ul li span {
             position: absolute;
-    right: 10px;
-    top: 6px;
-    font-size: 29px;
-    color: #ff0000;
-    cursor: pointer;
+            right: 10px;
+            top: 6px;
+            font-size: 30px;
+            color: #ffffff;
+            cursor: pointer;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: #282828;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .modal-content h2 {
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+        .modal-content button {
+            background-color: rgb(0, 45, 255);
+            padding: 10px 20px;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .modal-content button:hover {
+            background-color: rgb(0, 132, 255);
         }
         @media screen and (max-width: 480px) {
             .container{
                 left: 10px;
-        width: 95%;
-
+                width: 95%;
             }
-            button{
+            button {
                 position: relative;
-        text-align: center;
-        right: 0px;
-        background: none;
-        color: rgb(255, 255, 255);
-        border: solid;
-        padding: 10px 20px;
-        background: rgb(0 76 255);
+                text-align: center;
+                right: 0px;
+                background: none;
+                color: rgb(255, 255, 255);
+                border: solid;
+                padding: 10px 20px;
+                background: rgb(0 76 255);
             }
         }
     </style>
@@ -141,20 +176,28 @@
                 <input type="text" id="search-bar" placeholder="Enter the note here.....">
                 <button onclick="addTask()">Add</button>
             </div>
-            <ul id="list-container">
-        
-            </ul>
+            <h1>Your Notes</h1>
+            <ul id="list-container"></ul>
         </div>
     </div>
+
+    <!-- Modal -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <h2>You didn't write any note!</h2>
+            <button onclick="closeModal()">Close</button>
+        </div>
+    </div>
+
     <script>
         const searchBar = document.getElementById("search-bar");
         const listcontainer = document.getElementById("list-container");
+        const modal = document.getElementById("modal");
 
         function addTask(){
             if(searchBar.value === ''){
-                alert("You didn't write any note");
-            }
-            else{
+                openModal();
+            } else {
                 let li = document.createElement("li");
                 li.innerHTML = searchBar.value;
                 listcontainer.appendChild(li);
@@ -183,6 +226,14 @@
 
         function showTask(){
             listcontainer.innerHTML = localStorage.getItem("data");
+        }
+
+        function openModal() {
+            modal.style.display = "flex";
+        }
+
+        function closeModal() {
+            modal.style.display = "none";
         }
 
         showTask();
