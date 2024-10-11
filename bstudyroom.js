@@ -1,6 +1,8 @@
 let imagesArray = [];
 let textInputs = [];
 const storageKey = 'userInputs';
+let lastDeleted = null; // Store the last deleted item
+let lastDeletedType = null; // Store the type of the last deleted item (image or text)
 
 // Load saved inputs from local storage on page load
 window.onload = function() {
@@ -36,7 +38,7 @@ function addThumbnail() {
   for (let i = 0; i < files.length; i++) {
     const file = files[i];
     const reader = new FileReader();
-    
+
     reader.onload = function(e) {
       const imgUrl = e.target.result;
 
@@ -59,12 +61,7 @@ function addThumbnailToDOM(imgUrl, thumbnailsContainer, displayImage) {
   const deleteIcon = document.createElement('span');
   deleteIcon.innerHTML = '<i class="fa-solid fa-trash delete-icon"></i>';
   deleteIcon.onclick = function() {
-    const index = imagesArray.indexOf(imgUrl);
-    if (index > -1) {
-      imagesArray.splice(index, 1); // Remove from array
-      thumbnailWrapper.remove(); // Remove from DOM
-      saveToLocalStorage(); // Save changes to local storage
-    }
+    deleteImage(imgUrl); // Use the delete function
   };
 
   thumbnail.onclick = function() {
@@ -86,6 +83,21 @@ function addThumbnailFromStorage(imgUrl) {
 // Save inputs to local storage
 function saveToLocalStorage() {
   localStorage.setItem(storageKey, JSON.stringify({ images: imagesArray, texts: textInputs }));
+}
+
+// Function to delete an image and provide undo option
+function deleteImage(imgUrl) {
+  const index = imagesArray.indexOf(imgUrl);
+  if (index > -1) {
+    lastDeleted = imgUrl;
+    lastDeletedType = 'image';
+
+    imagesArray.splice(index, 1); // Remove from array
+    saveToLocalStorage(); // Save changes to local storage
+    displayUndoOption(); // Show undo option
+    document.getElementById('thumbnailsContainer').innerHTML = ''; // Clear thumbnails container
+    imagesArray.forEach(addThumbnailFromStorage); // Re-add thumbnails to reflect deletion
+  }
 }
 
 // Function to add text input and display it
@@ -113,18 +125,59 @@ function addTextInputToDOM(text) {
   const deleteTextIcon = document.createElement('span');
   deleteTextIcon.innerHTML = '<i class="fa-solid fa-trash delete-text-icon"></i>'; // Font Awesome trash icon
   deleteTextIcon.onclick = function() {
-    const index = textInputs.indexOf(text);
-    if (index > -1) {
-      textInputs.splice(index, 1); // Remove from array
-      textWrapper.remove(); // Remove from DOM
-      saveToLocalStorage(); // Save changes to local storage
-    }
+    deleteText(text); // Use the delete function
   };
 
   // Append text element first, then delete icon
   textWrapper.appendChild(textElement);
   textWrapper.appendChild(deleteTextIcon);
   textInputsContainer.appendChild(textWrapper);
+}
+
+// Function to delete text and provide undo option
+function deleteText(text) {
+  const index = textInputs.indexOf(text);
+  if (index > -1) {
+    lastDeleted = text;
+    lastDeletedType = 'text';
+
+    textInputs.splice(index, 1); // Remove from array
+    saveToLocalStorage(); // Save changes to local storage
+    document.getElementById('textInputsContainer').innerHTML = ''; // Clear text inputs container
+    textInputs.forEach(addTextInputToDOM); // Re-add text inputs to reflect deletion
+    displayUndoOption(); // Show undo option
+  }
+}
+
+// Function to display the undo option
+function displayUndoOption() {
+  const undoContainer = document.getElementById('undoContainer');
+  undoContainer.style.display = 'block';
+
+  // Set a timeout to hide the undo option after 1 minute
+  setTimeout(() => {
+    undoContainer.style.display = 'none';
+    lastDeleted = null; // Clear the last deleted item
+    lastDeletedType = null; // Clear the last deleted type
+  }, 10000); // 60000 milliseconds = 1 minute
+
+  // Add event listener for the undo button
+  const undoButton = document.getElementById('undoButton');
+  undoButton.onclick = function() {
+    if (lastDeleted && lastDeletedType) {
+      if (lastDeletedType === 'image') {
+        imagesArray.push(lastDeleted);
+        addThumbnailToDOM(lastDeleted, document.getElementById('thumbnailsContainer'), document.getElementById('displayImage'));
+      } else if (lastDeletedType === 'text') {
+        textInputs.push(lastDeleted);
+        addTextInputToDOM(lastDeleted);
+      }
+      saveToLocalStorage();
+      undoContainer.style.display = 'none'; // Hide the undo option
+      lastDeleted = null; // Clear the last deleted item
+      lastDeletedType = null; // Clear the last deleted type
+    }
+  };
 }
 
 // Resizable divider functionality
@@ -154,7 +207,7 @@ function openModal() {
   const modal = document.getElementById('imageModal');
   const modalImage = document.getElementById('modalImage');
   const displayImage = document.getElementById('displayImage');
-  
+
   modalImage.src = displayImage.src; // Set modal image to current display image
   modal.style.display = 'flex'; // Show modal
 }
@@ -163,7 +216,9 @@ function openModal() {
 function closeModal() {
   const modal = document.getElementById('imageModal');
   modal.style.display = 'none'; // Hide modal
-}// Function to handle PDF upload and display
+}
+
+// Function to handle PDF upload and display
 function displayPDF() {
   const pdfInput = document.getElementById('pdfInput');
   const pdfContainer = document.getElementById('pdfContainer');
@@ -177,50 +232,50 @@ function displayPDF() {
 
   // Loop through each uploaded PDF and create an object URL to display it
   Array.from(files).forEach(file => {
-      if (file.type === "application/pdf") {
-          const fileReader = new FileReader();
+    if (file.type === "application/pdf") {
+      const fileReader = new FileReader();
 
-          fileReader.onload = function(e) {
-              const objectURL = URL.createObjectURL(file);
-              const containerDiv = document.createElement('div'); // Div container for each PDF
-              const pdfElement = document.createElement('embed');
-              const deleteButton = document.createElement('button');
+      fileReader.onload = function(e) {
+        const objectURL = URL.createObjectURL(file);
+        const containerDiv = document.createElement('div'); // Div container for each PDF
+        const pdfElement = document.createElement('embed');
+        const deleteButton = document.createElement('button');
 
-              // Set the PDF source
-              pdfElement.src = objectURL;
+        // Set the PDF source
+        pdfElement.src = objectURL;
 
-              // Add click event to open PDF in modal
-              pdfElement.onclick = function() {
-                  openPDFModal(objectURL); // Open the PDF in modal
-              };
+        // Add click event to open PDF in modal
+        pdfElement.onclick = function() {
+          openPDFModal(objectURL); // Open the PDF in modal
+        };
 
-              // Set up the Delete button
-              deleteButton.innerText = "Delete";
-              deleteButton.classList.add('delete-btn'); // Apply CSS class for styling
-              deleteButton.onclick = function() {
-                  deletePDF(file.name); // Delete the PDF when clicked
-              };
+        // Set up the Delete button
+        deleteButton.innerText = "Delete";
+        deleteButton.classList.add('delete-btn'); // Apply CSS class for styling
+        deleteButton.onclick = function() {
+          deletePDF(file.name); // Delete the PDF when clicked
+        };
 
-              // Append the PDF and delete button to the container
-              containerDiv.classList.add('pdf-container'); // Apply CSS class for styling
-              containerDiv.appendChild(pdfElement);
-              containerDiv.appendChild(deleteButton);
-              pdfContainer.appendChild(containerDiv);
+        // Append the PDF and delete button to the container
+        containerDiv.classList.add('pdf-container'); // Apply CSS class for styling
+        containerDiv.appendChild(pdfElement);
+        containerDiv.appendChild(deleteButton);
+        pdfContainer.appendChild(containerDiv);
 
-              // Save the file to the savedPDFs array as base64
-              savedPDFs.push({
-                  name: file.name,
-                  data: e.target.result // Base64 encoded PDF data
-              });
+        // Save the file to the savedPDFs array as base64
+        savedPDFs.push({
+          name: file.name,
+          data: e.target.result // Base64 encoded PDF data
+        });
 
-              // Save updated PDFs to localStorage
-              localStorage.setItem('uploadedPDFs', JSON.stringify(savedPDFs));
-          };
+        // Save updated PDFs to localStorage
+        localStorage.setItem('uploadedPDFs', JSON.stringify(savedPDFs));
+      };
 
-          fileReader.readAsDataURL(file); // Convert file to base64
-      } else {
-          alert("Only PDF files are allowed.");
-      }
+      fileReader.readAsDataURL(file); // Convert file to base64
+    } else {
+      alert("Only PDF files are allowed.");
+    }
   });
 }
 
@@ -233,31 +288,31 @@ function loadSavedPDFs() {
   pdfContainer.innerHTML = '';
 
   savedPDFs.forEach(pdf => {
-      const containerDiv = document.createElement('div'); // Div container for each PDF
-      const pdfElement = document.createElement('embed');
-      const deleteButton = document.createElement('button');
-      const objectURL = pdf.data; // Base64 data
+    const containerDiv = document.createElement('div'); // Div container for each PDF
+    const pdfElement = document.createElement('embed');
+    const deleteButton = document.createElement('button');
+    const objectURL = pdf.data; // Base64 data
 
-      // Set the PDF source
-      pdfElement.src = objectURL;
+    // Set the PDF source
+    pdfElement.src = objectURL;
 
-      // Add click event to open PDF in modal
-      pdfElement.onclick = function() {
-          openPDFModal(objectURL); // Open the PDF in modal
-      };
+    // Add click event to open PDF in modal
+    pdfElement.onclick = function() {
+      openPDFModal(objectURL); // Open the PDF in modal
+    };
 
-      // Set up the Delete button
-      deleteButton.innerText = "Delete";
-      deleteButton.classList.add('delete-btn'); // Apply CSS class for styling
-      deleteButton.onclick = function() {
-          deletePDF(pdf.name); // Delete the PDF when clicked
-      };
+    // Set up the Delete button
+    deleteButton.innerText = "Delete";
+    deleteButton.classList.add('delete-btn'); // Apply CSS class for styling
+    deleteButton.onclick = function() {
+      deletePDF(pdf.name); // Delete the PDF when clicked
+    };
 
-      // Append the PDF and delete button to the container
-      containerDiv.classList.add('pdf-container'); // Apply CSS class for styling
-      containerDiv.appendChild(pdfElement);
-      containerDiv.appendChild(deleteButton);
-      pdfContainer.appendChild(containerDiv);
+    // Append the PDF and delete button to the container
+    containerDiv.classList.add('pdf-container'); // Apply CSS class for styling
+    containerDiv.appendChild(pdfElement);
+    containerDiv.appendChild(deleteButton);
+    pdfContainer.appendChild(containerDiv);
   });
 }
 
@@ -294,13 +349,13 @@ function closePDFModal() {
 function toggleFullScreen() {
   const pdfContainer = document.getElementById('pdfContainer');
   if (!document.fullscreenElement) {
-      pdfContainer.requestFullscreen().catch(err => {
-          console.error(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
-      });
+    pdfContainer.requestFullscreen().catch(err => {
+      console.error(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+    });
   } else {
-      if (document.exitFullscreen) {
-          document.exitFullscreen();
-      }
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    }
   }
 }
 
