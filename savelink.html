@@ -52,13 +52,12 @@
         }
 
         // Display a link on the page with Copy and Delete buttons
-        // Display a link on the page with Copy and Delete buttons
 function displayLink(link, index) {
     const linkList = document.getElementById('linkList');
     const linkItem = document.createElement('div');
     linkItem.className = 'link-item';
     linkItem.innerHTML = `
-        <span>${link.title}</span>
+        <a href="${link.url}" target="_blank" style="flex: 1; color: #004cff; text-decoration: none;text-align: justify;">${link.title}</a>
         <div class="action-buttons">
             <button class="copy-btn" onclick="copyLink(${index})">Copy</button>
             <button class="delete-btn" onclick="deleteLink(${index})">Delete</button>
