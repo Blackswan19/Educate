@@ -1,241 +1,80 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BsWebsaver</title>
-    <link rel="icon" type="image/x-icon" href="https://i.ibb.co/N1krc8v/websave.png">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Orbitron:wght@400..900&family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&family=Strait&display=swap');
-        * {
-            color: rgb(255, 255, 255);
-            font-family: "Red Hat Display", sans-serif;
-        }
-        body {
-            margin: 0;
-            padding: 0;
-            background: #000000;
-            color: #ffffff;
+<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>BsWebsaver</title> <link rel="icon" type="image/x-icon" href="https://i.ibb.co/N1krc8v/websave.png"> <style> @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Orbitron:wght@400..900&family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&family=Strait&display=swap'); * { color: rgb(255, 255, 255); font-family: "Red Hat Display", sans-serif; margin: 0; padding: 0; box-sizing: border-box; } body { background-color: #0f0f0f; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; } .logo { font-size: 40px; margin-bottom: 20px; color: #0048ff; } .button1 { background-color: #0048ff; border: none; color: white; padding: 10px 20px; text-align: center; font-size: 16px; cursor: pointer; border-radius: 5px; margin-bottom: 20px; transition: background-color 0.3s; } .button1:hover { background-color: #0039cc; } /* Modal style */ .modal { display: none; /* Hidden by default */ position: fixed; z-index: 1; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.413); /* Black with opacity */ } .modal-content { background-color: #121212; margin: 15% auto; padding: 36px; border: 1px solid #4e4e4e; width: 500px; border-radius: 10px; } .close { color: #909090; float: right; font-size: 28px; font-weight: 100; position: relative; top: -25px; right: -15px; } .close:hover, .close:focus { color: #0048ff; text-decoration: none; cursor: pointer; } form { display: flex; flex-direction: column; } label { margin-bottom: 5px; } .input1 { padding: 10px; margin-bottom: 15px; border: none; border-radius: 5px; background-color: #333; color: #fff; } .input1:focus { outline: 1px solid #5d5d5d; } .addedsites { margin-top: 30px; width: 350px; border: solid 1px #3f3f3f; padding: 30px; border-radius: 10px; } h2 { margin-bottom: 30px; color: #a0a0a0; text-align: center; } ul { list-style: none; } li { margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; padding: 12px; background-color: transparent; border: 1px solid #7171716b; border-radius: 6px; } li a { display: flex; align-items: center; text-decoration: none; color: #ffffff; } li:hover { transition: 0.5s; background: #2a2a2a91; } button { background-color: #656565; border: none; color: white; padding: 5px 10px; cursor: pointer; border-radius: 5px; transition: background-color 0.3s; } button:hover { background-color: #ff0000; } img { margin-right: 10px; } /* Responsive Design for Mobile */ @media (max-width: 600px) { .logo { font-size: 28px; /* Smaller logo on mobile */ } .modal-content { width: 90%; margin: 50% auto; } .button1 { font-size: 14px; padding: 8px 16px; /* Adjust button size on mobile */ } li { align-items: flex-start; } img { max-width: 30px; /* Smaller icon on mobile */ max-height: 60px; } li a { margin-bottom: 5px; } button { padding: 6px; font-size: 13px; } h2 { font-size: 18px; /* Smaller heading on mobile */ } } </style> </head> <body> <div class="logo">BsWebsaver</div> <!-- Button to open the modal --> <button id="openFormButton" class="button1">Add</button> <!-- Modal Structure --> <div id="websiteModal" class="modal"> <div class="modal-content"> <span class="close">&times;</span> <form id="websiteForm"> <label for="websiteUrl">Website Url:</label> <input type="url" class="input1" id="websiteUrl" name="websiteUrl" required autocomplete="off"> <label for="websiteTitle">Title:</label> <input type="text" class="input1" id="websiteTitle" name="websiteTitle" required autocomplete="off"> <label for="websiteIconUrl">Icon Url:</label> <input type="url" class="input1" id="websiteIconUrl" name="websiteIconUrl" required autocomplete="off"> <button class="button1" type="submit">Add Website</button> </form> </div> </div> <!-- Saved Websites Display --> <div class="addedsites" id="storedWebsites"> <h2>Stored Webs</h2> <ul id="websiteList"></ul> </div>
+    <script>
+        // Get modal elements
+        var modal = document.getElementById("websiteModal");
+        var openFormButton = document.getElementById("openFormButton");
+        var closeModalButton = document.getElementsByClassName("close")[0];
+
+        // Open the modal when the user clicks the button
+        openFormButton.onclick = function() {
+            modal.style.display = "block";
         }
 
-        h2 {
-            color: #ffffff;
-            font-size: 24px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        a{
-            text-decoration: none;
-        }
-        form {
-            background: #00000000;
-            padding: 30px;
-            margin: 65px auto;
-            border-radius: 12px;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6);
-            max-width: 600px;
-            border: 1px solid #444;
+        // Close the modal when the user clicks on the "x" (close) button
+        closeModalButton.onclick = function() {
+            modal.style.display = "none";
         }
 
-        label {
-            display: block;
-            margin-bottom: 10px;
-            font-size: 16px;
-            font-weight: 500;
-            color: #ffffff;
+        // Close the modal when the user clicks outside of the modal
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
         }
 
-        .input1 {
-            width: calc(100% - 22px);
-            padding: 12px;
-            margin-bottom: 20px;
-            border: 1px solid #444;
-            border-radius: 8px;
-            background: #0000009e;
-            color: #ffffff;
-            font-size: 16px;
-            box-sizing: border-box;
-        }
-        ::placeholder{
-            color: rgb(0, 229, 255);
-        }
-        .button1 {
-            background: linear-gradient(90deg, #000000, #004cff);
-            color: #ffffff;
-            border: none;
-            padding: 12px 20px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 15px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background 0.3s, transform 0.2s;
-        }
+        // Handle form submission and store websites in localStorage
+        document.getElementById("websiteForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            var title = document.getElementById("websiteTitle").value;
+            var url = document.getElementById("websiteUrl").value;
+            var iconUrl = document.getElementById("websiteIconUrl").value;
 
-        .button1:hover {
-            background: linear-gradient(90deg, #004cff, #000000);
-            transform: scale(1.05);
-        }
-
-        .addedsites {
-            max-width: 800px;
-            margin: 20px auto;
-            background: #00000091;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6);
-            border: solid 1px #80808070;
-        }
-
-        #websiteList {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        #websiteList li {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-            padding: 12px;
-            background: #1b1b1b;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
-            transition: background 0.3s;
-        }
-
-        #websiteList li:hover {
-            background: #535353;
-        }
-
-        #websiteList img {
-            margin-right: 15px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
-        }
-
-        #websiteList a {
-            display: flex;
-            align-items: center;
-            text-decoration: none;
-            color: #ffffff;
-            flex-grow: 1;
-        }
-
-        #websiteList button {
-            background: #e74c3c;
-            color: #ffffff;
-            border: none;
-            padding: 8px 15px;
-            font-size: 14px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background 0.3s, transform 0.2s;
-        }
-
-        #websiteList button:hover {
-            background: #c0392b;
-            transform: scale(1.05);
-        }
-
-        .logo {
-            position: fixed;
-            left: 24px;
-            font-size: 15px;
-            z-index: 1;
-            background: black;
-            top: 24px;
-            border: solid 1.5px #3d3d3d75;
-            padding: 5px 20px;
-            border-radius: 6px;
-        }
-    </style>
-</head>
-<body>
-    <div class="s" style="    position: fixed;
-    top: 30px;
-    text-align: end;
-    right: 10px;
-    font-size: 13px;
-">
-        <a href="https://blackswan19.github.io/Educate/savelink.html" style="text-transform: none;
-    color: white;letter-spacing: 0.5px;">BsLinksaver?</a><br><br>
-    </div>
-    <img style="position: fixed;
-    width: 100%;
-    z-index: -111;
-    opacity: 90%;" src="https://images.unsplash.com/photo-1662403655546-2610bdbc34dc?q=80&w=2232&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="">
-
-<div class="logo">
-    BsWebsaver
-</div>
-<form id="websiteForm">
-    <label for="websiteUrl">Website Url:</label>
-    <input type="url" class="input1" id="websiteUrl" name="websiteUrl" placeholder="https://example.com" required autocomplete="off"><br>
-    <label for="websiteTitle">Title:</label>
-    <input type="text" class="input1" id="websiteTitle" name="websiteTitle" placeholder="Example: From Bs" required autocomplete="off"><br>
-    <label for="websiteIconUrl">Icon Url:</label>
-    <input type="url" class="input1" id="websiteIconUrl" name="websiteIconUrl" placeholder="https://example.com/icon.png" required autocomplete="off"><br>
-    
-    <button class="button1" type="submit">Add Website</button>
-    
-</form>
-
-<div class="addedsites" id="storedWebsites">
-    <h2>Stored Webs</h2>
-    <ul id="websiteList"></ul>
-</div>
-
-<script>
-document.getElementById("websiteForm").addEventListener("submit", function(event) {
-    event.preventDefault();
-    var title = document.getElementById("websiteTitle").value;
-    var url = document.getElementById("websiteUrl").value;
-    var iconUrl = document.getElementById("websiteIconUrl").value;
-    
-    if (title && url && iconUrl) {
-        var storedWebsites = JSON.parse(localStorage.getItem("websites")) || [];
-        storedWebsites.push({ title: title, url: url, image: iconUrl });
-        localStorage.setItem("websites", JSON.stringify(storedWebsites));
-        alert("Website, title, and icon URL successfully stored..!");
-        displayStoredWebsites();
-    } else {
-        alert("Please provide a title, website URL, and an icon URL.");
-    }
-});
-
-function displayStoredWebsites() {
-    var storedWebsites = JSON.parse(localStorage.getItem("websites")) || [];
-    var websiteList = document.getElementById("websiteList");
-    websiteList.innerHTML = "";
-    storedWebsites.forEach(function(website, index) {
-        var listItem = document.createElement("li");
-        var link = document.createElement("a");
-        link.href = website.url;
-        link.target = "_blank";
-        listItem.appendChild(link);
-        var image = new Image();
-        image.src = website.image;
-        image.alt = "Website Icon";
-        image.style.maxWidth = "40px";
-        image.style.maxHeight = "80px";
-        link.appendChild(image);
-        var titleText = document.createTextNode(" " + website.title);
-        link.appendChild(titleText);
-        var deleteButton = document.createElement("button");
-        deleteButton.textContent = "Delete";
-        deleteButton.addEventListener("click", function() {
-            storedWebsites.splice(index, 1);
-            localStorage.setItem("websites", JSON.stringify(storedWebsites));
-            displayStoredWebsites();
+            if (title && url && iconUrl) {
+                var storedWebsites = JSON.parse(localStorage.getItem("websites")) || [];
+                storedWebsites.push({ title: title, url: url, image: iconUrl });
+                localStorage.setItem("websites", JSON.stringify(storedWebsites));
+                alert("Website, title, and icon URL successfully stored!");
+                displayStoredWebsites();
+                modal.style.display = "none"; // Close modal after submission
+            } else {
+                alert("Please provide a title, website URL, and an icon URL.");
+            }
         });
-        listItem.appendChild(deleteButton);
-        websiteList.appendChild(listItem);
-    });
-}
 
-displayStoredWebsites();
-</script>
+        // Function to display stored websites
+        function displayStoredWebsites() {
+            var storedWebsites = JSON.parse(localStorage.getItem("websites")) || [];
+            var websiteList = document.getElementById("websiteList");
+            websiteList.innerHTML = "";
+            storedWebsites.forEach(function(website, index) {
+                var listItem = document.createElement("li");
+                var link = document.createElement("a");
+                link.href = website.url;
+                link.target = "_blank";
+                listItem.appendChild(link);
+                var image = new Image();
+                image.src = website.image;
+                image.alt = "Website Icon";
+                image.style.maxWidth = "40px";
+                image.style.maxHeight = "80px";
+                link.appendChild(image);
+                var titleText = document.createTextNode(" " + website.title);
+                link.appendChild(titleText);
+                var deleteButton = document.createElement("button");
+                deleteButton.textContent = "Delete";
+                deleteButton.addEventListener("click", function() {
+                    storedWebsites.splice(index, 1);
+                    localStorage.setItem("websites", JSON.stringify(storedWebsites));
+                    displayStoredWebsites();
+                });
+                listItem.appendChild(deleteButton);
+                websiteList.appendChild(listItem);
+            });
+        }
+
+        // Display stored websites on page load
+        displayStoredWebsites();
+    </script>
 
 </body>
 </html>
