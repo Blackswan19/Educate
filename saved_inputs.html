@@ -1,5 +1,181 @@
-<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>BsBookpad</title> <link rel="icon" type="image/x-icon" href="https://i.ibb.co/gW8Py0B/BS.png"> <style> @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Orbitron:wght@400..900&family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&family=Strait&display=swap'); * { color: rgb(255, 255, 255); font-family: "Red Hat Display", sans-serif; letter-spacing: 0.5px; } body { font-family: "Red Hat Display", sans-serif; background-color: #3c3c3c; color: #E0E0E0; margin: 0; padding: 20px; } .saved-items { padding: 13px; margin-top: 60px; max-height: 650px; overflow-y: auto; border-radius: 5px; color: #E0E0E0; } .saved-item { margin-bottom: 10px; background-color: #3c3c3c00; border: solid 1px #959595; padding: 10px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center; } .saved-item:hover { color: #ffffff; border: solid 1px #ffffff; background-color: #181818; transition: 0.5s; } .button-group { display: flex; gap: 10px; } .delete-btn, .copy-btn, .clear-btn, .undo-btn { background-color: #ff3b30; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; color: white; } .copy-btn { background-color: #4caf50; } .clear-btn { background-color: #595959; /* Orange color for clear button */ } .undo-btn { background-color: #185bf8; /* Blue color for undo button */ } .message { color: white; position: fixed; top: 20px; padding: 10px 20px; z-index: 10000000; background: #004cff; border-radius: 5px; display: none; left: 42%; } .logo { position: fixed; top: 20px; left: 20px; font-size: 20px; } .saved-text { font-size: 14px; } .clear-area { position: fixed; bottom: 20px; right: 20px; display: flex; gap: 10px; } @media (max-width: 768px) { .fullscreen-container { padding: 40px; } .saved-item { padding: 8px; } .delete-btn, .copy-btn, .clear-btn, .undo-btn { padding: 6px 10px; font-size: 0.9rem; } .button-group { gap: 8px; } } @media (max-width: 480px) { .fullscreen-container { padding: 20px; } .saved-item { padding: 10px; } .saved-text { width: 65%; font-size: 10px; } .delete-btn, .copy-btn, .clear-btn, .undo-btn { padding: 5px 8px; font-size: 0.8rem; } .button-group { gap: 5px; } .logo { position: fixed; top: 30px; left: 20px; font-size: 18px; } .message { font-size: 10px; top: 0px; } } </style> </head> <body> <div class="logo">BsBookpad</div> <div class="saved-items" id="savedItems"></div> <div class="message" id="popupMessage"></div> <!-- Popup Message --> <script src="noright.js"></script> <div class="clear-area"> <button class="clear-btn" onclick="clearAll()">Clear All</button> <button class="undo-btn" id="undoBtn" style="display:none;" onclick="undoClear()">Undo</button> </div>
-<script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BsBookpad</title>
+    <link rel="icon" type="image/x-icon" href="https://i.ibb.co/gW8Py0B/BS.png">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Orbitron:wght@400..900&family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&family=Strait&display=swap');
+        * {
+            color: rgb(255, 255, 255);
+            font-family: "Red Hat Display", sans-serif;
+            letter-spacing: 0.5px;
+        }
+        body {
+            font-family: "Red Hat Display", sans-serif;
+            background-color: #121212;
+            color: #E0E0E0;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .saved-items {
+            margin-top: 90px;
+    max-height: 650px;
+    overflow-y: auto;
+    border-radius: 5px;
+    color: #E0E0E0;
+    text-align: center;
+        }
+
+        .saved-item {
+            margin-bottom: 10px;
+    background-color: #1e1e1e;
+    padding: 12px;
+    border-radius: 5px;
+    display: flex;
+    border: solid 1px #69696900;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .saved-item:hover {
+            color: #ffffff;
+            border: solid 1px #696969;
+            background-color: #181818;
+            transition: 0.5s;
+        }
+a{
+    text-decoration: none;
+    color: #004cff;
+}
+        .button-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .delete-btn, .copy-btn, .clear-btn, .undo-btn {
+            background-color: #171717;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            color: white;
+        }
+
+        .copy-btn {
+            background-color: #4caf50;
+        }
+
+        .clear-btn {
+            background-color: #595959; /* Orange color for clear button */
+        }
+
+        .undo-btn {
+            background-color: #185bf8; /* Blue color for undo button */
+        }
+
+        .message {
+            color: white;
+            position: fixed;
+            top: 20px;
+            padding: 10px 20px;
+            z-index: 10000000;
+            background: #004cff;
+            border-radius: 5px;
+            display: none;
+            left: 42%;
+        }
+
+        .logo{
+    position: fixed;
+    top: 31px;
+    left: 40px;
+    font-size: 24px;
+    color: #004cff;
+    font-weight: 600;
+}
+
+        .saved-text {
+            font-size: 14px;
+        }
+
+        .clear-area {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .fullscreen-container {
+                padding: 40px;
+            }
+
+            .saved-item {
+                padding: 8px;
+            }
+
+            .delete-btn, .copy-btn, .clear-btn, .undo-btn {
+                padding: 6px 10px;
+                font-size: 0.9rem;
+            }
+
+            .button-group {
+                gap: 8px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .fullscreen-container {
+                padding: 20px;
+            }
+
+            .saved-item {
+                padding: 10px;
+            }
+
+            .saved-text {
+                width: 65%;
+                font-size: 10px;
+            }
+
+            .delete-btn, .copy-btn, .clear-btn, .undo-btn {
+                padding: 5px 8px;
+                font-size: 0.8rem;
+            }
+
+            .button-group {
+                gap: 5px;
+            }
+
+            .logo{
+        position: fixed;
+top: 10px;
+left: 10px;
+font-size: 18px;
+    }
+
+            .message {
+                font-size: 10px;
+                top: 0px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="logo"><a href="bookpad.html">BsBookpad</a></div>
+    <div class="saved-items" id="savedItems"></div>
+    <div class="message" id="popupMessage"></div> <!-- Popup Message -->
+
+    <div class="clear-area">
+        <button class="clear-btn" onclick="clearAll()">Clear All</button>
+        <button class="undo-btn" id="undoBtn" style="display:none;" onclick="undoClear()">Undo</button>
+    </div>
+    <script src="noright.js"></script> 
+    <script>
         let lastSavedInputs = []; // To store the last saved inputs before clearing
 
         window.onload = function() {
