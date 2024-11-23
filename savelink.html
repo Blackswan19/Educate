@@ -55,7 +55,9 @@ function displayLink(link, index) {
     color: #8a8a8a;
     text-decoration: none;
     text-align: justify;
-    font-size: 15px;">${link.title}</a>
+    font-size: 15px;
+    overflow: overlay;
+    padding: 10px;text-transform: capitalize;">${link.title}</a>
         <div class="action-buttons">
             <button class="copy-btn" onclick="copyLink(${index})"><i class="fa-solid fa-copy"></i></button>
             <button class="delete-btn" onclick="deleteLink(${index})"><i class="fa-solid fa-delete-left"></i></button>
