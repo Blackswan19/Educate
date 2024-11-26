@@ -1,52 +1,541 @@
-<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>BsNote</title> <link rel="icon" type="image/x-icon" href="https://i.ibb.co/j5cg3w3/note.png"> <style> @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Orbitron:wght@400..900&family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&family=Strait&display=swap'); * { font-family: "Red Hat Display", sans-serif; list-style: none; margin: 0; padding: 0; box-sizing: border-box; color: #ffffffd4; } body { width: 100%; background-color: #000000; padding: 10px; margin: 0; overflow-x: hidden; } ::-webkit-scrollbar { width: 10px; background-color: rgba(30, 30, 30, 0); } ::-webkit-scrollbar-thumb{ background-color: #464646; } .container{ position: relative; left: 30%; width: 40%; } .container h1{ text-align: center; position: relative; top: 25px; color: rgb(0 76 255); font-size: 20px; } .todo { background-color: #0f0f0f; width: 40%; padding: 20px; border-radius: 25px 25px 0px 0px; border: solid 1px #171717; position: fixed; bottom: 0px; left: 30%; } .todo h1 { display: flex; align-items: center; font-size: 1.8rem; color: rgb(0 76 255); margin: 12px; justify-content: center; top: 0px; } .todo h1 img { width: 25px; margin-left: 10px; } .search { display: grid; } input { border: none; outline: none; background: none; padding: 16px; font-size: 1rem; text-align: center; } button { background: rgb(0 76 255); border-radius: 55px; border: none; color: white; text-align: center; cursor: pointer; font-size: 1rem; padding: 14px 45px; /* border: solid 1px #898989; */ } button:hover { transition: 0.5s; background-color: rgb(0, 13, 255); } ul#list-container { position: relative; top: 50px; overflow: scroll; height: 485px; overflow-x: hidden; } ul li { font-size: 16px; padding: 16px 49px 14px 38px; user-select: none; position: relative; cursor: pointer; border-bottom: 1px solid #7e7e7e; width: 100%; } ul li::before { content: ''; position: absolute; height: 20px; width: 20px; border-radius: 50%; background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5iP9aTTmIkrw9KVS8bWzYCqgXK5XAImAgg_Z9FUdMTMxsRlkb85jIzB_PtV-6m9_CSCk&usqp=CAU"); background-size: cover; background-position: center; top: 18px; left: 8px; } ul li.checked { color: rgba(0, 0, 0, 0.4); text-decoration: line-through; } ul li.checked::before { background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToor318Vv50HIWt-UchwIecF0JGVznEE-KAgkBmXXWNoQ-_NOYPrcX8_7fyFqnXqK_ZjY&usqp=CAU"); opacity: 15%; } ul li span { position: absolute; right: 10px; top: 6px; font-size: 30px; color: #ffffff; cursor: pointer; } .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgb(0 0 0 / 81%); justify-content: center; align-items: center; } .modal-content { background-color: #282828; padding: 20px; border-radius: 5px; text-align: center; } .modal-content h2 { margin-bottom: 20px; font-size: 1.2rem; font-weight: 400; } .modal-content button { background-color: rgb(0, 45, 255); padding: 10px 20px; color: white; border: none; border-radius: 5px; cursor: pointer; } .modal-content button:hover { background-color: rgb(0, 132, 255); } video{ width: 6%; position: fixed; left: 34%; } @media screen and (max-width: 480px) { ::-webkit-scrollbar { width: 10px; background-color: rgb(0, 0, 0); } ::-webkit-scrollbar-thumb{ background-color: #000000; } .container{ left: 0px; width: 100%; /* margin: 45% auto; */ } video{ width: 20%; position: fixed; left: 5%; } .todo { background-color: #161616; width: 100%; border-radius: 25px 25px 0px 0px; position: fixed; bottom: 0px; left: 0px; padding: 25px; } ul#list-container { position: relative; top: 60px; overflow: scroll; height: 385px; overflow-x: hidden; } } </style> </head> <body> <div class="container"> <div class="titlogo"> <script src="noright.js"></script><video src="https://v1.pinimg.com/videos/iht/720p/3a/0e/d0/3a0ed08132b15629e5d1971ca513dc20.mp4" muted autoplay></video> <h1>Take a short note</h1> </div> <ul id="list-container"></ul> <div class="todo"> <h1>BsNote</h1> <div class="search"> <input type="text" id="search-bar" placeholder="Enter the note here....."><br> <button onclick="addTask()">Add the note now</button> </div> </div> </div> <!-- Modal --> <div id="modal" class="modal"> <div class="modal-content"> <h2>You didn't write any note!</h2> <button onclick="closeModal()">Close</button> </div> </div>
-<script>
-        const searchBar = document.getElementById("search-bar");
-        const listcontainer = document.getElementById("list-container");
-        const modal = document.getElementById("modal");
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BsNote</title>
+    <link rel="icon" type="image/x-icon" href="https://i.pinimg.com/originals/22/fb/32/22fb32654195b989444117ae2f1a479b.gif">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
 
-        function addTask(){
-            if(searchBar.value === ''){
-                openModal();
-            } else {
-                let li = document.createElement("li");
-                li.innerHTML = searchBar.value;
-                listcontainer.appendChild(li);
-
-                let span = document.createElement("span");
-                span.innerHTML = "\u00d7";
-                li.appendChild(span);
-            }
-            searchBar.value = "";
-            saveData();
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #000000;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        .container {
+            display: flex;
+            height: 100vh;
+            position: relative;
         }
 
-        listcontainer.addEventListener("click", function(e){
-            if(e.target.tagName === "LI"){
-                e.target.classList.toggle("checked");
-                saveData();
-            } else if(e.target.tagName === "SPAN"){
-                e.target.parentElement.remove();
-                saveData();
+        /* Sidebar Styles */
+        .sidebar {
+            width: 28%;
+    background: #1e1e1e;
+    color: white;
+    padding: 60px 40px;
+    box-sizing: border-box;
+    position: absolute;
+    left: -31%;
+    transition: transform 0.3s ease;
+    height: 100%;
+    z-index: 1000;
+        }
+
+        .sidebar.show {
+            transform: translateX(100%); /* Slide the sidebar into view */
+        }
+
+        .sidebar h2 {
+            margin-bottom: 20px;
+        }
+
+        .user-list {
+            list-style: none;
+    padding: 0;
+    position: relative;
+    top: 17px;
+    left: 20px;
+        }
+
+        .user-list li {
+            padding: 14px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    text-transform: capitalize;
+        }
+
+        .user-list li:hover {
+            background: #3c3c3c;
+    border-radius: 10px;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            width: 101%;
+    background: rgb(0, 0, 0);
+    display: flex
+;
+    flex-direction: column;
+    padding: 20px;
+    box-sizing: border-box;
+    align-items: center;
+        }
+::-webkit-scrollbar{
+    background-color: #2d2d2d00;
+    width: 14px;
+}
+::-webkit-scrollbar-thumb{
+    background-color: #2d2d2d;
+}
+::-webkit-scrollbar-thumb:hover{
+    background-color: #6d6d6d;
+}
+        .chat-header {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    color: white;
+}
+        .addbtn{
+            position: fixed;
+    bottom: 20px;
+    right: 20px;
+    font-size: 21px;
+    padding: 5px 10px;
+    background: no-repeat;
+        }
+        .chat-box {
+            flex: 1;
+    overflow-y: auto;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    background: #1e1e1e;
+    width: 47%;
+    max-height: 625px;
+        }
+
+        .chat-message {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-message.user {
+            color: white;
+            font-size: 20px;
+        }
+        .chat-message.user:hover{
+            background: #000000;
+        }
+        .chat-message.system {
+            background: #f1f1f1;
+        }
+
+        .chat-message img {
+            max-width: 100px;
+            height: auto;
+            border-radius: 4px;
+        }
+
+        .input-container {
+            display: flex
+;
+    gap: 10px;
+    position: fixed;
+    top: 740px;
+
+    background: rgb(30 30 30);
+    width: 40%;
+    align-items: center;
+        }
+        .txtinput{
+            width:82%;
+    font-size: 18px;
+    color: #5b5b5b;
+        }
+        input{
+            padding: 10px;
+    border: 1px solid #535353;
+    border-radius: 4px;
+    color: white;
+    background: transparent;
+    outline: none;
+        }
+    label{
+    color: white;
+    cursor: pointer;
+    padding: 12px;
+    border-radius: 4px;
+    border: 1px solid #535353;
+    background: transparent;
+    outline: none;
+}
+        button{
+    color: white;
+    cursor: pointer;
+    padding: 13px;
+    border-radius: 4px;
+    border: 1px solid #535353;
+    background: transparent;
+    outline: none;
+}
+
+        button:hover {
+            background-color: #4f4f4f;
+        }
+
+        .fa-paperclip {
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        /* Context Menu Styles */
+        .context-menu {
+            position: absolute;
+    background: #fcfcfc;
+    border-radius: 5px;
+    z-index: 1000;
+    display: none;
+    list-style: none;
+    font-size: 18px;
+    padding: 10px;
+    text-align: justify;
+        }
+
+        .context-menu li {
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .context-menu li:hover {
+            background: #000000;
+            color: white;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
             }
+
+            .sidebar {
+                width: 100%;
+                position: fixed;
+                top: 0;
+                left: -100%; background: black;
+            }
+            .main-content {
+                width: 100%;
+                padding: 10px;
+            }
+            .input-container {
+    display: flex
+;
+    gap: 10px;
+    position: relative;
+    top: 140px;
+    background: rgb(30 30 30);
+    width: 100%;
+    align-items: center;
+}
+.chat-message.user {
+    color: white;
+    font-size: 15px;
+}
+.txtinput {
+    width: 82%;
+    font-size: 15px;
+    color: #5b5b5b;
+}
+.addbtn {
+    font-size: 21px;
+    padding: 5px 10px;
+}
+label {
+    padding: 10px;
+}/* Sidebar Visible by Default on Mobile */
+@media (max-width: 768px) {
+    .sidebar {
+        transform: translateX(0); /* Make sidebar visible */
+    }
+}
+
+            .chat-box {
+                position: relative;
+        width: 100%;
+        top: 100px;
+        max-height: 450px;
+            }
+            .chat-header{
+                font-size: 18px;
+        color: white;
+        position: fixed;
+        top: 60px;
+        text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- @ Symbol Button -->
+        <button id="toggleSidebarBtn" style="z-index: 10000;
+        position: absolute;
+        top: 3px;
+        background: none;
+        border: none;
+        font-size: 26px;
+        cursor: pointer;
+        left: 0.8%;
+        background: #282828;
+        padding: 3px 10px;"><i class="fa-solid fa-bars-staggered"></i></button>
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo" style="    position: fixed;
+            color: rgb(0 96 255);
+            right: 10px;
+            top: 20px;
+            z-index: 1000;
+            font-size: 20px;
+            font-weight: 600;">
+        #BsNote
+    </div>
+            <ul class="user-list" id="userList">
+                <!-- Users will be dynamically added here -->
+            </ul>
+            <button class="addbtn" onclick="addUser()"><i class="fa-solid fa-circle-plus"></i></button>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="chat-header" id="chatHeader">Take a short note</div>
+            <div class="chat-box" id="chatBox">
+                <!-- Messages will appear here -->
+            </div>
+            <div class="input-container">
+                <input class="txtinput" type="text" id="messageInput" placeholder="Enter your note" disabled>
+                <label for="imageInput">
+                    <i class="fa-solid fa-paperclip" id="clipIcon" onclick="attachImage()"></i>
+                </label>
+                <button onclick="sendMessage()" id="sendButton" disabled><i class="fa-solid fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Context Menu -->
+    <ul class="context-menu" id="contextMenu">
+        <li id="editOption">Edit</li>
+        <li id="deleteOption">Delete</li>
+    </ul>
+
+    <script>
+        const users = JSON.parse(localStorage.getItem('users')) || {};
+        let activeUser = null;
+        let contextTarget = null; // The item on which the context menu is invoked
+        let attachedImage = null; // To store the image URL
+
+        const userListElement = document.getElementById('userList');
+        const chatHeader = document.getElementById('chatHeader');
+        const chatBox = document.getElementById('chatBox');
+        const messageInput = document.getElementById('messageInput');
+        const sendButton = document.getElementById('sendButton');
+        const contextMenu = document.getElementById('contextMenu');
+        const editOption = document.getElementById('editOption');
+        const deleteOption = document.getElementById('deleteOption');
+        const toggleSidebarBtn = document.getElementById('toggleSidebarBtn');
+        const sidebar = document.querySelector('.sidebar');
+        const clipIcon = document.getElementById('clipIcon');
+
+        // Save users to localStorage
+        function saveToLocalStorage() {
+            localStorage.setItem('users', JSON.stringify(users));
+        }
+
+        // Add a new user
+        function addUser() {
+            const username = prompt('Enter a new user name:');
+            if (username && !users[username]) {
+                users[username] = [];
+                saveToLocalStorage();
+                renderUserList();
+            }
+        }
+
+        // Render the user list
+        function renderUserList() {
+            userListElement.innerHTML = '';
+            Object.keys(users).forEach(username => {
+                const li = document.createElement('li');
+                li.textContent = username;
+                li.addEventListener('click', () => selectUser(username));
+                li.addEventListener('contextmenu', (e) => showContextMenu(e, username, 'user'));
+                userListElement.appendChild(li);
+            });
+        }
+
+        // Select a user and show their notes
+        function selectUser(username) {
+            activeUser = username;
+            chatHeader.textContent = `Take a short note in ${username}`;
+            messageInput.disabled = false;
+            sendButton.disabled = false;
+            renderMessages();
+        }
+
+        // Render messages for the selected user
+        function renderMessages() {
+            chatBox.innerHTML = '';
+            if (activeUser && users[activeUser]) {
+                users[activeUser].forEach((message, index) => {
+                    const div = document.createElement('div');
+                    div.className = `chat-message ${message.type}`;
+                    div.addEventListener('contextmenu', (e) => showContextMenu(e, index, 'message'));
+
+                    if (message.type === 'image') {
+                        const img = document.createElement('img');
+                        img.src = message.text;
+                        div.appendChild(img);
+                    } else {
+                        div.textContent = message.text;
+                    }
+
+                    chatBox.appendChild(div);
+                });
+            }
+        }
+
+        // Show context menu for editing or deleting messages/users
+        function showContextMenu(event, target, type) {
+            event.preventDefault();
+            contextTarget = { target, type };
+            contextMenu.style.display = 'block';
+            contextMenu.style.left = `${event.pageX}px`;
+            contextMenu.style.top = `${event.pageY}px`;
+        }
+
+        function hideContextMenu() {
+            contextMenu.style.display = 'none';
+            contextTarget = null;
+        }
+
+        editOption.addEventListener('click', () => {
+            if (contextTarget.type === 'user') {
+                const oldUsername = contextTarget.target;
+                const newUsername = prompt('Edit user name:', oldUsername);
+                if (newUsername && !users[newUsername]) {
+                    users[newUsername] = users[oldUsername];
+                    delete users[oldUsername];
+                    if (activeUser === oldUsername) activeUser = newUsername;
+                    saveToLocalStorage();
+                    renderUserList();
+                }
+            } else if (contextTarget.type === 'message') {
+                const index = contextTarget.target;
+                const newMessage = prompt('Edit message:', users[activeUser][index].text);
+                if (newMessage) {
+                    users[activeUser][index].text = newMessage;
+                    saveToLocalStorage();
+                    renderMessages();
+                }
+            }
+            hideContextMenu();
         });
 
-        function saveData(){
-            localStorage.setItem("data", listcontainer.innerHTML);
+        deleteOption.addEventListener('click', () => {
+            if (contextTarget.type === 'user') {
+                const username = contextTarget.target;
+                if (confirm(`Delete user ${username}?`)) {
+                    delete users[username];
+                    if (activeUser === username) activeUser = null;
+                    saveToLocalStorage();
+                    renderUserList();
+                    renderMessages();
+                }
+            } else if (contextTarget.type === 'message') {
+                const index = contextTarget.target;
+                users[activeUser].splice(index, 1);
+                saveToLocalStorage();
+                renderMessages();
+            }
+            hideContextMenu();
+        });
+
+        // Toggle sidebar visibility
+        function toggleSidebar() {
+            sidebar.classList.toggle('show');
         }
 
-        function showTask(){
-            listcontainer.innerHTML = localStorage.getItem("data");
+        // Event listener for the @ button to toggle the sidebar
+        toggleSidebarBtn.addEventListener('click', toggleSidebar);
+
+        // Send note (message) functionality
+        function sendMessage() {
+            const text = messageInput.value.trim();
+            if (text && activeUser) {
+                users[activeUser].push({ text, type: 'user' });
+                messageInput.value = ''; // Clear the input
+                saveToLocalStorage();
+                renderMessages();
+            }
         }
 
-        function openModal() {
-            modal.style.display = "flex";
+        // Close context menu when clicking outside
+        document.body.addEventListener('click', hideContextMenu);
+
+        // Handle image attachment (paperclip icon click)
+        function attachImage() {
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.accept = 'image/*';
+
+            fileInput.addEventListener('change', () => {
+                const file = fileInput.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = () => {
+                        const imageUrl = reader.result;
+                        if (activeUser) {
+                            users[activeUser].push({ text: imageUrl, type: 'image' });
+                            saveToLocalStorage();
+                            renderMessages();
+                        }
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            fileInput.click(); // Trigger the file input click event
         }
 
-        function closeModal() {
-            modal.style.display = "none";
-        }
+        renderUserList();
+        
+// Automatically show the sidebar on mobile screens
+window.addEventListener('DOMContentLoaded', () => {
+    if (window.innerWidth <= 768) {
+        sidebar.classList.add('show');
+    }
+});
 
-        showTask();
+// Hide sidebar after selecting a user on mobile
+function selectUser(username) {
+    activeUser = username;
+    chatHeader.textContent = `Take a short note in ${username}`;
+    messageInput.disabled = false;
+    sendButton.disabled = false;
+    renderMessages();
+
+    // Hide sidebar on mobile
+    if (window.innerWidth <= 768) {
+        sidebar.classList.remove('show');
+    }
+}
+// Event listener for the @ button to toggle the sidebar
+toggleSidebarBtn.addEventListener('click', toggleSidebar);
+
+function toggleSidebar() {
+    sidebar.classList.toggle('show');
+}
     </script>
+    <script src="noright.js"></script>
 </body>
 </html>
