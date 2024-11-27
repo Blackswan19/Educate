@@ -1,579 +1,102 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BsAdstoper</title>
-    <link rel="icon" type="image/x-icon" href="https://i.ibb.co/DgWHFgR/roralogo.png">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald|Noto+Sans">
-        <meta charset="utf-8"/>
-        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1"/>
-        <meta name="generator" content="Odoo"/>
-        <meta name="description" content="This is the homepage of the Jennie Global Union website. JGU is a tight-knit group of passionate fanbases who are wholeheartedly devoted to Jennie Kim, the multi-talented artist, We work tirelessly to support her every endeavor, from organizing fan events and creating engaging content to promoting her music and projects worldwide."/>
-        <meta name="keywords" content="Jennie,제니,jennie kim,jennie ruby jane,jennie fanbase,jennie global union,met gala,blackpink"/>
-        <meta property="og:type" content="website"/>
-        <meta property="og:description" content="This is the homepage of the Jennie Global Union website. JGU is a tight-knit group of passionate fanbases who are wholeheartedly devoted to Jennie Kim, the multi-talented artist, We work tirelessly to support her every endeavor, from organizing fan events and creating engaging content to promoting her music and projects worldwide."/> <meta property="og:title" content="Jennie Global Union"/><link rel="stylesheet" href="css.css">
-<style></style></head><body><img id="menuIcon" src="https://twice.jype.com/Content/Pc/images/common/menu.png" alt="Menu Icon" width="30" height="30"><div id="menu"><a href="https://blackswan19.github.io/bscrop/watchin/mylist.html">Save the video?</a><br><br><a href="addhome.html">Add to home screen?</a><br><br><a href="savelink.html">Save the link?</a><br><br><a href="howtodo.mp4">Help?</a></div><script>document.getElementById("menuIcon").addEventListener("click",function(){var menu=document.getElementById("menu");menu.style.display==="block"?menu.style.display="none":menu.style.display="block";});</script>
-        <meta property="og:site_name" content="Jennie Global Union"/>
-        <meta property="og:url" content="https://jennieglobalunion.odoo.com/"/>
-        <meta property="og:image" content="https://jennieglobalunion.odoo.com/web/image/842-87aebab5/GLpnwzVaoAAPl-f.svg"/>
-        <meta name="twitter:card" content="summary_large_image"/>
-        <meta name="twitter:title" content="Jennie Global Union"/>
-        <meta name="twitter:image" content="https://jennieglobalunion.odoo.com/web/image/842-87aebab5/GLpnwzVaoAAPl-f.svg"/>
-        <meta name="twitter:description" content="This is the homepage of the Jennie Global Union website. JGU is a tight-knit group of passionate fanbases who are wholeheartedly devoted to Jennie Kim, the multi-talented artist, We work tirelessly to support her every endeavor, from organizing fan events and creating engaging content to promoting her music and projects worldwide."/><body></div><div class="container"> <h2>BsAdstoper</h2> <input type="text" id="userLink" placeholder="Paste any youtube link here..." autocomplete="off"> <br><button onclick="modifyLink()">Submit</button> <div id="result"></div></div><p>We will play video without any interruptions from ads.</p></body>
+<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>BsAdstoper</title> <link rel="icon" type="image/x-icon" href="https://i.ibb.co/DgWHFgR/roralogo.png"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald|Noto+Sans"> <link rel="stylesheet" href="css.css"> <link rel="stylesheet" href="css2.css"> </head> <body> <img id="menuIcon" src="https://twice.jype.com/Content/Pc/images/common/menu.png" alt="Menu Icon" width="30" height="30"><div id="menu"><a href="https://blackswan19.github.io/bscrop/watchin/mylist.html">Save the video?</a><br><br><a href="addhome.html">Add to home screen?</a><br><br><a href="savelink.html">Save the link?</a><br><br><a href="howtodo.mp4">Help?</a></div><script>document.getElementById("menuIcon").addEventListener("click",function(){var menu=document.getElementById("menu");menu.style.display==="block"?menu.style.display="none":menu.style.display="block";});</script> <script src="noright.js"></script> <div class="side-section"> <a id="showButton" onclick="showRecommendations()" style="text-decoration: none; ">Recently Watched</a> </div> <div class="container"> <h2>BsAdstoper</h2> <input type="text" id="userLink" placeholder="Paste any YouTube link here..." autocomplete="off"> <br> <button onclick="modifyLink()">Submit</button> <div id="result"></div> </div> <div class="recommendation-section" id="recommendationSection"> <button class="close-button" onclick="closeRecommendations()">Close</button> <h3>Recently Watched Videos</h3> <ul class="video-list" id="videoList"></ul> </div> <div class="notification" id="notificationBox">Link copied to clipboard!</div>
     <script>
-        // Function to set the page into fullscreen mode
-        function setFullscreen() {
-            if (document.documentElement.requestFullscreen) {
-                document.documentElement.requestFullscreen();
-            } else if (document.documentElement.mozRequestFullScreen) { // Firefox
-                document.documentElement.mozRequestFullScreen();
-            } else if (document.documentElement.webkitRequestFullscreen) { // Chrome, Safari, and Opera
-                document.documentElement.webkitRequestFullscreen();
-            } else if (document.documentElement.msRequestFullscreen) { // IE/Edge
-                document.documentElement.msRequestFullscreen();
+        // Function to store and retrieve recently watched videos
+        const localStorageKey = 'recentlyWatched';
+
+        function getRecentlyWatched() {
+            const videos = localStorage.getItem(localStorageKey);
+            return videos ? JSON.parse(videos) : [];
+        }
+
+        function addRecentlyWatched(videoUrl) {
+            const videos = getRecentlyWatched();
+            if (!videos.includes(videoUrl)) {
+                videos.unshift(videoUrl); // Add new video to the beginning
+                if (videos.length > 10) videos.pop(); // Limit to 10 videos
+                localStorage.setItem(localStorageKey, JSON.stringify(videos));
             }
+        }
+
+        // Function to display recently watched videos
+        function showRecommendations() {
+            const recommendationSection = document.getElementById('recommendationSection');
+            const videoList = document.getElementById('videoList');
+            const videos = getRecentlyWatched();
+
+            videoList.innerHTML = ''; // Clear previous list
+
+            if (videos.length === 0) {
+                videoList.innerHTML = '<li>No videos watched recently.</li>';
+            } else {
+                videos.forEach(video => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<a href="${video}" target="_self">${video}</a>
+                        <div class="action-buttons">
+                            
+                            <button onclick="copyToClipboard('${video}')">Copy</button>
+                            <button onclick="deleteVideo('${video}')">Remove</button>
+                        </div>
+                    `;
+                    videoList.appendChild(li);
+                });
+            }
+
+            recommendationSection.style.display = 'block'; // Show the section
+        }
+
+        function closeRecommendations() {
+            const recommendationSection = document.getElementById('recommendationSection');
+            recommendationSection.style.display = 'none'; // Hide the section
+        }
+
+        function modifyLink() {
+            const userLink = document.getElementById("userLink").value.trim();
+            let modifiedLink = userLink;
+
+            if (userLink.toLowerCase().includes("youtu.be")) {
+                modifiedLink = `https://www.yout-ube.com/watch?v=${userLink.split("youtu.be/")[1].split("?")[0]}`;
+            } else if (userLink.toLowerCase().includes("youtube.com")) {
+                modifiedLink = userLink.replace(/youtube/i, "yout-ube");
+            }
+
+            if (modifiedLink.includes("yout-ube.com/watch?v=")) {
+                document.getElementById("result").innerHTML = `
+                    <button id="playButton" onclick="playVideo('${modifiedLink}')">Play in Full Screen</button>
+                `;
+                addRecentlyWatched(modifiedLink); // Store the link in local storage
+                document.getElementById("userLink").value = "";
+            } else {
+                document.getElementById("result").innerHTML = "Invalid URL";
+            }
+        }
+
+        function playVideo(videoUrl) {
+            window.open(videoUrl, "_self");
+        }
+
+        function copyToClipboard(link) {
+            navigator.clipboard.writeText(link).then(() => {
+                showNotification("Link copied to clipboard!");
+            }).catch(() => {
+                showNotification("Failed to copy the link!");
+            });
+        }
+
+        function deleteVideo(videoUrl) {
+            let videos = getRecentlyWatched();
+            videos = videos.filter(video => video !== videoUrl); // Remove the selected video
+            localStorage.setItem(localStorageKey, JSON.stringify(videos));
+            showRecommendations(); // Refresh the list
+        }
+
+        function showNotification(message) {
+            const notificationBox = document.getElementById("notificationBox");
+            notificationBox.textContent = message;
+            notificationBox.classList.add("show");
+            setTimeout(() => {
+                notificationBox.classList.remove("show");
+            }, 2000);
         }
     </script>
-        <link rel="stylesheet" href="css2.css">
-    </head>
-    <body>
-    
-        <div class="containers">
-            <!-- Left side with recommendation text -->
-            <div class="side-section">
-                <button id="showButton" onclick="showRecommendations()" style="text-decoration: none;">Suggestions</button>
-            </div>
-    
-            <!-- Right side with video list -->
-            <div class="recommendation-section" id="recommendationSection">
-                <div class="video-list" id="videoList"></div>
-            </div>
-        </div>
-    
-        <!-- Notification Box -->
-        <div class="notification" id="notificationBox">Link copied to clipboard!</div>
-    
-        <script>
-            const videoData = [
-                { 
-                    url: "https://www.youtube.com/watch?v=X-yIEMduRXk&list=RDQMiiyMbB4FtGo&start_radio=1", 
-                    title: "Adele - Rolling in the Deep", 
-                    playlist: "Popular Songs Playlist" 
-                },
-                { 
-                    url: "https://www.youtube.com/watch?v=JGwWNGJdvx8&list=PLPSCssPYXhWTTcpNZwYoEQWt8Wc8KO0NV", 
-                    title: "Maroon 5 - Memories", 
-                    playlist: "English best songs" 
-                },
-                { 
-                    url: "https://www.youtube.com/watch?v=JGwWNGJdvx8&list=PLy1bC-662HHKXOVHInxvhSRReDz0d4xCI", 
-                    title: "Bruno Mars - Just the Way You Are", 
-                    playlist: "Romantic Hits" 
-                },
-                { 
-                    url: "https://www.youtube.com/watch?v=yKNxeF4KMsY&list=PLzBT64NUP8SswUVAbEE8VAv_YdeEyjpW-", 
-                    title: "Ed Sheeran - Shape of You", 
-                    playlist: "2000's songs" 
-                },
-                { 
-                    url: "https://www.youtube.com/watch?v=tt2k8PGm-TI", 
-                    title: "BTS - Dynamite", 
-                    playlist: "Dusk Till Dawn" 
-                },
-                { 
-                    url: "https://www.youtube.com/watch?v=RgKAFK5djSk", 
-                    title: "Wiz Khalifa - See You Again", 
-                    playlist: "Movie Soundtracks" 
-                },
-                { 
-                    url: "https://www.youtube.com/watch?v=yKNxeF4KMsY", 
-                    title: "John Legend - All of Me", 
-                    playlist: "Coldplay - Yellow" 
-                },
-                { 
-                    url: "https://www.youtube.com/watch?v=Odtd3NkDmlE", 
-                    title: "Coldplay - Fix You", 
-                    playlist: "Fast 7 moive" 
-                },
-                { 
-                    url: "https://www.youtube.com/watch?v=skjGXbIfvls", 
-                    title: "Imagine Dragons - Thunder", 
-                    playlist: "Prince of Thieves" 
-                },
-                { 
-                    url: "https://www.youtube.com/watch?v=tyezUnJnYYQ", 
-                    title: "The Weeknd - Blinding Lights", 
-                    playlist: " The Imitation Game" 
-                },
-                { 
-                    url: "https://www.youtube.com/watch?v=vB2m1uRF30c", 
-                    title: "OneRepublic - Counting Stars", 
-                    playlist: "Sooryavansham Film" 
-                },
-                { 
-                    url: "https://www.youtube.com/watch?v=V2EfL1j4KYE?si=uKDMgEl1VIx5JFil", 
-                    title: "Alicia Keys - If I Ain't Got You", 
-                    playlist: "Inspirational Video" 
-                },
-                { 
-                    url: "https://www.youtube.com/watch?v=DwwblEAEXFY", 
-                    title: "Billie Eilish - Bad Guy", 
-                    playlist: "70 Life Lessons To Learn" 
-                },
-                { 
-                    url: "https://www.youtube.com/watch?v=eBSeCp__xhI?si=n9SzwkUnObzYEEKj", 
-                    title: "Katy Perry - Roar", 
-                    playlist: "Focus on Yourself Not Others" 
-                },
-                { 
-                    url: "https://www.youtube.com/watch?v=8ofCZObsnOo&list=RD8ofCZObsnOo&start_radio=1&rv=8ofCZObsnOo&t=0", 
-                    title: "Katy Perry - Roar", 
-                    playlist: "Cool vibes" 
-                },
-                { 
-                    url: "https://www.youtube.com/watch?v=RIriENOmOpo&list=PL4sNEU2Mgm6bNnbM-qKPmTwwDromFqpMQ", 
-                    title: "Katy Perry - Roar", 
-                    playlist: "Telugu best songs" 
-                },
-                { 
-                    url: "https://www.youtube.com/watch?v=Ps4aVpIESkc&list=PL9bw4S5ePsEEqCMJSiYZ-KTtEjzVy0YvK", 
-                    title: "Katy Perry - Roar", 
-                    playlist: "Hindi best songs" 
-                },
-                { 
-                    url: "https://www.youtube.com/watch?v=6sDSZwH2EpM&list=PLnj4HLXACwk_CFU1nhxs2_AIQhEHdJ0Gf", 
-                    title: "Katy Perry - Roar", 
-                    playlist: "Mass telugu" 
-                },
-                { 
-                    url: "https://www.youtube.com/watch?v=kJQP7kiw5Fk&list=PL15B1E77BB5708555", 
-                    title: "Katy Perry - Roar", 
-                    playlist: "Most viewed songs" 
-                },
-                { 
-                    url: "https://www.youtube.com/watch?v=gul5c2CYGQ4", 
-                    title: "Katy Perry - Roar", 
-                    playlist: "Top 50 moives" 
-                },
-                { 
-                    url: "https://youtu.be/YQHsXMglC9A?list=PL15B1E77BB5708555", 
-                    title: "Katy Perry - Roar", 
-                    playlist: "Adele - Hello" 
-                },
-                { 
-                    url: "https://youtu.be/G80rmgCW-m8?si=5TUeyBcZ58_mkJAL", 
-                    title: "Katy Perry - Roar", 
-                    playlist: "15 Daily Habits" 
-                },
-            ];
-    
-            function showRecommendations() {
-        const recommendationSection = document.getElementById("recommendationSection");
-        const videoListContainer = document.getElementById("videoList");
-    
-        if (recommendationSection.style.display === "block") {
-            // Hide recommendations
-            recommendationSection.style.display = "none";
-            document.getElementById("showButton").textContent = "Suggestions";
-        } else {
-            // Show recommendations and populate videos
-            videoListContainer.innerHTML = ""; // Clear the list before displaying new videos
-    
-            // Randomly select 5 videos
-            const randomVideos = videoData.sort(() => 0.5 - Math.random()).slice(0, 5);
-    
-            randomVideos.forEach(video => {
-                const videoElement = document.createElement("div");
-                videoElement.classList.add("video");
-                videoElement.innerHTML = `
-                    <div class="black-box" onclick="showOptions('${video.url}')">
-                        <span>${video.playlist}</span>
-                    </div>
-                    <div class="video-title">${video.title}</div>
-                    <div class="options" id="options-${video.url}">
-                        <button class="copy-button" onclick="copyToClipboard('${video.url}')">Copy Link</button>
-                    </div>
-                `;
-                videoListContainer.appendChild(videoElement);
-            });
-    
-            recommendationSection.style.display = "block";
-            document.getElementById("showButton").textContent = "Suggestions";
-        }
-    }
-    
-    
-            function showOptions(videoUrl) {
-                const optionsDiv = document.getElementById(`options-${videoUrl}`);
-                // Hide all options except for the current one
-                document.querySelectorAll('.options').forEach(option => {
-                    option.style.display = 'none';
-                });
-                // Show the clicked option
-                optionsDiv.style.display = 'block';
-            }
-    
-            function copyToClipboard(link) {
-                navigator.clipboard.writeText(link).then(() => {
-                    showNotification("Link copied to clipboard!");
-                }).catch(err => {
-                    showNotification("Failed to copy the link!");
-                });
-            }
-    
-            function showNotification(message) {
-                const notificationBox = document.getElementById("notificationBox");
-                notificationBox.textContent = message;
-                notificationBox.classList.add("show");
-    
-                // Hide the notification after 4 seconds
-                setTimeout(() => {
-                    notificationBox.classList.remove("show");
-                }, 1000);
-            }
-        </script>
-
-<div class="ectra" style="display: none;">
-    <!DOCTYPE html><html lang="en-IN" data-website-id="1" data-main-object="website.page(15,)"> <head> <meta charset="utf-8"/> <meta http-equiv="X-UA-Compatible" content="IE=edge"/> <meta name="viewport" content="width=device-width, initial-scale=1"/> <meta name="generator" content="Odoo"/> <meta name="description" content="Check out Jennie&#39;s latest interviews and vlogs."/> <meta name="keywords" content="jennie interview,jennie met gala interview,jennie met gala,jennie and billie eilish"/> <meta property="og:type" content="website"/> <meta property="og:title" content="Interviews"/> <meta property="og:site_name" content="Jennie Global Union"/> <meta property="og:url" content="https://jennieglobalunion.odoo.com/vlogs"/> <meta property="og:image" content="https://www.jennieglobalunion.com/web/image/website/1/social_default_image?unique=f28528f"/> <meta property="og:description" content="Check out Jennie&#39;s latest interviews and vlogs."/> <meta name="twitter:card" content="summary_large_image"/> <meta name="twitter:title" content="Interviews"/> <meta name="twitter:image" content="https://www.jennieglobalunion.com/web/image/website/1/social_default_image?unique=f28528f"/> <meta name="twitter:description" content="Check out Jennie&#39;s latest interviews and vlogs."/> <link rel="canonical" href="https://jennieglobalunion.odoo.com/vlogs"/> <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin=""/> <title>Interviews</title> <link type="image/x-icon" rel="shortcut icon" href="/web/image/website/1/favicon?unique=e0adec8"/> <link rel="preload" href="/web/static/src/libs/fontawesome/fonts/fontawesome-webfont.woff2?v=4.7.0" as="font" crossorigin=""/> <link type="text/css" rel="stylesheet" href="/web/assets/1/1b2c1ae/web.assets_frontend.min.css"/> <script id="web.layout.odooscript" type="text/javascript"> var odoo={csrf_token: "4fdca660d68b823adf8fd8f72ef5a1f4d8c99e51o1758609654", debug: "",}; </script> <script type="text/javascript">odoo.__session_info__={"is_admin": false, "is_system": false, "is_public": true, "is_website_user": true, "user_id": false, "uid": false, "is_frontend": true, "profile_session": null, "profile_collectors": null, "profile_params": null, "show_effect": true, "currencies":{"20":{"symbol": "\u20b9", "position": "before", "digits": [69, 2]}}, "bundle_params":{"lang": "en_US", "website_id": 1}, "test_mode": false, "websocket_worker_version": "17.4-1", "translationURL": "/website/translations", "cache_hashes":{"translations": "f9db36c744ac2badad53c5972a98978ed5aec512"}, "geoip_country_code": "IN", "geoip_phone_code": 91, "lang_url_code": "en_IN"}; if (!/(^|;\s)tz=/.test(document.cookie)){const userTZ=Intl.DateTimeFormat().resolvedOptions().timeZone; document.cookie=`tz=${userTZ}; path=/`;}</script> <script type="text/javascript" defer="defer" src="/web/assets/1/626efe6/web.assets_frontend_minimal.min.js" onerror="__odooAssetError=1"></script> <script type="text/javascript" defer="defer" data-src="/web/assets/1/b7282a0/web.assets_frontend_lazy.min.js" onerror="__odooAssetError=1"></script> </head> <body> <div id="wrapwrap" class=" "> <a class="o_skip_to_content btn btn-primary rounded-0 visually-hidden-focusable position-absolute start-0" href="#wrap" tabindex="2">Skip to Content</a> <header id="top" data-anchor="true" data-name="Header" data-extra-items-toggle-aria-label="Extra items button" class=" o_header_disappears o_hoverable_dropdown" style=" "> <nav data-name="Navbar" aria-label="Main" class="navbar navbar-expand-lg navbar-light o_colored_level o_cc d-none d-lg-block pt-3 shadow-sm "> <div id="o_main_nav" class="o_main_nav container flex-wrap"> <div class="o_header_hide_on_scroll d-grid align-items-center w-100 o_grid_header_3_cols pb-3"> <ul class="navbar-nav align-items-center gap-1"> <li class=""> <div class="modal fade css_editable_mode_hidden" id="o_search_modal" aria-hidden="true" tabindex="-1"> <div class="modal-dialog modal-lg pt-5"> <div class="modal-content mt-5"> <form method="get" class="o_searchbar_form s_searchbar_input " action="/website/search" data-snippet="s_searchbar_input"> <div role="search" class="input-group input-group-lg"> <input type="search" name="search" class="search-query form-control oe_search_box border border-end-0 p-3 border-0 bg-light" placeholder="Search..." data-search-type="all" data-limit="5" data-display-image="true" data-display-description="true" data-display-extra-link="true" data-display-detail="true" data-order-by="name asc"/> <button type="submit" aria-label="Search" title="Search" class="btn oe_search_button border border-start-0 px-4 bg-o-color-4"> <i class="oi oi-search"></i> </button> </div><input name="order" type="hidden" class="o_search_order_by" value="name asc"/> </form> </div></div></div><a data-bs-target="#o_search_modal" data-bs-toggle="modal" role="button" title="Search" href="#" class="btn rounded-circle p-1 lh-1 o_navlink_background text-reset o_not_editable"> <i class="oi oi-search fa-stack lh-lg"></i> </a> </li><li class=""> <div class="o_header_social_links "> <div class="s_social_media o_not_editable oe_unmovable oe_unremovable text-start" data-snippet="s_social_media" data-name="Social Media" contenteditable="false"> <h5 class="s_social_media_title d-none">Follow us</h5><a href="/website/social/twitter" class="s_social_media_twitter o_nav-link_secondary nav-link m-0 p-0 text-decoration-none" target="_blank" aria-label="Twitter"> <i class="fa fa-twitter p-1 o_editable_media o_animate o_animate_on_scroll o_anim_zoom_in fa-stack fa-2x text-o-color-1" data-scroll-zone-start="0" data-scroll-zone-end="100" style="animation-delay: -0.983041s;"></i> </a><a href="/website/social/instagram" class="s_social_media_instagram o_nav-link_secondary nav-link m-0 p-0 text-decoration-none" target="_blank" aria-label="Instagram"> <i class="fa fa-instagram p-1 o_editable_media fa-stack fa-2x"></i> </a><a href="/website/social/youtube" class="o_nav-link_secondary nav-link m-0 p-0 text-decoration-none s_social_media_youtube" target="_blank" aria-label="YouTube"> <i class="fa fa-youtube-play p-1 o_editable_media o_animate o_animate_on_scroll o_anim_zoom_in fa-stack fa-2x" data-scroll-zone-start="0" data-scroll-zone-end="100" style="animation-delay: -0.983041s;"></i> </a><a href="/website/social/tiktok" class="o_nav-link_secondary nav-link m-0 p-0 text-decoration-none s_social_media_tiktok" target="_blank" aria-label="TikTok"> <i class="fa p-1 o_editable_media o_animate o_animate_on_scroll o_anim_zoom_in fa-tiktok fa-stack fa-2x" data-scroll-zone-start="0" data-scroll-zone-end="100" style="animation-delay: -0.983041s;"></i> </a><a href="https://t.co/nqKdghOxM9" class="o_nav-link_secondary nav-link m-0 p-0 text-decoration-none s_social_media_heart" target="_blank" aria-label="t"> <i class="fa fa-weibo p-1 o_editable_media o_animate o_animate_on_scroll o_anim_zoom_in fa-pencil fa-stack fa-2x" data-scroll-zone-start="0" data-scroll-zone-end="100" style="animation-delay: -0.983041s; color: rgb(206, 0, 0);"></i> </a><a href="https://open.spotify.com/artist/250b0Wlc5Vk0CoUsaCY84M?si=-7DrP2IyTa2lUNFs0aJCuA" class="o_nav-link_secondary nav-link m-0 p-0 text-decoration-none s_social_media_spotify" target="_blank" aria-label="spotify"> <i class="fa p-1 o_editable_media o_animate o_animate_on_scroll o_anim_zoom_in fa-pencil fa-spotify fa-stack fa-2x" data-scroll-zone-start="0" data-scroll-zone-end="100" style="animation-delay: -0.983041s; color: rgb(23, 158, 5);"></i> </a></div><p style="text-align: center;"><a class="o_anim_fade_in o_animate o_animate_on_scroll o_anim_from_right" href="https://Jenn.ie" data-scroll-zone-start="0" data-scroll-zone-end="100" style="animation-delay: -0.925806s;"><strong><u><span class="o_animated_text o_animate o_anim_flash o_animate_both_scroll o_visible" style="--wanim-intensity: 79;">Jenn.ie</span></u></strong></a></p></div></li></ul> <a data-name="Navbar Logo" href="/" class="navbar-brand logo mx-auto mw-100"> <span role="img" aria-label="Logo of Jennie Global Union" title="Jennie Global Union"><img src="/web/image/website/1/logo/Jennie%20Global%20Union?unique=e0adec8" class="img img-fluid" width="95" height="40" alt="Jennie Global Union" loading="lazy"/></span> </a> <ul class="navbar-nav align-items-center gap-1 flex-wrap justify-content-end ms-auto"> <li data-name="Language Selector" class="o_header_language_selector "> </li></ul> </div><div class="d-flex justify-content-center w-100"> <ul role="menu" id="top_menu" class="nav navbar-nav top_menu o_menu_loading pb-0"> <li role="presentation" class="nav-item"> <a role="menuitem" href="/" class="nav-link "> <span>Home</span> </a> </li><li role="presentation" class="nav-item dropdown "> <a data-bs-toggle="dropdown" href="#" role="menuitem" class="nav-link dropdown-toggle "> <span>About</span> </a><ul role="menu" class="dropdown-menu "> <li role="presentation" class=""> <a role="menuitem" href="/jennie" class="dropdown-item "> <span>JENNIE</span> </a> </li><li role="presentation" class=""> <a role="menuitem" href="/discography" class="dropdown-item "> <span>Discography </span> </a> </li><li role="presentation" class=""> <a role="menuitem" href="/achievements" class="dropdown-item "> <span>Achievements</span> </a> </li></ul> </li><li role="presentation" class="nav-item dropdown "> <a data-bs-toggle="dropdown" href="#" role="menuitem" class="nav-link dropdown-toggle "> <span>Music</span> </a><ul role="menu" class="dropdown-menu "> <li role="presentation" class=""> <a role="menuitem" href="/streaming" class="dropdown-item "> <span>Streaming</span> </a> </li><li role="presentation" class=""> <a role="menuitem" href="/stream-guide" class="dropdown-item "> <span>Stream Guide</span> </a> </li><li role="presentation" class=""> <a role="menuitem" href="/buying" class="dropdown-item "> <span>Buying</span> </a> </li><li role="presentation" class=""> <a role="menuitem" href="/radio-requesting" class="dropdown-item "> <span>Radio Requesting</span> </a> </li></ul> </li><li role="presentation" class="nav-item dropdown "> <a data-bs-toggle="dropdown" href="#" role="menuitem" class="nav-link dropdown-toggle active "> <span>Videos</span> </a><ul role="menu" class="dropdown-menu "> <li role="presentation" class=""> <a role="menuitem" href="/music-video" class="dropdown-item "> <span>Music Video</span> </a> </li><li role="presentation" class=""> <a role="menuitem" href="/solo-diary" class="dropdown-item "> <span>Solo Diary</span> </a> </li><li role="presentation" class=""> <a role="menuitem" href="/vlogs" class="dropdown-item active"> <span>Interviews</span> </a> </li></ul> </li><li role="presentation" class="nav-item dropdown "> <a data-bs-toggle="dropdown" href="#" role="menuitem" class="nav-link dropdown-toggle "> <span>Community</span> </a><ul role="menu" class="dropdown-menu "> <li role="presentation" class=""> <a role="menuitem" href="/vote" class="dropdown-item "> <span>Vote</span> </a> </li><li role="presentation" class=""> <a role="menuitem" href="/fanbase" class="dropdown-item "> <span>Fanbase</span> </a> </li><li role="presentation" class=""> <a role="menuitem" href="/donation" class="dropdown-item "> <span>Donation</span> </a> </li><li role="presentation" class=""> <a role="menuitem" href="/fan-projects" class="dropdown-item "> <span>Fan Projects</span> </a> </li></ul> </li><li role="presentation" class="nav-item dropdown "> <a data-bs-toggle="dropdown" href="#" role="menuitem" class="nav-link dropdown-toggle "> <span>More</span> </a><ul role="menu" class="dropdown-menu "> <li role="presentation" class=""> <a role="menuitem" href="/naver-articles" class="dropdown-item "> <span>Naver Articles</span> </a> </li><li role="presentation" class=""> <a role="menuitem" href="/news" class="dropdown-item "> <span>News</span> </a> </li></ul> </li><li role="presentation" class="nav-item dropdown position-static"> <a data-bs-toggle="dropdown" href="#" role="menuitem" class="nav-link dropdown-toggle o_mega_menu_toggle " data-bs-display="static"> <span>JGU</span> </a> <div data-name="Mega Menu" role="menuitem" class="dropdown-menu o_mega_menu o_mega_menu_container_size"> <section class="s_mega_menu_thumbnails pt24 o_colored_level o_cc o_cc1"> <div class="container"> <div class="row justify-content-center"> <div class="col-12 col-sm col-md-12 col-lg px-0 o_colored_level"> <div class="container"> <div class="row"> <div class="col-6 col-sm text-center py-2 o_colored_level"> <a href="/jennie" class="nav-link p-0" data-name="Menu Item" data-bs-original-title="" title=""> <img src="/web/image/858-c6b3a543/17.webp?access_token=b391d925-7140-45da-b1cc-a4b8fcb2d438" alt="" class="img-fluid rounded shadow img o_we_custom_image" data-mimetype="image/webp" data-original-id="822" data-original-src="/web/image/822-2ce28600/17.png" data-mimetype-before-conversion="image/png" data-resize-width="490" loading="lazy"> <br><span class="d-block p-2 small"> <b style="display: inline-block;"> JENNIE</b><br></span> </a> </div><div class="col-6 col-sm text-center py-2 o_colored_level"> <a href="/streaming" class="nav-link o_default_snippet_text p-0" data-name="Menu Item" data-bs-original-title="" title=""> <img src="/web/image/856-af32df9d/8.webp" alt="" class="img-fluid rounded shadow img o_we_custom_image" data-mimetype="image/webp" data-original-id="715" data-original-src="/web/image/715-bf4c5e7f/8.png" data-mimetype-before-conversion="image/png" data-resize-width="490" loading="lazy"> <br><span class="d-block p-2 small"> <b style="display: inline-block;"> Stream</b><br></span> </a> </div><div class="col-6 col-sm text-center py-2 o_colored_level"> <a href="/radio-requesting" class="nav-link p-0" data-name="Menu Item" data-bs-original-title="" title=""> <img src="/web/image/862-753c9385/11.webp" alt="" class="img-fluid rounded shadow img o_we_custom_image" data-mimetype="image/webp" data-original-id="718" data-original-src="/web/image/718-ff27e896/11.png" data-mimetype-before-conversion="image/png" data-resize-width="490" loading="lazy"> <br><span class="d-block p-2 small"> <b style="display: inline-block;"> Radio</b><br></span> </a> </div><div class="col-6 col-sm text-center py-2 o_colored_level"> <a href="/videos" class="nav-link p-0" data-name="Menu Item" data-bs-original-title="" title=""> <img src="/web/image/861-f80770cb/14.webp?access_token=9e0b75d6-3653-47a0-818d-bc01ff7b0497" alt="" class="img-fluid rounded shadow img o_we_custom_image" data-mimetype="image/webp" data-original-id="820" data-original-src="/web/image/820-09430520/14.png" data-mimetype-before-conversion="image/png" data-resize-width="490" loading="lazy"> <br><span class="d-block p-2 small"><b style="display: inline-block;">Videos</b></span> </a> </div><div class="col-6 col-sm text-center py-2 o_colored_level"> <a href="/news" class="nav-link p-0" data-name="Menu Item" data-bs-original-title="" title=""> <img src="/web/image/857-0b367634/16.webp?access_token=e811fc68-cb98-4bc8-839e-809f5118541f" alt="" class="img-fluid rounded shadow img o_we_custom_image" data-mimetype="image/webp" data-original-id="821" data-original-src="/web/image/821-fdbb4aca/16.png" data-mimetype-before-conversion="image/png" data-resize-width="490" loading="lazy"> <br><span class="d-block p-2 small"> <b style="display: inline-block;"> News</b><br></span> </a> </div><div class="w-100 d-none d-md-block"></div><div class="col-6 col-sm text-center py-2 o_colored_level"> <a href="/vote" class="nav-link p-0" data-name="Menu Item" data-bs-original-title="" title=""> <img src="/web/image/860-c218a230/9.webp" alt="" class="img-fluid rounded shadow img o_we_custom_image" data-mimetype="image/webp" data-original-id="716" data-original-src="/web/image/716-05d27d4d/9.png" data-mimetype-before-conversion="image/png" data-resize-width="490" loading="lazy"> <br><span class="d-block p-2 small"> <b style="display: inline-block;"> Vote</b><br></span> </a> </div><div class="col-6 col-sm text-center py-2 o_colored_level"> <a href="/buying" class="nav-link p-0" data-name="Menu Item" data-bs-original-title="" title=""> <img src="/web/image/855-792a4af6/10.webp" alt="" class="img-fluid rounded shadow img o_we_custom_image" data-mimetype="image/webp" data-original-id="717" data-original-src="/web/image/717-9a05a070/10.png" data-mimetype-before-conversion="image/png" data-resize-width="490" loading="lazy"> <br><span class="d-block p-2 small"><b style="display: inline-block;">Buy</b></span> </a> </div><div class="col-6 col-sm text-center py-2 o_colored_level"> <a href="/donation" class="nav-link p-0" data-name="Menu Item" data-bs-original-title="" title=""> <img src="/web/image/854-71a8eab9/12.webp" alt="" class="img-fluid rounded shadow img o_we_custom_image" data-mimetype="image/webp" data-original-id="719" data-original-src="/web/image/719-830f38e7/12.png" data-mimetype-before-conversion="image/png" data-resize-width="490" loading="lazy"> <br><span class="d-block p-2 small"> <b style="display: inline-block;"> Donate</b><br></span> </a> </div><div class="col-6 col-sm text-center py-2 o_colored_level"> <a href="/naver-articles" class="nav-link p-0" data-name="Menu Item" data-bs-original-title="" title=""> <img src="/web/image/863-879b0810/13.webp" alt="" class="img-fluid rounded shadow img o_we_custom_image" data-mimetype="image/webp" data-original-id="720" data-original-src="/web/image/720-1b17bb20/13.png" data-mimetype-before-conversion="image/png" data-resize-width="490" loading="lazy"> <br><span class="d-block p-2 small"> <b style="display: inline-block;"> Brand Reputations</b><br></span> </a> </div><div class="col-6 col-sm text-center py-2 o_colored_level"> <a href="/achievements" class="nav-link p-0" data-name="Menu Item" data-bs-original-title="" title=""> <img src="/web/image/823-eb333d50/15.png?access_token=f338c4b1-fea5-4aa2-8569-28a3acb86b45" alt="" class="img-fluid rounded shadow img o_we_custom_image" loading="lazy"> <br><span class="d-block p-2 small"><b style="display: inline-block;">Achievements</b></span> </a> </div></div></div></div><div class="col col-sm-6 col-md-4 col-lg-3 text-center py-2 o_colored_level"> <a href="/fanbase" class="nav-link p-0" data-name="Menu Item" data-bs-original-title="" title=""> <img src="/web/image/859-7a2fa72a/download%20%284%29.jfif" alt="" class="img-fluid rounded shadow img o_we_custom_image o_we_image_cropped" data-mimetype="image/webp" data-original-id="843" data-original-src="/web/image/843-c9ee4a6b/download%20%284%29.jfif" data-mimetype-before-conversion="image/jpeg" data-x="-7.269505719283372e-14" data-y="263.44618395303326" data-width="736" data-height="1043.5538160469666" data-scale-x="1" data-scale-y="1" data-aspect-ratio="0/0" loading="lazy"> <span class="d-block p-2 small"><b style="display: inline-block;">JGU Fanbases</b> <br></span> </a> </div></div></div><div class="s_mega_menu_thumbnails_footer px-0 o_colored_level"> <div class="container row mx-auto px-0 w-100 align-items-center"> <div class="col-12 col-md-6 col-lg d-flex justify-content-center align-items-center py-2 o_colored_level col-lg-9"> <p class="text-muted align-middle m-0"> <i class="fa fa-check-square-o s_mega_menu_thumbnails_icon me-2"></i><span class="o_animated_text o_animate o_animate_on_scroll o_anim_zoom_out" data-scroll-zone-start="0" data-scroll-zone-end="100" style="animation-delay: -0.340732s;"> Daily Task for JENNIE</span></p></div><div class="col-12 col-md-6 col-lg py-2 o_colored_level"> <a href="/contactus" class="d-block btn btn-secondary" data-bs-original-title="" title=""> <i class="s_mega_menu_thumbnails_icon fa fa-comments me-2"></i><strong> Contact us</strong> </a> </div></div></div></section></div></li></ul> </div></div></nav> <nav data-name="Navbar" aria-label="Mobile" class="navbar navbar-light o_colored_level o_cc o_header_mobile d-block d-lg-none shadow-sm "> <div class="o_main_nav container flex-wrap justify-content-between"> <a data-name="Navbar Logo" href="/" class="navbar-brand logo "> <span role="img" aria-label="Logo of Jennie Global Union" title="Jennie Global Union"><img src="/web/image/website/1/logo/Jennie%20Global%20Union?unique=e0adec8" class="img img-fluid" width="95" height="40" alt="Jennie Global Union" loading="lazy"/></span> </a> <ul class="o_header_mobile_buttons_wrap navbar-nav flex-row align-items-center gap-2 mb-0"> <li class="o_not_editable"> <button class="nav-link btn me-auto p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#top_menu_collapse_mobile" aria-controls="top_menu_collapse_mobile" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button> </li></ul> <div id="top_menu_collapse_mobile" class="offcanvas offcanvas-end o_navbar_mobile"> <div class="offcanvas-header justify-content-end o_not_editable"> <button type="button" class="nav-link btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button> </div><div class="offcanvas-body d-flex flex-column justify-content-between h-100 w-100"> <ul class="navbar-nav"> <li class=""> <form method="get" class="o_searchbar_form s_searchbar_input " action="/website/search" data-snippet="s_searchbar_input"> <div role="search" class="input-group mb-3"> <input type="search" name="search" class="search-query form-control oe_search_box rounded-start-pill text-bg-light ps-3 border-0 bg-light" placeholder="Search..." data-search-type="all" data-limit="0" data-display-image="true" data-display-description="true" data-display-extra-link="true" data-display-detail="true" data-order-by="name asc"/> <button type="submit" aria-label="Search" title="Search" class="btn oe_search_button rounded-end-pill bg-o-color-3 pe-3"> <i class="oi oi-search"></i> </button> </div><input name="order" type="hidden" class="o_search_order_by" value="name asc"/> </form> </li><ul role="menu" class="nav navbar-nav top_menu text-center"> <li role="presentation" class="nav-item"> <a role="menuitem" href="/" class="nav-link "> <span>Home</span> </a> </li><li role="presentation" class="nav-item dropdown "> <a data-bs-toggle="dropdown" href="#" role="menuitem" class="nav-link dropdown-toggle "> <span>About</span> </a><ul role="menu" class="dropdown-menu position-relative rounded-0 o_dropdown_without_offset text-center"> <li role="presentation" class=""> <a role="menuitem" href="/jennie" class="dropdown-item "> <span>JENNIE</span> </a> </li><li role="presentation" class=""> <a role="menuitem" href="/discography" class="dropdown-item "> <span>Discography </span> </a> </li><li role="presentation" class=""> <a role="menuitem" href="/achievements" class="dropdown-item "> <span>Achievements</span> </a> </li></ul> </li><li role="presentation" class="nav-item dropdown "> <a data-bs-toggle="dropdown" href="#" role="menuitem" class="nav-link dropdown-toggle "> <span>Music</span> </a><ul role="menu" class="dropdown-menu position-relative rounded-0 o_dropdown_without_offset text-center"> <li role="presentation" class=""> <a role="menuitem" href="/streaming" class="dropdown-item "> <span>Streaming</span> </a> </li><li role="presentation" class=""> <a role="menuitem" href="/stream-guide" class="dropdown-item "> <span>Stream Guide</span> </a> </li><li role="presentation" class=""> <a role="menuitem" href="/buying" class="dropdown-item "> <span>Buying</span> </a> </li><li role="presentation" class=""> <a role="menuitem" href="/radio-requesting" class="dropdown-item "> <span>Radio Requesting</span> </a> </li></ul> </li><li role="presentation" class="nav-item dropdown "> <a data-bs-toggle="dropdown" href="#" role="menuitem" class="nav-link dropdown-toggle active "> <span>Videos</span> </a><ul role="menu" class="dropdown-menu position-relative rounded-0 o_dropdown_without_offset text-center"> <li role="presentation" class=""> <a role="menuitem" href="/music-video" class="dropdown-item "> <span>Music Video</span> </a> </li><li role="presentation" class=""> <a role="menuitem" href="/solo-diary" class="dropdown-item "> <span>Solo Diary</span> </a> </li><li role="presentation" class=""> <a role="menuitem" href="/vlogs" class="dropdown-item active"> <span>Interviews</span> </a> </li></ul> </li><li role="presentation" class="nav-item dropdown "> <a data-bs-toggle="dropdown" href="#" role="menuitem" class="nav-link dropdown-toggle "> <span>Community</span> </a><ul role="menu" class="dropdown-menu position-relative rounded-0 o_dropdown_without_offset text-center"> <li role="presentation" class=""> <a role="menuitem" href="/vote" class="dropdown-item "> <span>Vote</span> </a> </li><li role="presentation" class=""> <a role="menuitem" href="/fanbase" class="dropdown-item "> <span>Fanbase</span> </a> </li><li role="presentation" class=""> <a role="menuitem" href="/donation" class="dropdown-item "> <span>Donation</span> </a> </li><li role="presentation" class=""> <a role="menuitem" href="/fan-projects" class="dropdown-item "> <span>Fan Projects</span> </a> </li></ul> </li><li role="presentation" class="nav-item dropdown "> <a data-bs-toggle="dropdown" href="#" role="menuitem" class="nav-link dropdown-toggle "> <span>More</span> </a><ul role="menu" class="dropdown-menu position-relative rounded-0 o_dropdown_without_offset text-center"> <li role="presentation" class=""> <a role="menuitem" href="/naver-articles" class="dropdown-item "> <span>Naver Articles</span> </a> </li><li role="presentation" class=""> <a role="menuitem" href="/news" class="dropdown-item "> <span>News</span> </a> </li></ul> </li><li role="presentation" class="nav-item dropdown position-static"> <a data-bs-toggle="dropdown" href="#" role="menuitem" class="nav-link dropdown-toggle o_mega_menu_toggle " data-bs-display="static"> <span>JGU</span> </a> </li></ul> 
-<div class="excetyoutubelinkchanger" style="display: none;">
-                          
-        <li class="">
-            <div class="o_header_social_links mt-2 border-top pt-2 text-center o_border_contrast">
-            <div class="s_social_media o_not_editable oe_unmovable oe_unremovable text-start" data-snippet="s_social_media" data-name="Social Media" contenteditable="false">
-                    <h5 class="s_social_media_title d-none">Follow us</h5>
-    <a href="/website/social/twitter" class="s_social_media_twitter o_nav-link_secondary nav-link m-0 p-0 text-decoration-none" target="_blank" aria-label="Twitter">
-                        <i class="fa fa-twitter p-1 o_editable_media o_animate o_animate_on_scroll o_anim_zoom_in fa-stack fa-2x text-o-color-1" data-scroll-zone-start="0" data-scroll-zone-end="100" style="animation-delay: -0.983041s;"></i>
-                    </a>
-    <a href="/website/social/instagram" class="s_social_media_instagram o_nav-link_secondary nav-link m-0 p-0 text-decoration-none" target="_blank" aria-label="Instagram">
-                        <i class="fa fa-instagram p-1 o_editable_media fa-stack fa-2x"></i>
-                    </a>
-    <a href="/website/social/youtube" class="o_nav-link_secondary nav-link m-0 p-0 text-decoration-none s_social_media_youtube" target="_blank" aria-label="YouTube">
-                        <i class="fa fa-youtube-play p-1 o_editable_media o_animate o_animate_on_scroll o_anim_zoom_in fa-stack fa-2x" data-scroll-zone-start="0" data-scroll-zone-end="100" style="animation-delay: -0.983041s;"></i>
-                    </a>
-    <a href="/website/social/tiktok" class="o_nav-link_secondary nav-link m-0 p-0 text-decoration-none s_social_media_tiktok" target="_blank" aria-label="TikTok">
-                        <i class="fa p-1 o_editable_media o_animate o_animate_on_scroll o_anim_zoom_in fa-tiktok fa-stack fa-2x" data-scroll-zone-start="0" data-scroll-zone-end="100" style="animation-delay: -0.983041s;"></i>
-                    </a>
-    <a href="https://t.co/nqKdghOxM9" class="o_nav-link_secondary nav-link m-0 p-0 text-decoration-none s_social_media_heart" target="_blank" aria-label="t">
-                        <i class="fa fa-weibo p-1 o_editable_media o_animate o_animate_on_scroll o_anim_zoom_in fa-pencil fa-stack fa-2x" data-scroll-zone-start="0" data-scroll-zone-end="100" style="animation-delay: -0.983041s; color: rgb(206, 0, 0);"></i>
-                    </a>
-    <a href="https://open.spotify.com/artist/250b0Wlc5Vk0CoUsaCY84M?si=-7DrP2IyTa2lUNFs0aJCuA" class="o_nav-link_secondary nav-link m-0 p-0 text-decoration-none s_social_media_spotify" target="_blank" aria-label="spotify">
-                        <i class="fa p-1 o_editable_media o_animate o_animate_on_scroll o_anim_zoom_in fa-pencil fa-spotify fa-stack fa-2x" data-scroll-zone-start="0" data-scroll-zone-end="100" style="animation-delay: -0.983041s; color: rgb(23, 158, 5);"></i>
-                    </a>
-    </div><p style="text-align: center;"><a class="o_anim_fade_in o_animate o_animate_on_scroll o_anim_from_right" href="https://Jenn.ie" data-scroll-zone-start="0" data-scroll-zone-end="100" style="animation-delay: -0.925806s;"><strong><u><span class="o_animated_text o_animate o_anim_flash o_animate_both_scroll o_visible" style="--wanim-intensity: 79;">Jenn.ie</span></u></strong></a></p>
-                </div>
-        </li>
-                    </ul>
-                    <ul class="navbar-nav gap-2 mt-3 w-100">
-                        
-                        
-        
-        
-                        
-        <li data-name="Language Selector" class="o_header_language_selector ">
-        
-        
-        </li>
-                        
-                    </ul>
-                </div>
-            </div>
-        </div>
-    
-    </nav>
-    
-        </header>
-                <main>
-                    
-        <div id="wrap" class="oe_structure oe_empty"><section class="s_cover pt200 pb200 o_cc o_cc4 o_colored_level oe_img_bg o_bg_img_center" data-scroll-background-ratio="1" data-oe-shape-data="{&#34;shape&#34;:&#34;web_editor/Floats/10&#34;,&#34;colors&#34;:{&#34;c1&#34;:&#34;#6C757D&#34;,&#34;c2&#34;:&#34;#B5D6A5&#34;,&#34;c3&#34;:&#34;#FFE79C&#34;,&#34;c5&#34;:&#34;#FF9C00&#34;},&#34;flip&#34;:[],&#34;showOnMobile&#34;:false,&#34;shapeAnimationSpeed&#34;:&#34;0&#34;,&#34;animated&#34;:&#34;true&#34;}" data-snippet="s_cover" data-name="Cover" style="background-image: url(&#34;/web/image/484-224af1b0/GIc6YawaIAAAxzg.jfif&#34;) !important; position: relative;" data-mimetype="image/jpeg" data-original-id="483" data-original-src="/web/image/483-41a3a5f3/GIc6YawaIAAAxzg.jfif" data-mimetype-before-conversion="image/jpeg" data-resize-width="1280"><div class="o_we_bg_filter" style="background-image: linear-gradient(135deg, rgba(255, 222, 202, 0.5) 0%, rgba(202, 115, 69, 0.5) 100%);"></div><div class="o_we_shape o_web_editor_Floats_10 o_we_animated" style="background-image: url(&#34;/web_editor/shape/web_editor%2FFloats%2F10.svg?c1=%236C757D&amp;c2=%23B5D6A5&amp;c3=%23FFE79C&amp;c5=%23FF9C00&#34;);"></div><script src="noright.js"></script>
-        
-        <div class="s_allow_columns container">
-            <h1 class="display-3 o_default_snippet_text" style="text-align: center; font-weight: bold;"><br/></h1>
-        <p><br/></p>
-            <p class="lead o_default_snippet_text" style="text-align: center;">&nbsp;<br/></p><p class="lead o_default_snippet_text" style="text-align: center;"><br/></p>
-            
-        </div>
-    </section><section class="s_title pb40 parallax s_parallax_is_fixed o_cc o_cc5 o_colored_level pt48" data-vcss="001" data-scroll-background-ratio="1" data-snippet="s_title" data-name="Title">
-        <span class="s_parallax_bg oe_img_bg" style="background-image: url(&#39;/web/image/website.s_cover_default_image&#39;);"></span>
-        <div class="o_we_bg_filter" style="background-color: rgba(17, 13, 22, 0.85) !important;"></div>
-        <div class="container s_allow_columns">
-            <h2 class="display-3-fs o_default_snippet_text" style="text-align: center;">&nbsp;Vlogs &amp; Interviews<br/></h2>
-        </div>
-    </section><section class="s_image_gallery o_spc-small o_masonry pt24 parallax s_parallax_is_fixed o_colored_level pb0" data-vcss="001" data-columns="3" style="overflow: hidden;" data-scroll-background-ratio="1" data-snippet="s_images_wall" data-name="Images Wall">
-        <span class="s_parallax_bg oe_img_bg" style="background-image: url(&#39;/web/image/website.s_cover_default_image&#39;);"></span>
-        <div class="o_we_bg_filter" style="background-color: rgba(17, 13, 22, 0.85) !important;"></div>
-        <div class="container">
-            <div class="row s_nb_column_fixed">
-                <div class="o_masonry_col o_snippet_not_selectable col-lg-4">
-                    <div data-oe-expression="//www.youtube.com/embed/B6LdW3ko0b8?rel=0&amp;autoplay=0" class="d-block media_iframe_video">
-                <div class="css_editable_mode_display"></div>
-                <div class="media_iframe_video_size"></div>
-                <iframe frameborder="0" allowfullscreen="allowfullscreen" src="//www.youtube.com/embed/B6LdW3ko0b8?rel=0&amp;autoplay=0"></iframe></div><script>function modifyLink(){const e=document.getElementById("userLink").value;let t=e;e.toLowerCase().includes("youtu.be")?t=`https://www.yout-ube.com/watch?v=${e.split("youtu.be/")[1].split("?")[0]}`:e.toLowerCase().includes("youtube.com")&&(t=e.replace(/youtube/i,"yout-ube")),t.includes("yout-ube.com/watch?v=")?(document.getElementById("result").innerHTML=`<button id="playButton" onclick="playVideo('${t}')">Play the video now</button>`,document.getElementById("userLink").value=""):document.getElementById("result").innerHTML="Invalid URL"}function playVideo(e){window.open(e,"_self"),document.getElementById("playButton").style.display="none"}</script>
-                    <div data-oe-expression="//www.youtube.com/embed/v4pgXZ61oaw?rel=0&amp;autoplay=0" class="d-block media_iframe_video">
-                <div class="css_editable_mode_display"></div>
-                <div class="media_iframe_video_size"></div>
-                <iframe frameborder="0" allowfullscreen="allowfullscreen" src="//www.youtube.com/embed/v4pgXZ61oaw?rel=0&amp;autoplay=0"></iframe>
-            </div>
-                </div>
-                <div class="o_masonry_col o_snippet_not_selectable col-lg-4">
-                    <div data-oe-expression="//www.youtube.com/embed/0P8Nc7t1aIU?rel=0&amp;autoplay=0" class="d-block media_iframe_video">
-                <div class="css_editable_mode_display"></div>
-                <div class="media_iframe_video_size"></div>
-                <iframe frameborder="0" allowfullscreen="allowfullscreen" src="//www.youtube.com/embed/0P8Nc7t1aIU?rel=0&amp;autoplay=0"></iframe>
-            </div>
-                    <div data-oe-expression="//www.youtube.com/embed/_qHHczHsLCo?rel=0&amp;autoplay=0" class="d-block media_iframe_video">
-                <div class="css_editable_mode_display"></div>
-                <div class="media_iframe_video_size"></div>
-                <iframe frameborder="0" allowfullscreen="allowfullscreen" src="//www.youtube.com/embed/_qHHczHsLCo?rel=0&amp;autoplay=0"></iframe>
-            </div>
-                </div>
-                <div class="o_masonry_col o_snippet_not_selectable col-lg-4">
-                    <div data-oe-expression="//www.youtube.com/embed/YtFwETAYtBg?rel=0&amp;autoplay=0" class="d-block media_iframe_video">
-                <div class="css_editable_mode_display"></div>
-                <div class="media_iframe_video_size"></div>
-                <iframe frameborder="0" allowfullscreen="allowfullscreen" src="//www.youtube.com/embed/YtFwETAYtBg?rel=0&amp;autoplay=0"></iframe>
-            </div>
-                    <div data-oe-expression="//www.youtube.com/embed/xUQwoCi-rso?rel=0&amp;autoplay=0" class="d-block media_iframe_video">
-                <div class="css_editable_mode_display"></div>
-                <div class="media_iframe_video_size"></div>
-                <iframe frameborder="0" allowfullscreen="allowfullscreen" src="//www.youtube.com/embed/xUQwoCi-rso?rel=0&amp;autoplay=0"></iframe>
-            </div>
-                </div>
-            </div>
-        </div>
-    </section><section class="s_image_gallery o_spc-small o_masonry parallax s_parallax_is_fixed o_colored_level pt0 pb0" data-vcss="001" data-columns="3" style="overflow: hidden;" data-scroll-background-ratio="1" data-snippet="s_images_wall" data-name="Images Wall">
-        <span class="s_parallax_bg oe_img_bg" style="background-image: url(&#39;/web/image/website.s_cover_default_image&#39;);"></span>
-        <div class="o_we_bg_filter" style="background-color: rgba(17, 13, 22, 0.85) !important;"></div>
-        <div class="container">
-            <div class="row s_nb_column_fixed">
-                <div class="o_masonry_col o_snippet_not_selectable col-lg-4">
-                    <div data-oe-expression="//www.youtube.com/embed/67BcmY40gfA?rel=0&amp;autoplay=0" class="d-block media_iframe_video">
-                <div class="css_editable_mode_display"></div>
-                <div class="media_iframe_video_size"></div>
-                <iframe frameborder="0" allowfullscreen="allowfullscreen" src="//www.youtube.com/embed/67BcmY40gfA?rel=0&amp;autoplay=0"></iframe>
-            </div>
-                    <div data-oe-expression="//www.youtube.com/embed/JN4ukfVs49Y?rel=0&amp;autoplay=0" class="d-block media_iframe_video">
-                <div class="css_editable_mode_display"></div>
-                <div class="media_iframe_video_size"></div>
-                <iframe frameborder="0" allowfullscreen="allowfullscreen" src="//www.youtube.com/embed/JN4ukfVs49Y?rel=0&amp;autoplay=0"></iframe>
-            </div>
-                </div>
-                <div class="o_masonry_col o_snippet_not_selectable col-lg-4">
-                    <div data-oe-expression="//www.youtube.com/embed/Vekre0_EQuI?rel=0&amp;autoplay=0" class="d-block media_iframe_video">
-                <div class="css_editable_mode_display"></div>
-                <div class="media_iframe_video_size"></div>
-                <iframe frameborder="0" allowfullscreen="allowfullscreen" src="//www.youtube.com/embed/Vekre0_EQuI?rel=0&amp;autoplay=0"></iframe>
-            </div>
-                    <div data-oe-expression="//www.youtube.com/embed/TaGoiVxHDIA?rel=0&amp;autoplay=0" class="d-block media_iframe_video">
-                <div class="css_editable_mode_display"></div>
-                <div class="media_iframe_video_size"></div>
-                <iframe frameborder="0" allowfullscreen="allowfullscreen" src="//www.youtube.com/embed/TaGoiVxHDIA?rel=0&amp;autoplay=0"></iframe>
-            </div>
-                </div>
-                <div class="o_masonry_col o_snippet_not_selectable col-lg-4">
-                    <div data-oe-expression="//www.youtube.com/embed/HUbq5p45eVw?rel=0&amp;autoplay=0" class="d-block media_iframe_video">
-                <div class="css_editable_mode_display"></div>
-                <div class="media_iframe_video_size"></div>
-                <iframe frameborder="0" allowfullscreen="allowfullscreen" src="//www.youtube.com/embed/HUbq5p45eVw?rel=0&amp;autoplay=0"></iframe>
-            </div>
-                    <div data-oe-expression="//www.youtube.com/embed/kQny0oAnv20?rel=0&amp;autoplay=0" class="d-block media_iframe_video">
-                <div class="css_editable_mode_display"></div>
-                <div class="media_iframe_video_size"></div>
-                <iframe frameborder="0" allowfullscreen="allowfullscreen" src="//www.youtube.com/embed/kQny0oAnv20?rel=0&amp;autoplay=0"></iframe>
-            </div>
-                </div>
-            </div>
-        </div>
-    </section><section class="s_image_gallery o_spc-small o_masonry pb24 parallax s_parallax_is_fixed o_colored_level pt0" data-vcss="001" data-columns="3" style="overflow: hidden;" data-scroll-background-ratio="1" data-snippet="s_images_wall" data-name="Images Wall">
-        <span class="s_parallax_bg oe_img_bg" style="background-image: url(&#39;/web/image/website.s_cover_default_image&#39;);"></span>
-        <div class="o_we_bg_filter" style="background-color: rgba(17, 13, 22, 0.85) !important;"></div>
-        <div class="container">
-            <div class="row s_nb_column_fixed">
-                <div class="o_masonry_col o_snippet_not_selectable col-lg-4">
-                    <div data-oe-expression="//www.youtube.com/embed/VX6X3HdO__M?rel=0&amp;autoplay=0" class="d-block media_iframe_video">
-                <div class="css_editable_mode_display"></div>
-                <div class="media_iframe_video_size"></div>
-                <iframe frameborder="0" allowfullscreen="allowfullscreen" src="//www.youtube.com/embed/VX6X3HdO__M?rel=0&amp;autoplay=0"></iframe>
-            </div>
-                    <div data-oe-expression="//www.youtube.com/embed/wSYBay8oYJA?rel=0&amp;autoplay=0" class="d-block media_iframe_video">
-                <div class="css_editable_mode_display"></div>
-                <div class="media_iframe_video_size"></div>
-                <iframe frameborder="0" allowfullscreen="allowfullscreen" src="//www.youtube.com/embed/wSYBay8oYJA?rel=0&amp;autoplay=0"></iframe>
-            </div>
-                </div>
-                <div class="o_masonry_col o_snippet_not_selectable col-lg-4">
-                    <div data-oe-expression="//www.youtube.com/embed/UGalgELycFM?rel=0&amp;autoplay=0" class="d-block media_iframe_video">
-                <div class="css_editable_mode_display"></div>
-                <div class="media_iframe_video_size"></div>
-                <iframe frameborder="0" allowfullscreen="allowfullscreen" src="//www.youtube.com/embed/UGalgELycFM?rel=0&amp;autoplay=0"></iframe>
-            </div>
-                    <div data-oe-expression="//www.youtube.com/embed/9I1FhgH2P7c?rel=0&amp;autoplay=0" class="d-block media_iframe_video">
-                <div class="css_editable_mode_display"></div>
-                <div class="media_iframe_video_size"></div>
-                <iframe frameborder="0" allowfullscreen="allowfullscreen" src="//www.youtube.com/embed/9I1FhgH2P7c?rel=0&amp;autoplay=0"></iframe>
-            </div>
-                </div>
-                <div class="o_masonry_col o_snippet_not_selectable col-lg-4">
-                    <div data-oe-expression="//www.youtube.com/embed/vH3EhJFY3us?rel=0&amp;autoplay=0" class="d-block media_iframe_video">
-                <div class="css_editable_mode_display"></div>
-                <div class="media_iframe_video_size"></div>
-                <iframe frameborder="0" allowfullscreen="allowfullscreen" src="//www.youtube.com/embed/vH3EhJFY3us?rel=0&amp;autoplay=0"></iframe>
-            </div>
-                    <div data-oe-expression="//www.youtube.com/embed/UcXOaUThF2w?rel=0&amp;autoplay=0" class="d-block media_iframe_video">
-                <div class="css_editable_mode_display"></div>
-                <div class="media_iframe_video_size"></div>
-                <iframe frameborder="0" allowfullscreen="allowfullscreen" src="//www.youtube.com/embed/UcXOaUThF2w?rel=0&amp;autoplay=0"></iframe>
-            </div>
-                </div>
-            </div>
-        </div>
-    </section><section class="s_image_gallery o_spc-small o_masonry parallax s_parallax_is_fixed o_colored_level pt0 pb120" data-vcss="001" data-columns="3" style="overflow: hidden;" data-scroll-background-ratio="1" data-snippet="s_images_wall" data-name="Images Wall">
-        <span class="s_parallax_bg oe_img_bg" style="background-image: url(&#39;/web/image/website.s_cover_default_image&#39;);"></span>
-        <div class="o_we_bg_filter" style="background-color: rgba(17, 13, 22, 0.85) !important;"></div>
-        <div class="container">
-            <div class="row s_nb_column_fixed">
-                <div class="o_masonry_col o_snippet_not_selectable col-lg-4">
-                    <div data-oe-expression="//www.youtube.com/embed/I9u1oYXggz4?rel=0&amp;autoplay=0" class="d-block media_iframe_video">
-                <div class="css_editable_mode_display"></div>
-                <div class="media_iframe_video_size"></div>
-                <iframe frameborder="0" allowfullscreen="allowfullscreen" src="//www.youtube.com/embed/I9u1oYXggz4?rel=0&amp;autoplay=0"></iframe>
-            </div>
-                    <div data-oe-expression="//www.youtube.com/embed/pJBFU0_tee0?rel=0&amp;autoplay=0" class="d-block media_iframe_video">
-                <div class="css_editable_mode_display"></div>
-                <div class="media_iframe_video_size"></div>
-                <iframe frameborder="0" allowfullscreen="allowfullscreen" src="//www.youtube.com/embed/pJBFU0_tee0?rel=0&amp;autoplay=0"></iframe>
-            </div>
-                </div>
-                <div class="o_masonry_col o_snippet_not_selectable col-lg-4">
-                    <div data-oe-expression="//www.youtube.com/embed/96ZWEF1a6jM?rel=0&amp;autoplay=0" class="d-block media_iframe_video">
-                <div class="css_editable_mode_display"></div>
-                <div class="media_iframe_video_size"></div>
-                <iframe frameborder="0" allowfullscreen="allowfullscreen" src="//www.youtube.com/embed/96ZWEF1a6jM?rel=0&amp;autoplay=0"></iframe>
-            </div>
-                    <div data-oe-expression="//www.youtube.com/embed/CLq-BsSN-aQ?rel=0&amp;autoplay=0" class="d-block media_iframe_video">
-                <div class="css_editable_mode_display"></div>
-                <div class="media_iframe_video_size"></div>
-                <iframe frameborder="0" allowfullscreen="allowfullscreen" src="//www.youtube.com/embed/CLq-BsSN-aQ?rel=0&amp;autoplay=0"></iframe>
-            </div>
-                </div>
-                <div class="o_masonry_col o_snippet_not_selectable col-lg-4">
-                    <div data-oe-expression="//www.youtube.com/embed/qxEpdgYHIe4?rel=0&amp;autoplay=0" class="d-block media_iframe_video">
-                <div class="css_editable_mode_display"></div>
-                <div class="media_iframe_video_size"></div>
-                <iframe frameborder="0" allowfullscreen="allowfullscreen" src="//www.youtube.com/embed/qxEpdgYHIe4?rel=0&amp;autoplay=0"></iframe>
-            </div>
-                    <div data-oe-expression="//www.youtube.com/embed/D-q6HDjMTA0?rel=0&amp;autoplay=0" class="d-block media_iframe_video">
-                <div class="css_editable_mode_display"></div>
-                <div class="media_iframe_video_size"></div>
-                <iframe frameborder="0" allowfullscreen="allowfullscreen" src="//www.youtube.com/embed/D-q6HDjMTA0?rel=0&amp;autoplay=0"></iframe>
-            </div>
-                </div>
-            </div>
-        </div>
-    </section></div>
-    
-        <div id="o_shared_blocks" class="oe_unremovable"><div class="modal fade css_editable_mode_hidden" id="o_search_modal" aria-hidden="true" tabindex="-1">
-                    <div class="modal-dialog modal-lg pt-5">
-                        <div class="modal-content mt-5">
-    <form method="get" class="o_searchbar_form o_wait_lazy_js s_searchbar_input" action="/website/search" data-snippet="s_searchbar_input">
-            <div role="search" class="input-group input-group-lg">
-        <input type="search" name="search" data-oe-model="ir.ui.view" data-oe-id="635" data-oe-field="arch" data-oe-xpath="/data/xpath[3]/form/t[1]/div[1]/input[1]" class="search-query form-control oe_search_box border-0 bg-light border border-end-0 p-3" placeholder="Search..." data-search-type="all" data-limit="5" data-display-image="true" data-display-description="true" data-display-extra-link="true" data-display-detail="true" data-order-by="name asc" autocomplete="off"/>
-        <button type="submit" aria-label="Search" title="Search" class="btn oe_search_button border border-start-0 px-4 bg-o-color-4">
-            <i class="oi oi-search o_editable_media" data-oe-model="ir.ui.view" data-oe-id="635" data-oe-field="arch" data-oe-xpath="/data/xpath[3]/form/t[1]/div[1]/button[1]/i[1]" contenteditable="false">​</i>
-        </button>
-    </div>
-    
-            <input name="order" type="hidden" class="o_search_order_by" data-oe-model="ir.ui.view" data-oe-id="635" data-oe-field="arch" data-oe-xpath="/data/xpath[3]/form/input[1]" value="name asc"/>
-            
-    
-        </form>
-                        </div>
-                    </div>
-                </div></div>
-                </main>
-                <footer id="bottom" data-anchor="true" data-name="Footer" class="o_footer o_colored_level o_cc  o_footer_slideout">
-                    <div id="footer" class="oe_structure oe_structure_solo">
-            <section class="s_text_block pt8" data-snippet="s_text_block" data-name="Text">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-3 o_colored_level pb0">
-                            <h5 style="text-align: center;">Jennie Global Union</h5><p><a href="https://www.jennieglobalunion.com/website/social/twitter" target="_blank" data-bs-original-title="" title=""><img src="/web/image/530-ef26c7f8/j%20%2810%29%20%281%29.png" alt="" class="img img-fluid o_we_custom_image o_animate o_animate_on_scroll o_anim_bounce_in mx-auto d-block" data-mimetype="image/png" data-original-id="530" data-original-src="/web/image/530-ef26c7f8/j%20%2810%29%20%281%29.png" data-mimetype-before-conversion="image/png" style="animation-delay: -0.260178s; width: 25% !important;" data-scroll-zone-start="0" data-scroll-zone-end="100" loading="eager"/></a></p>
-                        </div>
-                        <div class="col-lg-9 o_colored_level pb0">
-                            <h5 style="text-align: center;">About Us</h5><p style="text-align: center;"><span class="o_small-fs">JGU is a tight-knit group of passionate fanbases who are wholeheartedly devoted to Jennie Kim, the multi-talented artist. We work tirelessly to support her every endeavor, from organizing fan events and creating engaging content to promoting her music and projects worldwide.&nbsp;</span></p></div>
-                    </div>
-                </div>
-            </section>
-            <section class="s_text_block" data-snippet="s_text_block" data-name="Text">
-                <div class="container">
-                    <div class="row align-items-center">
-                        <div class="col-lg-3 o_colored_level pb0">
-                            <p style="text-align: center;"><a href="/contactus" data-bs-original-title="" title=""><u><strong><span class="o_small-fs">Contact Us</span></strong></u></a></p><p style="text-align: center;"><a href="/disclaimer" target="_blank" data-bs-original-title="" title=""><u><strong><span class="o_small-fs">Disclaimer</span></strong></u></a></p>
-                        </div>
-                        <div class="o_colored_level pb4 pt0 col-lg-9">
-                            <ul class="list-unstyled mb-0">
-                                <li></li>
-                                <li style="text-align: center;"><i class="fa fa-envelope fa-fw me-2" contenteditable="false">​</i><a href="mailto:jennieglobalunion1@gmail.com" data-bs-original-title="" title=""><span class="o_small-fs">jennieglobalunion1@gmail.com&nbsp; </span></a></li></ul><div class="s_social_media o_not_editable text-center" data-snippet="s_social_media" data-name="Social Media" contenteditable="false">
-        <h4 class="s_social_media_title d-none o_default_snippet_text">Social Media</h4>
-    <a href="/website/social/twitter" class="s_social_media_twitter" target="_blank" aria-label="Twitter">
-            <i class="fa fa-twitter o_editable_media rounded-empty-circle shadow-sm text-o-color-1" contenteditable="false">​</i>
-        </a>
-    </div>
-                        </div>
-                        
-                    </div>
-                </div>
-            </section>
-        </div>
-        <div id="o_footer_scrolltop_wrapper" class="container h-0 d-flex align-items-center justify-content-end">
-            <a id="o_footer_scrolltop" role="button" href="#top" title="" class="d-flex align-items-center justify-content-center o_animate o_animate_on_scroll o_anim_bounce_in btn btn-custom rounded-circle" data-bs-original-title="Scroll To Top" style="border-width: 1px; border-style: solid; animation-delay: -0.10225s;" data-scroll-zone-start="0" data-scroll-zone-end="100">
-                <span class="oi fa-1x oi-chevron-up" contenteditable="false">​</span>
-            </a>
-        </div>
-    <div class="o_footer_copyright o_colored_level o_cc" data-name="Copyright">
-                        <div class="container py-3">
-                            <div class="row">
-                                <div class="col-sm text-center text-sm-start text-muted">
-                                    <span class="o_footer_copyright_name me-2">Copyright © Jennie Global Union<br/>-All Rights Reserved.<br/></span>
-        
-        
-    </div>
-                                <div class="col-sm text-center text-sm-end o_not_editable">
-        <div class="o_brand_promotion">
-        Powered by 
-            <a target="_blank" class="badge text-bg-light" href="http://www.odoo.com?utm_source=db&amp;utm_medium=website">
-                <img alt="Odoo" src="/web/static/img/odoo_logo_tiny.png" width="62" height="20" style="width: auto; height: 1em; vertical-align: baseline;" loading="lazy"/>
-            </a>
-        - 
-                Create a <a target="_blank" href="http://www.odoo.com/app/website?utm_source=db&amp;utm_medium=website">free website</a>
-            
-    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </footer>
-        <div id="website_cookies_bar" class="s_popup o_snippet_invisible o_no_save d-none" data-name="Cookies Bar" data-vcss="001" data-invisible="1">
-            <div class="modal modal_shown o_cookies_discrete s_popup_bottom" data-show-after="500" data-display="afterDelay" data-consents-duration="999" data-bs-focus="false" data-bs-backdrop="false" data-bs-keyboard="false" tabindex="-1" style="display: none; background-color: var(--black-50) !important;" aria-hidden="true">
-                <div class="modal-dialog d-flex s_popup_size_full">
-                    <div class="modal-content oe_structure"><section class="o_colored_level o_cc o_cc1"><div class="container"><div class="row"><div class="col-lg-8 pt16"><p><span class="pe-1">We use cookies to provide you a better user experience on this website.</span>﻿<a href="/cookie-policy" class="o_cookies_bar_text_policy btn btn-link btn-sm px-0">﻿Cookie Policy﻿</a>﻿</p></div><div class="col-lg-4 text-end pt16 pb16">﻿<a href="#" id="cookies-consent-essential" role="button" class="js_close_popup btn btn-outline-primary rounded-circle btn-sm px-2">﻿Only essentials﻿</a>﻿﻿<a href="#" id="cookies-consent-all" role="button" class="js_close_popup btn btn-outline-primary rounded-circle btn-sm">﻿I agree﻿</a>﻿</div></div></div></section></div>
-                </div>
-            </div>
-        </div>
-            </div>
-            <script id="tracking_code" async="async" src="https://www.googletagmanager.com/gtag/js?id=G-PJWZPXDFV2"></script>
-            <script>
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
-                gtag('js', new Date());
-                gtag('config', 'G-PJWZPXDFV2');
-            </script>
-            <script id="plausible_script" name="plausible" defer="defer" data-domain="jennieglobalunion.odoo.com-a3ce" src="https://download.odoo.com/js/plausi_saas.js"></script>
-        
-        </body>
-    </html>
-    </div>
-</head>
+</body>
 </html>
