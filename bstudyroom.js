@@ -210,7 +210,7 @@ function displayPDF() {
           openPDFModal(objectURL);
         };
 
-        deleteButton.innerText = "Delete";
+        deleteButton.innerText = "Delete this PDF";
         deleteButton.classList.add('delete-btn');
         deleteButton.onclick = function() {
           deletePDF(file.name);
@@ -252,7 +252,7 @@ function loadSavedPDFs() {
       openPDFModal(objectURL);
     };
 
-    deleteButton.innerText = "Delete";
+    deleteButton.innerText = "Delete this PDF";
     deleteButton.classList.add('delete-btn');
     deleteButton.onclick = function() {
       deletePDF(pdf.name);
