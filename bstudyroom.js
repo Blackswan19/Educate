@@ -47,7 +47,7 @@ function addThumbnailToDOM(imgUrl, thumbnailsContainer, displayImage) {
   thumbnail.src = imgUrl;
 
   const deleteIcon = document.createElement('span');
-  deleteIcon.innerHTML = '<i class="fa-solid fa-trash delete-icon"></i>';
+  deleteIcon.innerHTML = '<i class="fa-solid fa-ban delete-icon"></i>';
   deleteIcon.onclick = function() {
     deleteImage(imgUrl);
   };
@@ -104,7 +104,7 @@ function addTextInputToDOM(text) {
   textElement.style.display = 'block';
 
   const deleteTextIcon = document.createElement('span');
-  deleteTextIcon.innerHTML = '<i class="fa-solid fa-trash delete-text-icon"></i>';
+  deleteTextIcon.innerHTML = '<i class="fa-solid fa-ban delete-icon"></i>';
   deleteTextIcon.onclick = function() {
     deleteText(text);
   };
