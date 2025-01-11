@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BsTracker</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .form-container {
+            margin-bottom: 20px;
+        }
+        canvas {
+            max-width: 100%;
+            height: 400px;
+            overflow-x: auto;
+        }
+        .chart-container {
+            max-width: 100%;
+            overflow-x: auto;
+            padding-bottom: 20px;
+        }
+        .data-list {
+            margin-top: 20px;
+        }
+        .data-list ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .data-list li {
+            display: flex;
+            justify-content: space-between;
+            margin: 5px 0;
+        }
+        .data-list button {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Income and Expenses Graph</h1>
+    <div class="form-container">
+        <form id="dataForm">
+            <label for="date">Date:</label>
+            <input type="date" id="date" required>
+
+            <label for="reason">Reason:</label>
+            <input type="text" id="reason" placeholder="Enter reason" required>
+
+            <label for="type">Type:</label>
+            <select id="type" required>
+                <option value="income">Income</option>
+                <option value="expense">Expense</option>
+            </select>
+
+            <label for="amount">Amount:</label>
+            <input type="number" id="amount" placeholder="Enter amount" required>
+
+            <button type="button" onclick="addData()">Add</button>
+        </form>
+    </div>
+
+    <div class="chart-container">
+        <canvas id="incomeExpenseChart"></canvas>
+    </div>
+
+    <div class="data-list">
+        <h3>Data Entries</h3>
+        <ul id="dataEntries"></ul>
+    </div>
+
+    <script>
+        // Load existing data from local storage if available
+        let dates = JSON.parse(localStorage.getItem('dates')) || [];
+        let balances = JSON.parse(localStorage.getItem('balances')) || [];
+        let reasons = JSON.parse(localStorage.getItem('reasons')) || [];
+        let colors = JSON.parse(localStorage.getItem('colors')) || [];
+        let points = JSON.parse(localStorage.getItem('points')) || [];
+
+        const ctx = document.getElementById('incomeExpenseChart').getContext('2d');
+        const chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: dates,
+                datasets: [{
+                    label: 'Balance',
+                    data: points,
+                    backgroundColor: colors,
+                    borderColor: function(context) {
+                        return context.dataset.data[context.dataIndex] < 0 ? 'rgba(255, 99, 132, 1)' : 'rgba(75, 192, 192, 1)';
+                    },
+                    borderWidth: 2,
+                    fill: false,
+                    pointRadius: 5,
+                    pointBackgroundColor: colors,
+                    pointBorderColor: colors,
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const reason = reasons[context.dataIndex];
+                                const value = context.raw;
+                                return `${context.label}: ${value} (Reason: ${reason})`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false
+                    }
+                }
+            }
+        });
+
+        function addData() {
+            const date = document.getElementById('date').value;
+            const reason = document.getElementById('reason').value;
+            const type = document.getElementById('type').value;
+            const amount = parseFloat(document.getElementById('amount').value);
+
+            if (date && reason && type && !isNaN(amount)) {
+                dates.push(date);
+                reasons.push(reason);
+                points.push(type === 'income' ? amount : -amount);
+                colors.push(type === 'income' ? 'rgba(75, 192, 192, 1)' : 'rgba(255, 99, 132, 1)');
+
+                // Update the chart
+                chart.update();
+
+                // Save the data to local storage
+                localStorage.setItem('dates', JSON.stringify(dates));
+                localStorage.setItem('reasons', JSON.stringify(reasons));
+                localStorage.setItem('points', JSON.stringify(points));
+                localStorage.setItem('colors', JSON.stringify(colors));
+
+                // Clear the form
+                document.getElementById('dataForm').reset();
+
+                // Update the data list display
+                updateDataList();
+            } else {
+                alert('Please fill in all fields correctly.');
+            }
+        }
+
+        function updateDataList() {
+            const dataEntries = document.getElementById('dataEntries');
+            dataEntries.innerHTML = '';
+            for (let i = 0; i < dates.length; i++) {
+                const li = document.createElement('li');
+                li.innerHTML = `${dates[i]}: ${points[i]} (Reason: ${reasons[i]}) 
+                                <button onclick="deleteData(${i})">Delete</button>`;
+                dataEntries.appendChild(li);
+            }
+        }
+
+        function deleteData(index) {
+            // Remove the item from the arrays
+            dates.splice(index, 1);
+            reasons.splice(index, 1);
+            points.splice(index, 1);
+            colors.splice(index, 1);
+
+            // Update the chart
+            chart.update();
+
+            // Save the updated data to local storage
+            localStorage.setItem('dates', JSON.stringify(dates));
+            localStorage.setItem('reasons', JSON.stringify(reasons));
+            localStorage.setItem('points', JSON.stringify(points));
+            localStorage.setItem('colors', JSON.stringify(colors));
+
+            // Update the data list display
+            updateDataList();
+        }
+
+        // Load the data list initially
+        updateDataList();
+    </script>
+    <script src="noright.js"></script>
+</body>
+</html>
