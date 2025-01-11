@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BsTracker</title>
+    <title>Income and Expenses Graph</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {
@@ -42,6 +42,12 @@
             padding: 5px;
             cursor: pointer;
         }
+        .totals {
+            margin-top: 20px;
+        }
+        .totals div {
+            font-size: 18px;
+        }
     </style>
 </head>
 <body>
@@ -76,6 +82,11 @@
         <ul id="dataEntries"></ul>
     </div>
 
+    <div class="totals">
+        <div><strong>Total Income:</strong> $<span id="totalIncome">0</span></div>
+        <div><strong>Total Expenses:</strong> $<span id="totalExpense">0</span></div>
+    </div>
+
     <script>
         // Load existing data from local storage if available
         let dates = JSON.parse(localStorage.getItem('dates')) || [];
@@ -83,6 +94,8 @@
         let reasons = JSON.parse(localStorage.getItem('reasons')) || [];
         let colors = JSON.parse(localStorage.getItem('colors')) || [];
         let points = JSON.parse(localStorage.getItem('points')) || [];
+        let totalIncome = JSON.parse(localStorage.getItem('totalIncome')) || 0;
+        let totalExpense = JSON.parse(localStorage.getItem('totalExpense')) || 0;
 
         const ctx = document.getElementById('incomeExpenseChart').getContext('2d');
         const chart = new Chart(ctx, {
@@ -136,6 +149,13 @@
                 points.push(type === 'income' ? amount : -amount);
                 colors.push(type === 'income' ? 'rgba(75, 192, 192, 1)' : 'rgba(255, 99, 132, 1)');
 
+                // Update totals
+                if (type === 'income') {
+                    totalIncome += amount;
+                } else if (type === 'expense') {
+                    totalExpense += amount;
+                }
+
                 // Update the chart
                 chart.update();
 
@@ -144,6 +164,12 @@
                 localStorage.setItem('reasons', JSON.stringify(reasons));
                 localStorage.setItem('points', JSON.stringify(points));
                 localStorage.setItem('colors', JSON.stringify(colors));
+                localStorage.setItem('totalIncome', JSON.stringify(totalIncome));
+                localStorage.setItem('totalExpense', JSON.stringify(totalExpense));
+
+                // Update the totals on the page
+                document.getElementById('totalIncome').textContent = totalIncome.toFixed(2);
+                document.getElementById('totalExpense').textContent = totalExpense.toFixed(2);
 
                 // Clear the form
                 document.getElementById('dataForm').reset();
@@ -168,10 +194,18 @@
 
         function deleteData(index) {
             // Remove the item from the arrays
+            const deletedAmount = points[index];
             dates.splice(index, 1);
             reasons.splice(index, 1);
             points.splice(index, 1);
             colors.splice(index, 1);
+
+            // Adjust the totals
+            if (deletedAmount > 0) {
+                totalIncome -= deletedAmount;
+            } else {
+                totalExpense -= Math.abs(deletedAmount);
+            }
 
             // Update the chart
             chart.update();
@@ -181,14 +215,21 @@
             localStorage.setItem('reasons', JSON.stringify(reasons));
             localStorage.setItem('points', JSON.stringify(points));
             localStorage.setItem('colors', JSON.stringify(colors));
+            localStorage.setItem('totalIncome', JSON.stringify(totalIncome));
+            localStorage.setItem('totalExpense', JSON.stringify(totalExpense));
+
+            // Update the totals on the page
+            document.getElementById('totalIncome').textContent = totalIncome.toFixed(2);
+            document.getElementById('totalExpense').textContent = totalExpense.toFixed(2);
 
             // Update the data list display
             updateDataList();
         }
 
-        // Load the data list initially
+        // Load the data list and totals initially
         updateDataList();
+        document.getElementById('totalIncome').textContent = totalIncome.toFixed(2);
+        document.getElementById('totalExpense').textContent = totalExpense.toFixed(2);
     </script>
-    <script src="noright.js"></script>
 </body>
 </html>
