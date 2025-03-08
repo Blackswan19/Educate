@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BsBlackrooms</title>
+    <link rel="icon" type="image/x-icon" href="https://i.ibb.co/bND6ZhX/logo.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  
+    <style>
+         @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Orbitron:wght@400..900&family=Red+Hat+Display:ital,wght@0,300..900&family=Strait&display=swap');
+
+* {
+    font-family: "Red Hat Display", sans-serif;
+}
+        body {
+            margin: 0;
+            padding: 0;
+            background: #1a1a1a;
+            color: #ffffff;
+            overflow: hidden;
+        }
+        #landing {
+            text-align: center;
+    /* padding: 60px 20px; */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+        }
+        #landing h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #e0e0e0;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        #roomName {
+            padding: 12px;
+            font-size: 1.1em;
+            width: 250px;
+            border: none;
+            border-radius: 8px;
+            background: #333;
+            color: #fff;
+            margin-right: 10px;
+            transition: background 0.3s;
+        }
+        #roomName:focus {
+            background: #444;
+            outline: none;
+        }
+        #blackboard {
+            display: none;
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+            background: #1a1a1a;
+        }
+        .text-box {
+            position: absolute;
+            padding: 10px;
+            cursor: move;
+            user-select: none;
+            background: rgba(50, 50, 50, 0.9);
+            border-radius: 6px;
+            color: #ddd;
+            font-size: 1em;
+            min-width: 100px;
+            min-height: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+            transition: background 0.2s;
+        }
+        .text-box:focus {
+            background: rgba(70, 70, 70, 0.9);
+            outline: none;
+        }
+        #controls {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 1em;
+            border: none;
+            border-radius: 8px;
+            background: #004cff;
+            color: #fff;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.1s;
+        }
+        button:hover {
+            background: #005fa3;
+            transform: translateY(-2px);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        #stop-start-btn.active {
+            background: #d32f2f;
+        }
+        #stop-start-btn.active:hover {
+            background: #b71c1c;
+        }
+        #trash-bin {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: #d32f2f;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 60px;
+            font-size: 1.5em;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+            transition: transform 0.2s, opacity 0.2s;
+            opacity: 0.85;
+        }
+        #trash-bin:hover {
+            transform: scale(1.1);
+            opacity: 1;
+        }
+        #room-list {
+            margin-top: 30px;
+            max-width: 600px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+        .room-item {
+            display: flex
+;
+    align-items: center;
+    background: #2c2c2c;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 1.1em;
+    transition: background 0.3s, transform 0.1s;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    gap: 10px;
+        }
+        .room-item:hover {
+            background: #3c3c3c;
+            transform: translateY(-2px);
+        }
+        .room-name {
+            cursor: pointer;
+            flex-grow: 1;
+        }
+        .delete-room-btn {
+            background: #d32f2f;
+            padding: 5px 10px;
+            margin-left: 10px;
+            font-size: 0.9em;
+            border-radius: 4px;
+        }
+        .delete-room-btn:hover {
+            background: #b71c1c;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div id="landing">
+        <h1>Create a BsBlackroom</h1>
+        <div>
+            <input type="text" id="roomName" placeholder="Enter room name">
+            <button onclick="createRoom()">Create New Room</button>
+        </div>
+        <div id="room-list"></div>
+    </div>
+
+    <div id="blackboard">
+        <div id="controls">
+            <button onclick="saveContent()">Save</button>
+            <button id="stop-start-btn" onclick="toggleTextCreation()">Stop</button>
+            <button onclick="backToLanding()">Back to Rooms</button>
+        </div>
+        <div id="trash-bin"><i class="fa-solid fa-trash-can"></i></div>
+    </div>
+
+    <script>
+        let blackboard = document.getElementById('blackboard');
+        let landing = document.getElementById('landing');
+        let trashBin = document.getElementById('trash-bin');
+        let roomList = document.getElementById('room-list');
+        let stopStartBtn = document.getElementById('stop-start-btn');
+        let currentRoom = null;
+        let isTextCreationEnabled = true;
+
+        window.onload = function() {
+            loadRoomList();
+        };
+
+        function createRoom() {
+            let roomName = document.getElementById('roomName').value.trim();
+            if (roomName) {
+                let rooms = JSON.parse(localStorage.getItem('rooms')) || [];
+                if (!rooms.includes(roomName)) {
+                    rooms.push(roomName);
+                    localStorage.setItem('rooms', JSON.stringify(rooms));
+                }
+                enterRoom(roomName);
+                document.getElementById('roomName').value = '';
+                loadRoomList();
+            }
+        }
+
+        function enterRoom(roomName) {
+            currentRoom = roomName;
+            landing.style.display = 'none';
+            blackboard.style.display = 'block';
+            clearBlackboard();
+            loadContent(roomName);
+            isTextCreationEnabled = true;
+            updateStopStartButton();
+        }
+
+        function loadRoomList() {
+            let rooms = JSON.parse(localStorage.getItem('rooms')) || [];
+            roomList.innerHTML = '';
+            rooms.forEach(room => {
+                let roomItem = document.createElement('div');
+                roomItem.className = 'room-item';
+
+                let roomNameSpan = document.createElement('span');
+                roomNameSpan.className = 'room-name';
+                roomNameSpan.innerText = room;
+                roomNameSpan.onclick = () => enterRoom(room);
+
+                let deleteBtn = document.createElement('button');
+                deleteBtn.className = 'delete-room-btn';
+                deleteBtn.innerText = 'x';
+                deleteBtn.onclick = (e) => {
+                    e.stopPropagation(); // Prevent entering the room when clicking delete
+                    deleteRoom(room);
+                };
+
+                roomItem.appendChild(roomNameSpan);
+                roomItem.appendChild(deleteBtn);
+                roomList.appendChild(roomItem);
+            });
+        }
+
+        function deleteRoom(roomName) {
+            if (confirm(`Are you sure you want to delete the room "${roomName}" and all its content?`)) {
+                let rooms = JSON.parse(localStorage.getItem('rooms')) || [];
+                rooms = rooms.filter(r => r !== roomName);
+                localStorage.setItem('rooms', JSON.stringify(rooms));
+                localStorage.removeItem(`blackboardContent_${roomName}`);
+                loadRoomList();
+            }
+        }
+
+        blackboard.addEventListener('click', function(e) {
+            if (e.target === blackboard && isTextCreationEnabled) {
+                let textBox = document.createElement('div');
+                textBox.className = 'text-box';
+                textBox.contentEditable = true;
+                textBox.style.left = e.clientX + 'px';
+                textBox.style.top = e.clientY + 'px';
+                textBox.innerText = '';
+                blackboard.appendChild(textBox);
+                makeDraggable(textBox);
+                textBox.focus();
+            }
+        });
+
+        function makeDraggable(element) {
+            let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+            element.onmousedown = dragMouseDown;
+
+            function dragMouseDown(e) {
+                e.preventDefault();
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                document.onmouseup = closeDragElement;
+                document.onmousemove = elementDrag;
+            }
+
+            function elementDrag(e) {
+                e.preventDefault();
+                pos1 = pos3 - e.clientX;
+                pos2 = pos4 - e.clientY;
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                element.style.top = (element.offsetTop - pos2) + 'px';
+                element.style.left = (element.offsetLeft - pos1) + 'px';
+
+                let binRect = trashBin.getBoundingClientRect();
+                let elemRect = element.getBoundingClientRect();
+                if (
+                    elemRect.left < binRect.right &&
+                    elemRect.right > binRect.left &&
+                    elemRect.top < binRect.bottom &&
+                    elemRect.bottom > binRect.top
+                ) {
+                    element.style.background = 'rgba(211, 47, 47, 0.7)';
+                } else {
+                    element.style.background = 'rgba(50, 50, 50, 0.9)';
+                }
+            }
+
+            function closeDragElement() {
+                document.onmouseup = null;
+                document.onmousemove = null;
+                let binRect = trashBin.getBoundingClientRect();
+                let elemRect = element.getBoundingClientRect();
+                if (
+                    elemRect.left < binRect.right &&
+                    elemRect.right > binRect.left &&
+                    elemRect.top < binRect.bottom &&
+                    elemRect.bottom > binRect.top
+                ) {
+                    element.remove();
+                }
+                element.style.background = 'rgba(50, 50, 50, 0.9)';
+            }
+        }
+
+        function toggleTextCreation() {
+            isTextCreationEnabled = !isTextCreationEnabled;
+            updateStopStartButton();
+        }
+
+        function updateStopStartButton() {
+            if (isTextCreationEnabled) {
+                stopStartBtn.innerText = 'Stop';
+                stopStartBtn.classList.remove('active');
+            } else {
+                stopStartBtn.innerText = 'Start';
+                stopStartBtn.classList.add('active');
+            }
+        }
+
+        function saveContent() {
+            if (!currentRoom) return;
+            let content = [];
+            document.querySelectorAll('.text-box').forEach(box => {
+                content.push({
+                    text: box.innerText,
+                    x: box.style.left,
+                    y: box.style.top
+                });
+            });
+            localStorage.setItem(`blackboardContent_${currentRoom}`, JSON.stringify(content));
+            alert(`Content saved for room: ${currentRoom}`);
+        }
+
+        function loadContent(roomName) {
+            let saved = localStorage.getItem(`blackboardContent_${roomName}`);
+            if (saved) {
+                let content = JSON.parse(saved);
+                content.forEach(item => {
+                    let textBox = document.createElement('div');
+                    textBox.className = 'text-box';
+                    textBox.contentEditable = true;
+                    textBox.innerText = item.text;
+                    textBox.style.left = item.x;
+                    textBox.style.top = item.y;
+                    blackboard.appendChild(textBox);
+                    makeDraggable(textBox);
+                });
+            }
+        }
+
+        function clearBlackboard() {
+            let controls = document.getElementById('controls');
+            let trash = document.getElementById('trash-bin');
+            blackboard.innerHTML = '';
+            blackboard.appendChild(controls);
+            blackboard.appendChild(trash);
+        }
+
+        function backToLanding() {
+            blackboard.style.display = 'none';
+            landing.style.display = 'flex';
+            currentRoom = null;
+            loadRoomList();
+        }
+    </script>
+    <script src="noright.js"></script> 
+</body>
+</html>
