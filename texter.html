@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google Fonts for font support -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Arial&family=Times+New+Roman&family=Courier+New&family=Verdana&family=Georgia&family=Trebuchet+MS&family=Helvetica&family=Garamond&family=Palatino&family=Futura&family=Comic+Sans+MS&family=Impact&family=Lucida+Sans&family=Roboto&family=Open+Sans&family=Lato&family=Montserrat&family=Oswald&family=Raleway&family=Poppins&family=Source+Sans+Pro&family=Ubuntu&family=Merriweather&family=Playfair+Display&family=Lobster&family=Pacifico&family=Dancing+Script&family=Caveat&family=Shadows+Into+Light&display=swap">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BsTexter</title>
+</head>
+
+<body>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Orbitron:wght@400..900&family=Red+Hat+Display:ital,wght@0,300..900&family=Strait&display=swap');
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Red Hat Display", sans-serif;
+        }
+        body {
+            background: blue;
+            color: white;
+            font-size: 100px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            position: relative;
+            text-transform: capitalize;
+            font-family: "Arial", sans-serif; /* Fallback font */
+        }
+        ::-webkit-scrollbar{
+            background-color: transparent;
+        }
+        .input-container {
+            position: absolute;
+            bottom: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            display: none;
+            transform: translateY(-20px);
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            opacity: 0;
+            z-index: 10;
+            font-size: 16px;
+            max-height: 50vh; /* Mobile-friendly */
+            overflow-y: auto;
+        }
+
+        .input-container.active {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        select, input[type="color"], input[type="number"] {
+            font-size: 16px;
+            margin: 5px;
+            padding: 3px;
+        }
+        ::placeholder
+{
+    color: white;
+    text-transform: capitalize;
+}        input[type="color"] {
+            width: 50px;
+            height: 30px;
+            border: none;
+            cursor: pointer;
+        }
+
+        input[type="number"] {
+            width: 100px;
+        }
+
+        button {
+            font-size: 20px;
+            padding: 10px 20px;
+            margin: 10px;
+            cursor: pointer;
+            background: white;
+            border: none;
+            border-radius: 5px;
+            position: fixed;
+            bottom: 0px;
+            right: 0px;
+        }
+
+        .icon-btn {
+            font-size: 24px;
+            padding: 10px;
+        }
+
+        ::placeholder {
+            color: white;
+            opacity: 0.7; /* Slightly dimmed for contrast */
+        }
+
+        .fa-icon {
+            font-size: 16px;
+            margin-right: 3px;
+            vertical-align: middle;
+            color: #333;
+        }
+
+        #customInput {
+            white-space: nowrap;
+            width: 50vw;
+            max-width: 90vw;
+            height: 100px;
+            text-align: center;
+            display: block;
+            resize: both;
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 100px;
+            line-height: 1;
+            padding: 10px;
+            overflow: auto; 
+            text-transform: capitalize;
+        }
+
+        label {
+            color: #333;
+            font-size: 14px;
+            margin-right: 5px;
+        }
+    </style>
+
+    <p><textarea 
+        name="customInput" 
+        id="customInput" 
+        placeholder="BsTexter" 
+        oninput="adjustFontSize()" 
+        aria-label="Custom Text Input" style="text-transform: capitalize" ></textarea></p>
+
+    <button class="icon-btn" onclick="toggleOptions()" aria-label="Toggle Options"><i class="fas fa-cog"></i></button>
+
+    <div class="input-container" id="optionsContainer">
+        <label for="fontFamily">Font:</label>
+        <select id="fontFamily" onchange="updateStyle()" aria-label="Font Family">
+            <option value="Arial">Arial</option>
+            <option value="Times New Roman">Times New Roman</option>
+            <option value="Courier New">Courier New</option>
+            <option value="Verdana">Verdana</option>
+            <option value="Georgia">Georgia</option>
+            <option value="Trebuchet MS">Trebuchet MS</option>
+            <option value="Helvetica">Helvetica</option>
+            <option value="Garamond">Garamond</option>
+            <option value="Palatino">Palatino</option>
+            <option value="Futura">Futura</option>
+            <option value="Comic Sans MS">Comic Sans MS</option>
+            <option value="Impact">Impact</option>
+            <option value="Lucida Sans">Lucida Sans</option>
+            <option value="Roboto">Roboto</option>
+            <option value="Open Sans">Open Sans</option>
+            <option value="Lato">Lato</option>
+            <option value="Montserrat">Montserrat</option>
+            <option value="Oswald">Oswald</option>
+            <option value="Raleway">Raleway</option>
+            <option value="Poppins">Poppins</option>
+            <option value="Source Sans Pro">Source Sans Pro</option>
+            <option value="Ubuntu">Ubuntu</option>
+            <option value="Merriweather">Merriweather</option>
+            <option value="Playfair Display">Playfair Display</option>
+            <option value="Lobster">Lobster</option>
+            <option value="Pacifico">Pacifico</option>
+            <option value="Dancing Script">Dancing Script</option>
+            <option value="Caveat">Caveat</option>
+            <option value="Shadows Into Light">Shadows Into Light</option>
+        </select>
+
+        <label for="backgroundColor">Background:</label>
+        <input type="color" id="backgroundColor" onchange="updateStyle()" value="#0000FF" aria-label="Background Color">
+
+        <label for="fontColor">Text Color:</label>
+        <input type="color" id="fontColor" onchange="updateStyle()" value="#FFFFFF" aria-label="Font Color">
+
+        <label for="textTransform">Text Style:</label>
+        <select id="textTransform" onchange="updateStyle()" aria-label="Text Transform">
+            <option value="uppercase">Uppercase</option>
+            <option value="lowercase">Lowercase</option>
+            <option value="capitalize">Capitalize</option>
+            <option value="none">None</option>
+        </select>
+
+        <label for="fontSize">Font Size (px):</label>
+        <input type="number" id="fontSize" min="1" max="500" value="100" onchange="updateStyle()" aria-label="Font Size">
+    </div>
+
+    <script>
+        // Debounce function to optimize input handling
+        function debounce(func, wait) {
+            let timeout;
+            return function (...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), wait);
+            };
+        }
+
+        function updateStyle() {
+            const input = document.getElementById('customInput');
+            const fontFamily = document.getElementById('fontFamily').value;
+            const backgroundColor = document.getElementById('backgroundColor').value;
+            const fontColor = document.getElementById('fontColor').value;
+            const textTransform = document.getElementById('textTransform').value;
+            const fontSize = document.getElementById('fontSize').value;
+
+            input.style.fontFamily = fontFamily;
+            input.style.textTransform = textTransform;
+            input.style.fontSize = `${fontSize}px`;
+            input.style.color = fontColor;
+            document.body.style.background = backgroundColor;
+
+            adjustFontSize(); // Adjust after style changes
+        }
+
+        function toggleOptions() {
+            const optionsContainer = document.getElementById('optionsContainer');
+            if (optionsContainer.style.display === 'none' || optionsContainer.style.display === '') {
+                optionsContainer.style.display = 'block';
+                setTimeout(() => optionsContainer.classList.add('active'), 10);
+            } else {
+                optionsContainer.classList.remove('active');
+                setTimeout(() => optionsContainer.style.display = 'none', 300);
+            }
+        }
+
+        function adjustFontSize() {
+            const input = document.getElementById('customInput');
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            const maxWidth = window.innerWidth * 0.9;
+            let fontSize = parseInt(input.style.fontSize) || 100;
+            context.font = `${fontSize}px "${input.style.fontFamily || 'Arial'}"`;
+
+            const text = input.value || input.placeholder;
+            let textWidth = context.measureText(text).width;
+
+            if (textWidth !== maxWidth) {
+                fontSize = Math.min(100, Math.max(1, Math.floor(fontSize * maxWidth / textWidth)));
+                input.style.fontSize = `${fontSize}px`;
+            }
+        }
+
+        // Initialize styles on page load
+        window.onload = function () {
+            updateStyle();
+            document.getElementById('customInput').addEventListener('input', debounce(adjustFontSize, 100));
+        };
+
+        //         document.addEventListener("DOMContentLoaded", () => {
+//     const customMenu = document.querySelector(".custom-menu");
+
+//     // Show custom menu on right-click
+//     document.addEventListener("contextmenu", (event) => {
+//         event.preventDefault();
+//         customMenu.style.display = "block";
+//         customMenu.style.top = `${event.pageY}px`;
+//         customMenu.style.left = `${event.pageX}px`;
+//     });
+
+//     // Hide the menu when clicking elsewhere
+//     document.addEventListener("click", () => {
+//         customMenu.style.display = "none";
+//     });
+// });
+    </script>
+</body>
+</html>
