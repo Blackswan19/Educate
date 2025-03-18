@@ -8,6 +8,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BsTexter</title>
+    
+    <link rel="icon" type="image/x-icon" href="https://i.ibb.co/cKDZ2Dv4/texter.png">
 </head>
 
 <body>
@@ -32,53 +34,52 @@
             margin: 0;
             position: relative;
             text-transform: capitalize;
-            font-family: "Arial", sans-serif; /* Fallback font */
+            font-weight: 600;
+
         }
         ::-webkit-scrollbar{
             background-color: transparent;
         }
         .input-container {
             position: absolute;
-            bottom: 10px;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 10px;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-            display: none;
-            transform: translateY(-20px);
-            transition: transform 0.3s ease, opacity 0.3s ease;
-            opacity: 0;
-            z-index: 10;
-            font-size: 16px;
-            max-height: 50vh; /* Mobile-friendly */
-            overflow-y: auto;
+    bottom: 65px;
+    right: 10px;
+    background: rgb(255 255 255);
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 2px 40px rgb(0 0 0 / 52%);
+    display: none;
+    transform: translateY(-20px);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    opacity: 0;
+    z-index: 10;
+    font-size: 20px;
+    max-height: 50vh;
+    overflow-y: auto;
+    width: 20%;
         }
-
         .input-container.active {
             transform: translateY(0);
             opacity: 1;
         }
-
         select, input[type="color"], input[type="number"] {
             font-size: 16px;
             margin: 5px;
             padding: 3px;
         }
-        ::placeholder
-{
-    color: white;
-    text-transform: capitalize;
-}        input[type="color"] {
+        ::placeholder {
+            color: white;
+            text-transform: capitalize;
+        }
+        input[type="color"] {
             width: 50px;
             height: 30px;
             border: none;
             cursor: pointer;
         }
-
         input[type="number"] {
             width: 100px;
         }
-
         button {
             font-size: 20px;
             padding: 10px 20px;
@@ -91,24 +92,20 @@
             bottom: 0px;
             right: 0px;
         }
-
         .icon-btn {
             font-size: 24px;
-            padding: 10px;
+            padding: 5px 10px;
         }
-
         ::placeholder {
             color: white;
-            opacity: 0.7; /* Slightly dimmed for contrast */
+            opacity: 0.7;
         }
-
         .fa-icon {
             font-size: 16px;
             margin-right: 3px;
             vertical-align: middle;
             color: #333;
         }
-
         #customInput {
             white-space: nowrap;
             width: 50vw;
@@ -123,16 +120,57 @@
             font-size: 100px;
             line-height: 1;
             padding: 10px;
-            overflow: auto; 
+            overflow: auto;
             text-transform: capitalize;
         }
-
         label {
             color: #333;
             font-size: 14px;
             margin-right: 5px;
         }
+        .copy-btn {
+            font-size: 16px;
+    padding: 8px 16px;
+    background: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex
+;
+    align-items: center;
+    gap: 5px;
+    z-index: 20;
+    color: black;
+    top: 10px;
+    position: fixed;
+    right: 10px;
+        }
+        .copy-btn:hover {
+            background: #f0f0f0;
+        }
+        .copied-feedback {
+            position: fixed;
+    top: 10px;
+    background: no-repeat;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 6px;
+    display: none;
+    z-index: 20;
+    font-size: 16px;
+    border: solid 1px;
+        }
+        @media (max-width: 600px) {
+        .input-container{
+            width: 80%;
+        }
+    }
     </style>
+
+    <buttons class="copy-btn" onclick="copyText()" aria-label="Copy Text">
+        <i class="fas fa-copy"></i> Copy
+    </buttons>
+    <span class="copied-feedback" id="copyFeedback">Copied!</span>
 
     <p><textarea 
         name="customInput" 
@@ -176,13 +214,13 @@
             <option value="Caveat">Caveat</option>
             <option value="Shadows Into Light">Shadows Into Light</option>
         </select>
-
+<br>
         <label for="backgroundColor">Background:</label>
         <input type="color" id="backgroundColor" onchange="updateStyle()" value="#0000FF" aria-label="Background Color">
-
+        <br>
         <label for="fontColor">Text Color:</label>
         <input type="color" id="fontColor" onchange="updateStyle()" value="#FFFFFF" aria-label="Font Color">
-
+        <br>
         <label for="textTransform">Text Style:</label>
         <select id="textTransform" onchange="updateStyle()" aria-label="Text Transform">
             <option value="uppercase">Uppercase</option>
@@ -190,13 +228,12 @@
             <option value="capitalize">Capitalize</option>
             <option value="none">None</option>
         </select>
-
+        <br>
         <label for="fontSize">Font Size (px):</label>
         <input type="number" id="fontSize" min="1" max="500" value="100" onchange="updateStyle()" aria-label="Font Size">
     </div>
 
     <script>
-        // Debounce function to optimize input handling
         function debounce(func, wait) {
             let timeout;
             return function (...args) {
@@ -206,22 +243,48 @@
         }
 
         function updateStyle() {
-            const input = document.getElementById('customInput');
-            const fontFamily = document.getElementById('fontFamily').value;
-            const backgroundColor = document.getElementById('backgroundColor').value;
-            const fontColor = document.getElementById('fontColor').value;
-            const textTransform = document.getElementById('textTransform').value;
-            const fontSize = document.getElementById('fontSize').value;
+    const input = document.getElementById('customInput');
+    const fontFamily = document.getElementById('fontFamily').value;
+    const backgroundColor = document.getElementById('backgroundColor').value;
+    const fontColor = document.getElementById('fontColor').value;
+    const textTransform = document.getElementById('textTransform').value;
+    const fontSize = document.getElementById('fontSize').value;
 
-            input.style.fontFamily = fontFamily;
-            input.style.textTransform = textTransform;
-            input.style.fontSize = `${fontSize}px`;
-            input.style.color = fontColor;
-            document.body.style.background = backgroundColor;
+    // Apply styles directly without calling adjustFontSize here
+    input.style.fontFamily = fontFamily;
+    input.style.textTransform = textTransform;
+    input.style.fontSize = `${fontSize}px`;  // Use the direct value from input
+    input.style.color = fontColor;
+    document.body.style.background = backgroundColor;
+}
 
-            adjustFontSize(); // Adjust after style changes
-        }
+function adjustFontSize() {
+    const input = document.getElementById('customInput');
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+    const maxWidth = window.innerWidth * 0.9;
+    
+    // Use the current font size from the input field
+    let fontSize = parseInt(document.getElementById('fontSize').value) || 100;
+    context.font = `${fontSize}px "${input.style.fontFamily || 'Arial'}"`;
 
+    const text = input.value || input.placeholder;
+    let textWidth = context.measureText(text).width;
+
+    // Only adjust if the text exceeds the max width
+    if (textWidth > maxWidth) {
+        fontSize = Math.floor(fontSize * maxWidth / textWidth);
+        input.style.fontSize = `${fontSize}px`;
+        document.getElementById('fontSize').value = fontSize; // Update the number input
+    }
+}
+
+window.onload = function () {
+    updateStyle();
+    // Add event listeners
+    document.getElementById('customInput').addEventListener('input', debounce(adjustFontSize, 100));
+    document.getElementById('fontSize').addEventListener('input', updateStyle); // Add this line
+};
         function toggleOptions() {
             const optionsContainer = document.getElementById('optionsContainer');
             if (optionsContainer.style.display === 'none' || optionsContainer.style.display === '') {
@@ -233,45 +296,44 @@
             }
         }
 
-        function adjustFontSize() {
+        
+        function copyText() {
             const input = document.getElementById('customInput');
-            const canvas = document.createElement('canvas');
-            const context = canvas.getContext('2d');
-            const maxWidth = window.innerWidth * 0.9;
-            let fontSize = parseInt(input.style.fontSize) || 100;
-            context.font = `${fontSize}px "${input.style.fontFamily || 'Arial'}"`;
-
             const text = input.value || input.placeholder;
-            let textWidth = context.measureText(text).width;
-
-            if (textWidth !== maxWidth) {
-                fontSize = Math.min(100, Math.max(1, Math.floor(fontSize * maxWidth / textWidth)));
-                input.style.fontSize = `${fontSize}px`;
-            }
+            
+            const tempTextarea = document.createElement('textarea');
+            tempTextarea.value = text;
+            tempTextarea.style.fontFamily = input.style.fontFamily;
+            tempTextarea.style.textTransform = input.style.textTransform;
+            document.body.appendChild(tempTextarea);
+            
+            tempTextarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextarea);
+            
+            const feedback = document.getElementById('copyFeedback');
+            feedback.style.display = 'block';
+            setTimeout(() => {
+                feedback.style.display = 'none';
+            }, 2000);
         }
 
-        // Initialize styles on page load
-        window.onload = function () {
-            updateStyle();
-            document.getElementById('customInput').addEventListener('input', debounce(adjustFontSize, 100));
-        };
+       
 
-        //         document.addEventListener("DOMContentLoaded", () => {
-//     const customMenu = document.querySelector(".custom-menu");
-
-//     // Show custom menu on right-click
-//     document.addEventListener("contextmenu", (event) => {
-//         event.preventDefault();
-//         customMenu.style.display = "block";
-//         customMenu.style.top = `${event.pageY}px`;
-//         customMenu.style.left = `${event.pageX}px`;
-//     });
-
-//     // Hide the menu when clicking elsewhere
-//     document.addEventListener("click", () => {
-//         customMenu.style.display = "none";
-//     });
-// });
+        document.addEventListener("DOMContentLoaded", () => {
+            const customMenu = document.querySelector(".custom-menu");
+            document.addEventListener("contextmenu", (event) => {
+                event.preventDefault();
+                if (customMenu) {
+                    customMenu.style.display = "block";
+                    customMenu.style.top = `${event.pageY}px`;
+                    customMenu.style.left = `${event.pageX}px`;
+                }
+            });
+            document.addEventListener("click", () => {
+                if (customMenu) customMenu.style.display = "none";
+            });
+        });
     </script>
 </body>
 </html>
