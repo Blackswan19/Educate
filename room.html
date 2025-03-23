@@ -4,42 +4,39 @@
     <meta charset="UTF-8">
     <title>BsBlackrooms</title>
     <link rel="icon" type="image/x-icon" href="https://i.ibb.co/bND6ZhX/logo.png">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-         @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Orbitron:wght@400..900&family=Red+Hat+Display:ital,wght@0,300..900&family=Strait&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Orbitron:wght@400..900&family=Red+Hat+Display:ital,wght@0,300..900&family=Strait&display=swap');
 
-* {
-    font-family: "Red Hat Display", sans-serif;
-}
+        * {
+            font-family: "Red Hat Display", sans-serif;
+        }
         body {
             margin: 0;
             padding: 0;
-            background: #1a1a1a;
+            background: #000000;
             color: #ffffff;
             overflow: hidden;
         }
         #landing {
             text-align: center;
-    /* padding: 60px 20px; */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
         #landing h1 {
-            font-size: 2.5em;
             margin-bottom: 20px;
             color: #e0e0e0;
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
         #roomName {
-            padding: 12px;
+            padding: 10px 25px;
             font-size: 1.1em;
-            width: 250px;
+            width: 245px;
             border: none;
             border-radius: 8px;
-            background: #333;
+            background: #1a1a1a;
             color: #fff;
             margin-right: 10px;
             transition: background 0.3s;
@@ -59,7 +56,7 @@
         .text-box {
             position: absolute;
             padding: 10px;
-            cursor: move;
+            cursor: grab;
             user-select: none;
             background: rgba(50, 50, 50, 0.9);
             border-radius: 6px;
@@ -69,10 +66,107 @@
             min-height: 20px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
             transition: background 0.2s;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
         }
-        .text-box:focus {
+        .text-box:focus{
             background: rgba(70, 70, 70, 0.9);
             outline: none;
+            cursor: grabbing;
+        }
+        .text-box:hover:active{
+            cursor: grabbing;
+        }
+        .text-content {
+            flex-grow: 1;
+        }
+        .menu-btn {
+            cursor: pointer;
+            padding: 2px 5px;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+        .menu-btn:hover {
+            opacity: 1;
+        }
+        .text-menu {
+            position: absolute;
+            background: #2a2a2a;
+            border-radius: 8px;
+            padding: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+            display: none;
+            z-index: 1001;
+            min-width: 150px;
+            border: 1px solid #404040;
+        }
+        .text-menu button {
+            display: block;
+    width: 100%;
+    padding: 8px 12px;
+    margin: 4px 0;
+    background: transparent;
+    text-align: left;
+    border-radius: 8px;
+    transition: background 0.2s, transform 0.1s;
+    font-size: 16px;
+        }
+        .text-menu button:hover {
+            background: #0040ff;
+            transform: translateX(2px);
+        }
+        .text-menu input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            margin: 4px 0;
+            border: none;
+            border-radius: 4px;
+            background: #fff;
+            color: #000;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        .color-picker-popup {
+            position: absolute;
+            background: #2a2a2a;
+            border-radius: 8px;
+            padding: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+            z-index: 1002;
+            border: 1px solid #404040;
+            display: none;
+        }
+        .color-picker-popup input[type="color"] {
+            width: 100px;
+            height: 40px;
+            padding: 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .font-size-popup {
+            position: absolute;
+    border-radius: 8px;
+    padding: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+    z-index: 1002;
+    border: 1px solid #404040;
+    display: none;
+    min-width: 120px;
+    font-size: 15px;
+    background: #2a2a2a;
+        }
+        .font-size-popup button {
+            display: block;
+            width: 100%;
+            padding: 6px 10px;
+            margin: 2px 0;
+            background: transparent;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+        .font-size-popup button:hover {
+            background: #0040ff;
         }
         #controls {
             position: fixed;
@@ -81,6 +175,20 @@
             z-index: 1000;
             display: flex;
             gap: 10px;
+        }
+        div#controls button{
+            padding: 5px 10px;
+    font-size: 1em;
+    border: none;
+    border-radius: 3px;
+    background: transparent;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.1s;
+        }
+        div#controls button:hover{
+            background: #004cff;
+            transform: translateY(-2px);
         }
         button {
             padding: 10px 20px;
@@ -93,7 +201,7 @@
             transition: background 0.3s, transform 0.1s;
         }
         button:hover {
-            background: #005fa3;
+            background: #424242;
             transform: translateY(-2px);
         }
         button:active {
@@ -134,24 +242,25 @@
             justify-content: center;
         }
         .room-item {
-            display: flex
-;
-    align-items: center;
-    background: #2c2c2c;
-    border-radius: 8px;
-    padding: 10px 20px;
-    font-size: 1.1em;
-    transition: background 0.3s, transform 0.1s;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-    gap: 10px;
+            display: flex;
+            align-items: center;
+            background: #000000;
+            border-radius: 8px;
+            padding: 7px 20px;
+            font-size: 1.1em;
+            transition: background 0.3s, transform 0.1s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            gap: 20px;
+            border: solid 1.5px #313131;
         }
         .room-item:hover {
-            background: #3c3c3c;
+            background: #1f1f1f;
             transform: translateY(-2px);
         }
         .room-name {
             cursor: pointer;
-            flex-grow: 1;
+            flex-grow: 0;
+            text-transform: capitalize;
         }
         .delete-room-btn {
             background: #d32f2f;
@@ -164,14 +273,32 @@
             background: #b71c1c;
             transform: translateY(0);
         }
+        .popup {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #2a2a2a;
+            color: #fff;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.3s, transform 0.3s;
+        }
+        .popup.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
     </style>
 </head>
 <body>
     <div id="landing">
-        <h1>Create a BsBlackroom</h1>
+        <h1>BsBlackroom</h1>
         <div>
             <input type="text" id="roomName" placeholder="Enter room name">
-            <button onclick="createRoom()">Create New Room</button>
+            <button onclick="createRoom()">Create room</button>
         </div>
         <div id="room-list"></div>
     </div>
@@ -197,6 +324,183 @@
         window.onload = function() {
             loadRoomList();
         };
+
+        function showPopup(message) {
+            let popup = document.createElement('div');
+            popup.className = 'popup';
+            popup.innerText = message;
+            document.body.appendChild(popup);
+            
+            setTimeout(() => {
+                popup.classList.add('show');
+            }, 10);
+
+            setTimeout(() => {
+                popup.classList.remove('show');
+                setTimeout(() => {
+                    document.body.removeChild(popup);
+                }, 300);
+            }, 2000);
+        }
+
+        function createTextBoxMenu(textBox) {
+            const menu = document.createElement('div');
+            menu.className = 'text-menu';
+            
+            const editBtn = document.createElement('button');
+            editBtn.innerText = 'Edit text';
+            editBtn.onclick = (e) => {
+                e.stopPropagation();
+                const textContent = textBox.querySelector('.text-content');
+                const editInput = document.createElement('input');
+                editInput.type = 'text';
+                editInput.value = textContent.innerText;
+                editInput.onblur = () => {
+                    textContent.innerText = editInput.value;
+                    menu.removeChild(editInput);
+                };
+                editInput.onkeypress = (event) => {
+                    if (event.key === 'Enter') {
+                        textContent.innerText = editInput.value;
+                        menu.removeChild(editInput);
+                    }
+                };
+                menu.appendChild(editInput);
+                editInput.focus();
+            };
+
+            const boldBtn = document.createElement('button');
+            boldBtn.innerText = 'Bolder';
+            boldBtn.onclick = (e) => {
+                e.stopPropagation();
+                textBox.style.fontWeight = textBox.style.fontWeight === 'bold' ? 'normal' : 'bold';
+                menu.style.display = 'none';
+            };
+
+            const textColorBtn = document.createElement('button');
+            textColorBtn.innerText = 'Text Color';
+            textColorBtn.onclick = (e) => {
+                e.stopPropagation();
+                const colorPickerPopup = document.createElement('div');
+                colorPickerPopup.className = 'color-picker-popup';
+                
+                const textColorPicker = document.createElement('input');
+                textColorPicker.type = 'color';
+                textColorPicker.value = textBox.dataset.textColor || '#ffffff';
+                textColorPicker.onchange = (e) => {
+                    textBox.style.color = textColorPicker.value;
+                    textBox.dataset.textColor = textColorPicker.value;
+                    colorPickerPopup.style.display = 'none';
+                };
+
+                colorPickerPopup.appendChild(textColorPicker);
+                textBox.appendChild(colorPickerPopup);
+                
+                const btnRect = textColorBtn.getBoundingClientRect();
+                const menuRect = menu.getBoundingClientRect();
+                colorPickerPopup.style.left = (btnRect.left - menuRect.left) + 'px';
+                colorPickerPopup.style.top = (btnRect.bottom - menuRect.top + 5) + 'px';
+                colorPickerPopup.style.display = 'block';
+
+                document.addEventListener('click', function closePopup(e) {
+                    if (!colorPickerPopup.contains(e.target) && e.target !== textColorBtn) {
+                        colorPickerPopup.style.display = 'none';
+                        document.removeEventListener('click', closePopup);
+                    }
+                }, { once: true });
+            };
+
+            const bgColorBtn = document.createElement('button');
+            bgColorBtn.innerText = 'Background';
+            bgColorBtn.onclick = (e) => {
+                e.stopPropagation();
+                const colorPickerPopup = document.createElement('div');
+                colorPickerPopup.className = 'color-picker-popup';
+                
+                const bgColorPicker = document.createElement('input');
+                bgColorPicker.type = 'color';
+                bgColorPicker.value = textBox.dataset.bgColor || '#323232';
+                bgColorPicker.onchange = (e) => {
+                    textBox.style.background = hexToRgba(bgColorPicker.value, 0.9);
+                    textBox.dataset.bgColor = bgColorPicker.value;
+                    colorPickerPopup.style.display = 'none';
+                };
+
+                colorPickerPopup.appendChild(bgColorPicker);
+                textBox.appendChild(colorPickerPopup);
+                
+                const btnRect = bgColorBtn.getBoundingClientRect();
+                const menuRect = menu.getBoundingClientRect();
+                colorPickerPopup.style.left = (btnRect.left - menuRect.left) + 'px';
+                colorPickerPopup.style.top = (btnRect.bottom - menuRect.top + 5) + 'px';
+                colorPickerPopup.style.display = 'block';
+
+                document.addEventListener('click', function closePopup(e) {
+                    if (!colorPickerPopup.contains(e.target) && e.target !== bgColorBtn) {
+                        colorPickerPopup.style.display = 'none';
+                        document.removeEventListener('click', closePopup);
+                    }
+                }, { once: true });
+            };
+
+            const fontSizeBtn = document.createElement('button');
+            fontSizeBtn.innerText = 'Font size';
+            fontSizeBtn.onclick = (e) => {
+                e.stopPropagation();
+                const fontSizePopup = document.createElement('div');
+                fontSizePopup.className = 'font-size-popup';
+                
+                const sizes = [
+                    { name: 'Small', value: '12' },
+                    { name: 'Medium', value: '16' },
+                    { name: 'Large', value: '24' },
+                    { name: 'X-Large', value: '32' }
+                ];
+
+                sizes.forEach(size => {
+                    const sizeBtn = document.createElement('button');
+                    sizeBtn.innerText = size.name;
+                    sizeBtn.onclick = (e) => {
+                        e.stopPropagation();
+                        textBox.style.fontSize = `${size.value}px`;
+                        textBox.dataset.fontSize = size.value;
+                        fontSizePopup.style.display = 'none';
+                    };
+                    fontSizePopup.appendChild(sizeBtn);
+                });
+
+                textBox.appendChild(fontSizePopup);
+                
+                const btnRect = fontSizeBtn.getBoundingClientRect();
+                const menuRect = menu.getBoundingClientRect();
+                fontSizePopup.style.left = (btnRect.left - menuRect.left) + 'px';
+                fontSizePopup.style.top = (btnRect.bottom - menuRect.top + 5) + 'px';
+                fontSizePopup.style.display = 'block';
+
+                document.addEventListener('click', function closePopup(e) {
+                    if (!fontSizePopup.contains(e.target) && e.target !== fontSizeBtn) {
+                        fontSizePopup.style.display = 'none';
+                        document.removeEventListener('click', closePopup);
+                    }
+                }, { once: true });
+            };
+
+            menu.appendChild(editBtn);
+            menu.appendChild(boldBtn);
+            menu.appendChild(textColorBtn);
+            menu.appendChild(bgColorBtn);
+            menu.appendChild(fontSizeBtn);
+            textBox.appendChild(menu);
+
+            return menu;
+        }
+
+        function hexToRgba(hex, alpha) {
+            let r = parseInt(hex.slice(1, 3), 16),
+                g = parseInt(hex.slice(3, 5), 16),
+                b = parseInt(hex.slice(5, 7), 16);
+            return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+        }
 
         function createRoom() {
             let roomName = document.getElementById('roomName').value.trim();
@@ -238,7 +542,7 @@
                 deleteBtn.className = 'delete-room-btn';
                 deleteBtn.innerText = 'x';
                 deleteBtn.onclick = (e) => {
-                    e.stopPropagation(); // Prevent entering the room when clicking delete
+                    e.stopPropagation();
                     deleteRoom(room);
                 };
 
@@ -255,6 +559,7 @@
                 localStorage.setItem('rooms', JSON.stringify(rooms));
                 localStorage.removeItem(`blackboardContent_${roomName}`);
                 loadRoomList();
+                showPopup(`Room "${roomName}" deleted`);
             }
         }
 
@@ -262,13 +567,46 @@
             if (e.target === blackboard && isTextCreationEnabled) {
                 let textBox = document.createElement('div');
                 textBox.className = 'text-box';
-                textBox.contentEditable = true;
+                
+                let textContent = document.createElement('div');
+                textContent.className = 'text-content';
+                textContent.contentEditable = true;
+                textContent.innerText = '';
+
+                let menuBtn = document.createElement('span');
+                menuBtn.className = 'menu-btn';
+                menuBtn.innerHTML = '<i class="fa-solid fa-ellipsis-vertical"></i>';
+
                 textBox.style.left = e.clientX + 'px';
                 textBox.style.top = e.clientY + 'px';
-                textBox.innerText = '';
+                textBox.style.color = '#ffffff';
+                textBox.style.background = hexToRgba('#323232', 0.9);
+                textBox.style.fontSize = '16px';
+                textBox.dataset.textColor = '#ffffff';
+                textBox.dataset.bgColor = '#323232';
+                textBox.dataset.fontSize = '16';
+
+                textBox.appendChild(textContent);
+                textBox.appendChild(menuBtn);
+                
+                const menu = createTextBoxMenu(textBox);
+                
+                menuBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+                    menu.style.left = menuBtn.offsetLeft + 'px';
+                    menu.style.top = (menuBtn.offsetTop + menuBtn.offsetHeight) + 'px';
+                };
+
                 blackboard.appendChild(textBox);
                 makeDraggable(textBox);
-                textBox.focus();
+                textContent.focus();
+
+                document.addEventListener('click', function closeMenu(e) {
+                    if (!textBox.contains(e.target)) {
+                        menu.style.display = 'none';
+                    }
+                });
             }
         });
 
@@ -277,6 +615,7 @@
             element.onmousedown = dragMouseDown;
 
             function dragMouseDown(e) {
+                if (e.target.className === 'menu-btn' || e.target.tagName === 'I') return;
                 e.preventDefault();
                 pos3 = e.clientX;
                 pos4 = e.clientY;
@@ -302,8 +641,6 @@
                     elemRect.bottom > binRect.top
                 ) {
                     element.style.background = 'rgba(211, 47, 47, 0.7)';
-                } else {
-                    element.style.background = 'rgba(50, 50, 50, 0.9)';
                 }
             }
 
@@ -319,8 +656,9 @@
                     elemRect.bottom > binRect.top
                 ) {
                     element.remove();
+                } else {
+                    element.style.background = element.dataset.bgColor ? hexToRgba(element.dataset.bgColor, 0.9) : hexToRgba('#323232', 0.9);
                 }
-                element.style.background = 'rgba(50, 50, 50, 0.9)';
             }
         }
 
@@ -343,14 +681,19 @@
             if (!currentRoom) return;
             let content = [];
             document.querySelectorAll('.text-box').forEach(box => {
+                const textContent = box.querySelector('.text-content');
                 content.push({
-                    text: box.innerText,
+                    text: textContent.innerText,
                     x: box.style.left,
-                    y: box.style.top
+                    y: box.style.top,
+                    bold: box.style.fontWeight === 'bold',
+                    color: box.dataset.textColor || '#ffffff',
+                    bgColor: box.dataset.bgColor || '#323232',
+                    fontSize: box.dataset.fontSize || '16'
                 });
             });
             localStorage.setItem(`blackboardContent_${currentRoom}`, JSON.stringify(content));
-            alert(`Content saved for room: ${currentRoom}`);
+            showPopup(`Content saved for room: ${currentRoom}`);
         }
 
         function loadContent(roomName) {
@@ -360,12 +703,46 @@
                 content.forEach(item => {
                     let textBox = document.createElement('div');
                     textBox.className = 'text-box';
-                    textBox.contentEditable = true;
-                    textBox.innerText = item.text;
+                    
+                    let textContent = document.createElement('div');
+                    textContent.className = 'text-content';
+                    textContent.contentEditable = true;
+                    textContent.innerText = item.text;
+
+                    let menuBtn = document.createElement('span');
+                    menuBtn.className = 'menu-btn';
+                    menuBtn.innerHTML = '<i class="fa-solid fa-ellipsis-vertical"></i>';
+
                     textBox.style.left = item.x;
                     textBox.style.top = item.y;
+                    textBox.style.fontWeight = item.bold ? 'bold' : 'normal';
+                    textBox.style.color = item.color;
+                    textBox.style.background = hexToRgba(item.bgColor, 0.9);
+                    textBox.style.fontSize = `${item.fontSize}px`;
+                    textBox.dataset.textColor = item.color;
+                    textBox.dataset.bgColor = item.bgColor;
+                    textBox.dataset.fontSize = item.fontSize;
+
+                    textBox.appendChild(textContent);
+                    textBox.appendChild(menuBtn);
+
+                    const menu = createTextBoxMenu(textBox);
+                    
+                    menuBtn.onclick = (e) => {
+                        e.stopPropagation();
+                        menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+                        menu.style.left = menuBtn.offsetLeft + 'px';
+                        menu.style.top = (menuBtn.offsetTop + menuBtn.offsetHeight) + 'px';
+                    };
+
                     blackboard.appendChild(textBox);
                     makeDraggable(textBox);
+
+                    document.addEventListener('click', function closeMenu(e) {
+                        if (!textBox.contains(e.target)) {
+                            menu.style.display = 'none';
+                        }
+                    });
                 });
             }
         }
@@ -385,6 +762,6 @@
             loadRoomList();
         }
     </script>
-    <script src="noright.js"></script> 
+    <script src="noright.js"></script>
 </body>
 </html>
