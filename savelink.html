@@ -79,7 +79,7 @@
             const linkItem = document.createElement('div');
             linkItem.className = 'link-item';
             linkItem.innerHTML = `
-                <div><a href="${link.url}" target="_parent">${link.title}</a></div>
+                <div><a href="${link.url}" target="_blank">${link.title}</a></div>
                 <div>${formatDate(link.dateAdded)}</div>
                 <div class="action-buttons">
                     <button class="copy-btn" onclick="copyLink(${index})"><i class="fa-solid fa-copy"></i></button>
