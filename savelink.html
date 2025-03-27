@@ -1,8 +1,34 @@
-<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>BsLinksaver</title> <link rel="icon" type="image/x-icon" href="https://i.ibb.co/0DBHQHG/linksave.png"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> <style>@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Orbitron:wght@400..900&family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&family=Strait&display=swap'); * { font-family: "Red Hat Display", sans-serif; list-style: none; box-sizing: border-box; } body { font-family: 'Roboto', sans-serif; background-color: #000000; color: #E0E0E0; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow-x: hidden; } .container { background-color: #0b0b0b; padding: 20px; border-radius: 10px; /* box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3); */ /* width: 90%; */ max-width: 600px; text-align: center; } h1 { font-size: 1.8rem; margin-bottom: 0px; color: #004cff; } .input-section { margin-bottom: 20px; } input[type="text"], input[type="url"] , input[type="search"]{ padding: 10px; margin: 10px 0; /* width: 100%; */ background-color: #282828; color: #E0E0E0; border: none; border-radius: 5px; font-size: 1rem; outline: none; } button { padding: 10px; background-color: #2e2e2e; border: none; color: #ffffffde; cursor: pointer; font-weight: 500; border-radius: 5px; transition: all 0.3s ease; font-size: 15px; } button:hover { background-color: #9a9a9ac5; } .link-list { margin-top: 20px; max-height: 250px; overflow-y: auto; padding: 20px; } .link-item { background-color: #171717; margin-bottom: 10px; padding: 8px 20px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; } .link-item:hover { background-color: #272727; } a { color: #004cff; font-size: 1rem; font-weight: 600; text-decoration: none; text-transform: uppercase; } a:hover { text-decoration: underline; } .action-buttons { display: flex; gap: 10px; margin-top: 0px; } .action-buttons button { background-color: #282828; border: none; cursor: pointer; font-size: 15px; font-weight: 600; color: rgb(221, 221, 221); padding: 8px 12px; } .copy-btn:hover { background-color: #0044ff; } .delete-btn:hover { background-color: #ff0d00c5; } .clear-btn { margin-top: 20px; background: none; font-size: 1rem; padding: 10px 30px; border-radius: 5px; } .clear-btn:hover { background-color: #880700; } /* Scrollbar styling for the link list */ .link-list::-webkit-scrollbar { width: 6px; } .link-list::-webkit-scrollbar-thumb { background-color: #898989; border-radius: 0px; } /* Pop-up modal styles */ .modal { display: none; position: fixed; z-index: 1; left: 0; top: 0; width: 100%; height: 100%; background-color: rgb(0 0 0 / 91%); justify-content: center; align-items: center; } .modal-content { background-color: #1a1a1a; padding: 15px; border-radius: 5px; text-align: center; width: 50%; max-width: 320px; color: #ffffffe1; } .modal-content p { margin-bottom: 20px; } .close-btn { background-color: #004cff; padding: 10px 20px; border: none; border-radius: 8px; color: #fff; cursor: pointer; } .close-btn:hover { background-color: #004cff; } @media (max-width: 480px) { body { background: #0b0b0b; } .container { width: 100%; text-align: center; position: fixed; top: 60px; padding: 0px; } .link-list { margin-top: 20px; max-height: 400px; overflow-y: auto; padding: 20px; } } </style> </head> <body> <div class="s" style="position: fixed; top: 14px; text-align: end; right: 16px;"> <a href="https://blackswan19.github.io/Educate/imgsaver.html" style="text-transform: none; color: white;text-decoration: underline;">BsImgsaver?</a><br><br> </div> <div class="container"> <h1>BsLinksaver</h1> <div class="search-section"> <input type="search" id="searchInput" placeholder="Search links..."> <button onclick="searchLinks()"><i class="fa-solid fa-search"></i></button> </div> <script src="noright.js"></script> <div class="input-section"> <input type="text" id="titleInput" placeholder="Enter the title here..." required> <input type="url" id="urlInput" placeholder="Paste the link here..." required> <button onclick="addLink()"><i class="fa-solid fa-bookmark"></i></button> </div> <div class="link-list" id="linkList"></div> <!-- <button class="clear-btn" onclick="clearLinks()">Clear all the links</button> --> </div> <!-- Pop-up modal for notifications --> <div id="modal" class="modal"> <script src="noright.js"></script> <div class="modal-content"> <p id="modalMessage"></p> <button class="close-btn" onclick="closeModal()">OK</button> </div> </div>
+<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>BsLinksaver</title> <link rel="icon" type="image/x-icon" href="https://i.ibb.co/0DBHQHG/linksave.png"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> <style> @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Orbitron:wght@400..900&family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&family=Strait&display=swap'); * { font-family: "Red Hat Display", sans-serif; list-style: none; box-sizing: border-box; margin: 0; padding: 0; } body { background-color: #121212; color: #E0E0E0; display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow-x: hidden; line-height: 1.6; padding: 20px; } .container { background-color: #181818; padding: 20px; border-radius: 12px; max-width: 800px; width: 100%; text-align: left; box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5); } h1 { font-size: 1.5rem; margin-bottom: 20px; color: #0049ff; font-weight: 800; letter-spacing: 1px; } .search-section, .filter-section { margin-bottom: 25px; display: flex; gap: 10px; align-items: center; } input[type="text"], input[type="url"], input[type="search"], select { padding: 12px; margin: 0; flex: 1; background-color: #282828; color: #E0E0E0; border: 1px solid #3a3a3a; border-radius: 8px; font-size: 1rem; outline: none; transition: border-color 0.3s ease; width: 100%; } input:focus, select:focus { border-color: #0049ff; } button { padding: 12px 20px; background-color: #2e2e2e; border: none; color: #ffffffde; cursor: pointer; font-weight: 600; border-radius: 8px; transition: all 0.3s ease; } button:hover { background-color: #0049ff; color: #fff; } .create-btn { background-color: #0049ff; color: #fff; display: flex; align-items: center; gap: 5px; } .create-btn:hover { background-color: #003bb3; } .filter-section button { padding: 10px 15px; background-color: #282828; border: none; color: #b3b3b3; cursor: pointer; border-radius: 20px; font-size: 0.9rem; transition: all 0.3s ease; } .filter-section button.active { background-color: #0049ff; color: #fff; } .filter-section button:hover { background-color: #3a3a3a; color: #fff; } .link-list { margin-top: 25px; max-height: 400px; overflow-y: auto; padding: 10px; background-color: #181818; border-radius: 8px; } .category-section { margin-bottom: 20px; display: none; } .category-section.active { display: block; } .category-section h2 { font-size: 1.2rem; color: #fff; margin-bottom: 10px; } .table-header, .link-item { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 10px; padding: 10px; align-items: center; border-bottom: 1px solid #282828; } div{ font-size: 15px; font-weight: 800; color: #dfdfdf; } div a { font-weight: 800; color: #dfdfdf; font-size: 18px; } .table-header div{ font-weight: 600; color: #848484; text-transform: math-auto; font-size: 12px; } .link-item:hover { background-color: #282828; } a { color: #fff; font-size: 1rem; text-decoration: none; transition: color 0.3s ease; } a:hover { color: #0049ff; text-decoration: underline; } .action-buttons { display: flex; gap: 25px; justify-content: end; } .action-buttons button { background-color: transparent; padding: 5px; font-size: 16px; } .copy-btn:hover i, .delete-btn:hover i { color: #0049ff; } .delete-btn:hover i { color: #ff0d00; } .link-list::-webkit-scrollbar { width: 8px; } .link-list::-webkit-scrollbar-thumb { background-color: #898989; border-radius: 4px; } .modal, .create-modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.95); justify-content: center; align-items: center; } .modal-content, .create-modal-content { background-color: #1a1a1a; padding: 20px; border-radius: 10px; width: 90%; max-width: 350px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7); } .modal-content p { margin-bottom: 20px; font-size: 1.1rem; } .close-btn, .save-btn { background-color: #0049ff; padding: 10px 25px; border-radius: 8px; font-weight: 600; } .close-btn:hover, .save-btn:hover { background-color: #003bb3; } .create-modal-content h2 { font-size: 1.5rem; margin-bottom: 15px; color: #fff; } .create-modal-content .form-group { margin-bottom: 15px; } .create-modal-content .form-group label { display: block; margin-bottom: 5px; font-size: 1rem; color: #b3b3b3; } @media (max-width: 480px) { body { padding: 10px; } .container { width: 100%; padding: 15px; } .table-header, .link-item { grid-template-columns: 1.5fr 1fr 1fr; font-size: 0.9rem; } h1 { font-size: 1.5rem; } input[type="text"], input[type="url"], input[type="search"], select { font-size: 0.9rem; } button { padding: 10px 15px; } .filter-section button { padding: 8px 12px; font-size: 0.8rem; } } </style> </head> <body> <div class="container"> <h1>BsLinksaver</h1> <div class="search-section"> <input type="search" id="searchInput" placeholder="Search in your links..." oninput="searchLinks()"> <button class="create-btn" onclick="openCreateModal()"><i class="fa-solid fa-plus"></i> Create</button> </div> <div class="filter-section"> <button type="button" class="filter-btn active" data-filter="important">Important</button> <button type="button" class="filter-btn" data-filter="casual">Casual</button> <button type="button" class="filter-btn" data-filter="others">Others</button> </div> <div class="link-list" id="linkList"> <div class="category-section active" id="importantSection"> <h2>Important</h2> <div class="table-header"> <div>Title</div> <div>Date Added</div> <div></div> </div> <div id="importantLinks"></div> </div> <div class="category-section" id="casualSection"> <h2>Casual</h2> <div class="table-header"> <div>Title</div> <div>Date Added</div> <div></div> </div> <div id="casualLinks"></div> </div> <div class="category-section" id="othersSection"> <h2>Others</h2> <div class="table-header"> <div>Title</div> <div>Date Added</div> <div></div> </div> <div id="othersLinks"></div> </div> </div> </div> <script src="noright.js"></script> <div id="modal" class="modal"> <div class="modal-content"> <p id="modalMessage"></p> <button class="close-btn" onclick="closeModal()">OK</button> </div> </div> <!-- Pop-up modal for creating a new link --> <div id="createModal" class="create-modal"> <div class="create-modal-content"> <h2>Create Link</h2> <div class="form-group"> <label for="createTitleInput">Title</label> <input type="text" id="createTitleInput" placeholder="Enter the title here..." required> </div> <div class="form-group"> <label for="createUrlInput">Link</label> <input type="url" id="createUrlInput" placeholder="Paste the link here..." required> </div> <div class="form-group"> <label for="createCategoryInput">Category</label> <select id="createCategoryInput"> <option value="important">Important</option> <option value="casual">Casual</option> <option value="others">Others</option> </select> </div> <button class="save-btn" onclick="saveLink()">Save</button> <button class="close-btn" onclick="closeCreateModal()">Cancel</button> </div> </div>
       <script>
+        let activeFilter = 'important';
+
         window.onload = function() {
             loadLinks();
+            setupFilterButtons();
         };
+
+        function setupFilterButtons() {
+            const buttons = document.querySelectorAll('.filter-btn');
+            buttons.forEach(button => {
+                button.addEventListener('click', () => {
+                    buttons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    activeFilter = button.getAttribute('data-filter');
+                    filterLinks();
+                });
+            });
+        }
+
+        function openCreateModal() {
+            document.getElementById('createModal').style.display = 'flex';
+            document.getElementById('createTitleInput').value = '';
+            document.getElementById('createUrlInput').value = '';
+            document.getElementById('createCategoryInput').value = 'important';
+        }
+
+        function closeCreateModal() {
+            document.getElementById('createModal').style.display = 'none';
+        }
 
         function showModal(message) {
             document.getElementById('modalMessage').innerText = message;
@@ -13,45 +39,63 @@
             document.getElementById('modal').style.display = 'none';
         }
 
-        function addLink() {
-            const title = document.getElementById('titleInput').value;
-            const url = document.getElementById('urlInput').value;
+        function saveLink() {
+            const title = document.getElementById('createTitleInput').value;
+            const url = document.getElementById('createUrlInput').value;
+            const category = document.getElementById('createCategoryInput').value;
 
             if (title && url) {
                 const links = JSON.parse(localStorage.getItem('youtubeLinks')) || [];
-                links.unshift({ title, url });
+                const dateAdded = new Date().toISOString();
+                links.unshift({ title, url, category, dateAdded });
                 localStorage.setItem('youtubeLinks', JSON.stringify(links));
-                document.getElementById('linkList').innerHTML = '';
+                document.getElementById('importantLinks').innerHTML = '';
+                document.getElementById('casualLinks').innerHTML = '';
+                document.getElementById('othersLinks').innerHTML = '';
                 loadLinks();
-                document.getElementById('titleInput').value = '';
-                document.getElementById('urlInput').value = '';
+                filterLinks();
+                closeCreateModal();
                 showModal('Link added!');
             } else {
-                showModal('Enter both a title and a video link.');
+                showModal('Enter both a title and a link.');
             }
         }
 
-        function displayLink(link, index) {
-    const linkList = document.getElementById('linkList');
-    const linkItem = document.createElement('div');
-    linkItem.className = 'link-item';
-    linkItem.innerHTML = `
-        <a href="${link.url}" target="_blank" style="flex: 1;
-    color: #8a8a8a;
-    text-decoration: none;
-    text-align: justify;
-    font-size: 15px;
-    overflow: overlay;
-    padding: 10px;text-transform: capitalize;">${link.title}</a>
-        <div class="action-buttons">
-            <button class="copy-btn" onclick="copyLink(${index})"><i class="fa-solid fa-copy"></i></button>
-            <button class="delete-btn" onclick="deleteLink(${index})"><i class="fa-solid fa-delete-left"></i></button>
-        </div>`;
-    linkList.appendChild(linkItem);
-    }
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            const date = new Date(dateString);
+            const now = new Date();
+            const diffTime = Math.abs(now - date);
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            if (diffDays === 0) return 'Today';
+            if (diffDays === 1) return '1 day ago';
+            if (diffDays <= 7) return `${diffDays} days ago`;
+            if (diffDays <= 30) return `${Math.floor(diffDays / 7)} weeks ago`;
+            return date.toLocaleDateString();
+        }
+
+        function displayLink(link, index, category) {
+            const container = document.getElementById(category + 'Links');
+            const linkItem = document.createElement('div');
+            linkItem.className = 'link-item';
+            linkItem.innerHTML = `
+                <div><a href="${link.url}" target="_blank">${link.title}</a></div>
+                <div>${formatDate(link.dateAdded)}</div>
+                <div class="action-buttons">
+                    <button class="copy-btn" onclick="copyLink(${index})"><i class="fa-solid fa-copy"></i></button>
+                    <button class="delete-btn" onclick="deleteLink(${index})"><i class="fa-solid fa-trash"></i></button>
+                </div>`;
+            container.appendChild(linkItem);
+        }
+
         function loadLinks() {
             const links = JSON.parse(localStorage.getItem('youtubeLinks')) || [];
-            links.forEach((link, index) => displayLink(link, index));
+            const importantLinks = links.filter(link => link.category === 'important');
+            const casualLinks = links.filter(link => link.category === 'casual');
+            const othersLinks = links.filter(link => link.category === 'others');
+            importantLinks.forEach((link, index) => displayLink(link, links.indexOf(link), 'important'));
+            casualLinks.forEach((link, index) => displayLink(link, links.indexOf(link), 'casual'));
+            othersLinks.forEach((link, index) => displayLink(link, links.indexOf(link), 'others'));
         }
 
         function copyLink(index) {
@@ -65,8 +109,11 @@
             const links = JSON.parse(localStorage.getItem('youtubeLinks'));
             links.splice(index, 1);
             localStorage.setItem('youtubeLinks', JSON.stringify(links));
-            document.getElementById('linkList').innerHTML = '';
+            document.getElementById('importantLinks').innerHTML = '';
+            document.getElementById('casualLinks').innerHTML = '';
+            document.getElementById('othersLinks').innerHTML = '';
             loadLinks();
+            filterLinks();
             showModal('Link deleted.');
         }
 
@@ -74,9 +121,29 @@
             const query = document.getElementById('searchInput').value.toLowerCase();
             const links = JSON.parse(localStorage.getItem('youtubeLinks')) || [];
             const filteredLinks = links.filter(link => link.title.toLowerCase().includes(query));
-            document.getElementById('linkList').innerHTML = '';
-            filteredLinks.forEach((link, index) => displayLink(link, index));
+            document.getElementById('importantLinks').innerHTML = '';
+            document.getElementById('casualLinks').innerHTML = '';
+            document.getElementById('othersLinks').innerHTML = '';
+            const importantLinks = filteredLinks.filter(link => link.category === 'important');
+            const casualLinks = filteredLinks.filter(link => link.category === 'casual');
+            const othersLinks = filteredLinks.filter(link => link.category === 'others');
+            importantLinks.forEach((link, index) => displayLink(link, links.indexOf(link), 'important'));
+            casualLinks.forEach((link, index) => displayLink(link, links.indexOf(link), 'casual'));
+            othersLinks.forEach((link, index) => displayLink(link, links.indexOf(link), 'others'));
+            filterLinks();
         }
-    </script>
-</body>
+
+        function filterLinks() {
+            const sections = ['importantSection', 'casualSection', 'othersSection'];
+            sections.forEach(section => {
+                const element = document.getElementById(section);
+                if (section === activeFilter + 'Section') {
+                    element.classList.add('active');
+                } else {
+                    element.classList.remove('active');
+                }
+            });
+        }
+      </script>
+   </body>
 </html>
