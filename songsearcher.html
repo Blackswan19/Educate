@@ -1,75 +1,37 @@
-<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>BSongsearch</title> <link rel="icon" type="image/x-icon" href="https://i.ibb.co/gW8Py0B/BS.png"> <style> @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Orbitron:wght@400..900&family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&family=Strait&display=swap'); * { color: #d7d7d7; font-family: "Red Hat Display", sans-serif; letter-spacing: 0.5px; box-sizing: border-box; } a { text-decoration: none; } body { font-family: 'Roboto', sans-serif; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; background-color: #0f0f0f; color: #d7d7d7; text-align: center; } .container { display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; } .search-box { display: flex; justify-content: center; align-items: center; flex-direction: column; width: 100%; } .input-container { display: flex; align-items: center; position: relative; width: 100%; max-width: 550px; } input[type="text"] { flex: 1; padding: 14px 40px 14px 20px; font-size: 15px; background-color: #1d1d1d; color: #d7d7d7; border: 1px solid #333333; border-radius: 24px; outline: none; transition: box-shadow 0.3s ease; } input[type="text"]:focus { border: 1px solid #525252; color: #ffffff; background-color: #3c3c3c; } .clear-icon { position: absolute; right: 20px; cursor: pointer; font-size: 30px; color: #d7d7d7; visibility: hidden; transition: color 0.3s ease; } .clear-icon:hover { color: white; } select { width: 115px; padding: 10px 5px; margin: 15px 0; font-size: 15px; background-color: #1d1d1d; color: #d7d7d7; border: 1px solid #333333; border-radius: 5px; outline: none; transition: box-shadow 0.3s ease; } select:hover { color: #ffffff; background-color: #3c3c3c; } .buttons { display: flex; justify-content: center; margin-top: 15px; } .buttons input[type="button"] { background-color: #1d1d1d; color: #d7d7d7; border: 1px solid #333333; padding: 10px 25px; font-size: 14px; margin: 15px; cursor: pointer; border-radius: 5px; transition: background-color 0.3s ease; } .buttons input[type="button"]:hover { background-color: #3c3c3c; color: #ffffff; } .footer { color: #e8eaed; position: fixed; bottom: 10px; font-size: 12px; } /* Logo Style */ .logo { font-size: 50px; font-weight: 400; color: #0044ff; margin-bottom: 20px; letter-spacing: -1px; } ::-webkit-scrollbar{ background: none; } /* Mobile responsiveness */ @media (max-width: 600px) { .input-container { width: 97%; } input[type="text"] { padding: 13px 40px 13px 20px; } .clear-icon { font-size: 18px; } .buttons input[type="button"] { font-size: 14px; } select#languageSelect { padding: 5px 10px; text-align: justify; } .logo { font-size: 45px; margin-bottom: 2px; } .footer { font-size: 10px; } } .suggestions { position: absolute; top: 50px; width: 100%; max-width: 550px; background-color: #1d1d1d; border: 1px solid #333333; border-radius: 10px; max-height: 200px; overflow-y: auto; z-index: 10; } .suggestion-item { padding: 10px 20px; cursor: pointer; color: #a2a2a2; font-size: 14px; transition: background-color 0.2s ease; } .suggestion-item:hover { font-weight: 900; color: rgb(0, 98, 255); text-decoration: underline; } </style> </head> <body> <div class="s" style="position: fixed; top: 14px; text-align: end; right: 16px;"><script src="noright.js"></script> <a href="https://blackswan19.github.io/Educate/stoper.html" style="color: white;font-size: 14px;">BsAdstoper?</a><br><br> </div> <div class="container"> <div class="logo">BSongsearch</div> <div class="search-box"> <div class="input-container"> <input type="text" id="searchQuery" placeholder="Enter the song name here..." onkeydown="checkEnter(event)" oninput="toggleClearIcon(); showSuggestions()"> <span class="clear-icon" onclick="clearInput()" id="clearIcon">×</span> <!-- Clear icon --> <div class="suggestions" id="suggestionsBox" style="display: none;"></div> </div> </div> <div class="buttons"> <input type="button" value="Search" onclick="performSongSearch()"> <select id="languageSelect"> <option value="" selected>Other</option> <option value="telugu">Telugu</option> <option value="hindi">Hindi</option> <option value="korean">Korean</option> <option value="english">English</option> <option value="japanese">Japanese</option> <option value="chinese">Chinese</option> </select> </div> <div class="footer"> #Powered by <a href="https://blackswan19.github.io/bscrop/formbs.html" style="text-decoration: none;">@FromBs</a> </div> </div>
-<script>
-        const songSuggestions = [
-    // English Songs
-    "Shape of You", "Blinding Lights", "Despacito", "Dance Monkey", "Closer",
-    "Someone Like You", "Rolling in the Deep", "Bohemian Rhapsody", "Hotel California",
-    "Stairway to Heaven", "Billie Jean", "Uptown Funk", "Thinking Out Loud", "Bad Guy",
-    "Old Town Road", "Senorita", "Sweet Child O' Mine", "Smells Like Teen Spirit",
-    "Wonderwall", "Imagine", "Yesterday", "Hey Jude", "Let It Be", "Lose Yourself",
-    
-    // Hindi Songs
-    "Tum Hi Ho", "Kal Ho Na Ho", "Chaiyya Chaiyya", "Mere Rashke Qamar", "Pehla Nasha",
-    "Tujh Mein Rab Dikhta Hai", "Kabira", "Ae Dil Hai Mushkil", "Lag Ja Gale", "Jai Ho",
-    "Tum Mile", "Badtameez Dil", "Ghungroo", "Sun Saathiya", "Pani Da Rang", "Dhoom Machale",
-    
-    // Telugu Songs
-    "Butta Bomma", "Vachindamma", "Samajavaragamana", "Inkem Inkem", "Rowdy Baby",
-    "Pilla Raa", "Ala Vaikunthapurramuloo", "Arere Yekkada", "Nee Kannu Neeli Samudram",
-    "Seeti Maar", "Jigelu Rani", "Evare", "Telusa Telusa", "Pakka Local", "Nee Kallalona",
-    
-    // Korean Songs (K-pop)
-    "Gangnam Style", "Dynamite", "Butter", "Boy With Luv", "Fake Love",
-    "Blood Sweat & Tears", "DNA", "I Am the Best", "Kill This Love", "How You Like That",
-    "Lovesick Girls", "Ice Cream", "Idol", "Run", "Not Today", "Dope",
-    
-    // Japanese Songs (J-pop & Anime)
-    "Gurenge", "Unravel", "Silhouette", "Blue Bird", "Crossing Field",
-    "A Cruel Angel's Thesis", "Again", "Your Name (Kimi no Na wa)", "Shinunoga E-Wa", 
-    "Pretender", "Lemon", "Paprika", "Fly Me to the Moon (Neon Genesis Evangelion)",
-    
-    // Chinese Songs
-    "Tong Hua (Fairy Tale)", "Bu De Bu Ai", "Xi Jie", "Jiang Nan", "Little Apple",
-    "Zhou Ma Tou (Street Corner)", "Zhi Shao Hai You Ni", "Wo De Ge Sheng Li", 
-    "Ping Fan Zhi Lu", "Zhong Guo Hua", "Tian Mi Mi", "Bei Pan", "Tian Ya Ge Nu", 
-    "Da Yu", "Mei Hao De Shi Guang",
-    
-    // More English Hits
-    "Firework", "Halo", "Rolling in the Deep", "Sorry", "Love Story", 
-    "Photograph", "Perfect", "God's Plan", "One Dance", "Work", "All of Me", 
-    "Thinking Out Loud", "Happy", "Roar", "Wrecking Ball", "Havana", "Lucid Dreams", 
-    "Take On Me", "Eye of the Tiger", "Africa"
-];
+<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>BSongsearch</title> <link rel="icon" type="image/x-icon" href="https://i.ibb.co/gW8Py0B/BS.png"> <style> @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Orbitron:wght@400..900&family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&family=Strait&display=swap'); * { color: #ededed; font-family: "Red Hat Display", sans-serif; letter-spacing: 0.5px; box-sizing: border-box; } a { text-decoration: none; } body { font-family: 'Roboto', sans-serif; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; background-color: #000000; color: #d7d7d7; text-align: center; } .container { display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; } .search-box { display: flex; justify-content: center; align-items: center; flex-direction: column; width: 100%; } .input-container { display: flex; align-items: center; position: relative; width: 100%; max-width: 550px; } input[type="text"] { flex: 1; padding: 14px 40px 14px 40px; font-size: 15px; background-color: #1d1d1d; color: #d7d7d7; border: 1px solid #333333; border-radius: 24px; outline: none; transition: box-shadow 0.3s ease; } input[type="text"]:focus { border: 1px solid #525252; color: #ffffff; background-color: #3c3c3c; } .clear-icon { position: absolute; right: 20px; cursor: pointer; font-size: 30px; color: #d7d7d7; visibility: hidden; transition: color 0.3s ease; } .clear-icon:hover { color: white; } select { width: 115px; padding: 10px 5px; margin: 15px 0; font-size: 15px; background-color: #1d1d1d; color: #d7d7d7; border: 1px solid #333333; border-radius: 5px; outline: none; transition: box-shadow 0.3s ease; } select:hover { color: #ffffff; background-color: #3c3c3c; } .buttons { display: flex; justify-content: center; margin-top: 15px; } .buttons input[type="button"] { background-color: #1d1d1d; color: #d7d7d7; border: 1px solid #333333; padding: 10px 25px; font-size: 14px; margin: 15px; cursor: pointer; border-radius: 5px; transition: background-color 0.3s ease; } .buttons input[type="button"]:hover { background-color: #3c3c3c; color: #ffffff; } .footer { color: #e8eaed; position: fixed; bottom: 10px; font-size: 12px; } /* Logo Style */ .logo { font-size: 33px; font-weight: 690; color: #0044ff; margin-bottom: 20px; letter-spacing: 0.5px; } ::-webkit-scrollbar{ background: none; } /* Mobile responsiveness */ @media (max-width: 600px) { .input-container { width: 97%; } input[type="text"] { padding: 13px 40px 13px 20px; } .clear-icon { font-size: 18px; } .buttons input[type="button"] { font-size: 14px; } select#languageSelect { padding: 5px 10px; text-align: justify; } .logo { font-size: 45px; margin-bottom: 2px; } .footer { font-size: 10px; } } .suggestions { position: absolute; top: 60px; width: 100%; max-width: 550px; background-color: #1d1d1d; border: 1px solid #333333; border-radius: 10px; max-height: 200px; overflow-y: auto; z-index: 10; } .suggestion-item { padding: 10px 20px; cursor: pointer; color: #a2a2a2; font-size: 14px; transition: background-color 0.2s ease; text-transform: capitalize; } .suggestion-item:hover { font-weight: 900; color: rgb(0, 98, 255); text-decoration: underline; } </style> </head> <body> <div class="s" style="position: fixed; top: 14px; text-align: end; right: 16px;"> <a href="https://blackswan19.github.io/Educate/stoper.html" style="color: white;font-size: 14px;">BsAdstoper?</a><br><br> </div> <div class="container"> <div class="logo">BSongsearch</div> <div class="search-box"> <div class="input-container"> <input type="text" id="searchQuery" placeholder="Enter the song name here..." onkeydown="checkEnter(event)" autocomplete="off" oninput="toggleClearIcon(); showSuggestions()"> <span class="clear-icon" onclick="clearInput()" id="clearIcon">×</span> <!-- Clear icon --> <div class="suggestions" id="suggestionsBox" style="display: none;"></div> </div> </div> <div class="buttons"> <input type="button" value="Search" onclick="performSongSearch()"> <select id="languageSelect"> <option value="all" selected>All</option> <option value="telugu">Telugu</option> <option value="hindi">Hindi</option> <option value="korean">Korean</option> <option value="english">English</option> <option value="japanese">Japanese</option> <option value="chinese">Chinese</option> </select> </div> <script src="noright.js"></script> <div class="footer"> #Powered by <a href="https://blackswan19.github.io/bscrop/formbs.html" style="text-decoration: none;">@FromBs</a> </div> </div>
+    <script>
+        // Initialize an array to store search history
+        let searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];
 
-        // Function to display suggestions
+        // Function to display suggestions based on search history
         function showSuggestions() {
             const query = document.getElementById('searchQuery').value.toLowerCase();
             const suggestionsBox = document.getElementById('suggestionsBox');
             suggestionsBox.innerHTML = ''; // Clear previous suggestions
 
             if (query) {
-                const filteredSuggestions = songSuggestions.filter(song =>
-                    song.toLowerCase().includes(query)
+                const filteredSuggestions = searchHistory.filter(search =>
+                    search.toLowerCase().includes(query)
                 );
 
                 // Populate suggestions box
-                filteredSuggestions.forEach(song => {
+                filteredSuggestions.forEach(search => {
                     const suggestionItem = document.createElement('div');
                     suggestionItem.classList.add('suggestion-item');
-                    suggestionItem.innerText = song;
-                    suggestionItem.onclick = () => selectSuggestion(song);
+                    suggestionItem.innerText = search;
+                    suggestionItem.onclick = () => selectSuggestion(search);
                     suggestionsBox.appendChild(suggestionItem);
                 });
 
-                suggestionsBox.style.display = 'block';
+                suggestionsBox.style.display = filteredSuggestions.length > 0 ? 'block' : 'none';
             } else {
                 suggestionsBox.style.display = 'none';
             }
         }
 
         // Function to handle suggestion selection
-        function selectSuggestion(song) {
-            document.getElementById('searchQuery').value = song;
+        function selectSuggestion(search) {
+            document.getElementById('searchQuery').value = search;
             document.getElementById('suggestionsBox').style.display = 'none';
             toggleClearIcon();
         }
@@ -82,12 +44,21 @@
             }
         });
 
-        // Remaining JavaScript functions from the original code
+        // Modified search function to store the input
         function performSongSearch() {
             var query = document.getElementById('searchQuery').value;
             var language = document.getElementById('languageSelect').value;
             if (query) {
-                var searchUrl = "https://www.google.com/search?q=" + encodeURIComponent(query + " " + language + " song");
+                // Add to search history if not already present
+                if (!searchHistory.includes(query)) {
+                    searchHistory.unshift(query); // Add to beginning of array
+                    if (searchHistory.length > 10) { // Limit to 10 recent searches
+                        searchHistory.pop();
+                    }
+                    localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
+                }
+                
+                var searchUrl = "https://www.google.com/search?q=" + encodeURIComponent("i want a song called " + query + ", display all " + language + " songs with " + query + " title name ");
                 window.open(searchUrl, '_blank');
             }
         }
