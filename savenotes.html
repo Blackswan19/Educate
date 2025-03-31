@@ -4,6 +4,7 @@
         let activeUser = null;
         let contextTarget = null;
         let attachedImage = null;
+        let showingImportantOnly = false;
 
         const userListElement = document.getElementById('userList');
         const chatHeader = document.getElementById('chatHeader');
@@ -106,6 +107,17 @@
                 li.addEventListener('contextmenu', (e) => showContextMenu(e, username, 'user'));
                 userListElement.appendChild(li);
             });
+
+            // Add star icon to filter important notes
+            const starIcon = document.createElement('i');
+            starIcon.className = 'fa-regular fa-star star-icon';
+            starIcon.style.position = 'fixed';
+            starIcon.style.right = '80px';
+            starIcon.style.bottom = '30px';
+            starIcon.style.cursor = 'pointer';
+            starIcon.style.fontSize = '20px';
+            starIcon.addEventListener('click', toggleImportantNotes);
+            document.querySelector('.sidebar').appendChild(starIcon);
         }
 
         function selectUser(username) {
@@ -113,15 +125,78 @@
             chatHeader.textContent = `Your notes in : ${username}`;
             messageInput.disabled = false;
             sendButton.disabled = false;
+            showingImportantOnly = false; // Reset to show all notes for this user
+            const starIcon = document.querySelector('.sidebar .fa-star');
+            starIcon.classList.remove('fa-solid');
+            starIcon.classList.add('fa-regular');
             renderMessages();
             if (window.innerWidth <= 768) {
                 sidebar.classList.remove('show');
             }
         }
 
+        function toggleImportantNotes() {
+            showingImportantOnly = !showingImportantOnly;
+            const starIcon = document.querySelector('.sidebar .fa-star');
+            starIcon.classList.toggle('fa-solid', showingImportantOnly);
+            starIcon.classList.toggle('fa-regular', !showingImportantOnly);
+            renderMessages();
+        }
+
         function renderMessages() {
             chatBox.innerHTML = '';
-            if (activeUser && users[activeUser]) {
+            if (showingImportantOnly) {
+                // Show all important notes from all users
+                chatHeader.textContent = "All Important Notes";
+                Object.keys(users).forEach(username => {
+                    users[username].forEach((message, index) => {
+                        if (message.important) {
+                            const div = document.createElement('div');
+                            div.className = `chat-message ${message.type} important`;
+                            div.addEventListener('contextmenu', (e) => showContextMenu(e, { user: username, index: index }, 'message'));
+
+                            const content = document.createElement('span');
+                            if (message.type === 'image') {
+                                const imgContainer = document.createElement('div');
+                                imgContainer.style.position = 'relative';
+                                
+                                const img = document.createElement('img');
+                                img.src = message.text;
+                                
+                                const expandIcon = document.createElement('i');
+                                expandIcon.className = 'fa-solid fa-up-right-and-down-left-from-center';
+                                expandIcon.style.position = 'absolute';
+                                expandIcon.style.right = '0px';
+                                expandIcon.style.top = '0px';
+                                expandIcon.style.color = 'white';
+                                expandIcon.style.cursor = 'pointer';
+                                expandIcon.style.background = 'rgb(18 0 255)';
+                                expandIcon.style.padding = '10px';
+                                expandIcon.style.filter = 'drop-shadow(2px 4px 16px white)';
+                                
+                                imgContainer.appendChild(img);
+                                imgContainer.appendChild(expandIcon);
+                                content.appendChild(imgContainer);
+
+                                imgContainer.addEventListener('click', () => showImagePopup(message.text));
+                            } else {
+                                content.textContent = message.text;
+                            }
+
+                            const starIcon = document.createElement('i');
+                            starIcon.className = `fa-regular fa-star star-icon ${message.important ? 'fa-solid' : ''}`;
+                            starIcon.addEventListener('click', () => toggleImportance(username, index));
+
+                            div.appendChild(content);
+                            div.appendChild(starIcon);
+
+                            chatBox.appendChild(div);
+                        }
+                    });
+                });
+            } else if (activeUser) {
+                // Show all notes for the active user
+                chatHeader.textContent = `Your notes in : ${activeUser}`;
                 users[activeUser].forEach((message, index) => {
                     const div = document.createElement('div');
                     div.className = `chat-message ${message.type} ${message.important ? 'important' : ''}`;
@@ -157,7 +232,7 @@
 
                     const starIcon = document.createElement('i');
                     starIcon.className = `fa-regular fa-star star-icon ${message.important ? 'fa-solid' : ''}`;
-                    starIcon.addEventListener('click', () => toggleImportance(index));
+                    starIcon.addEventListener('click', () => toggleImportance(activeUser, index));
 
                     div.appendChild(content);
                     div.appendChild(starIcon);
@@ -167,9 +242,9 @@
             }
         }
 
-        function toggleImportance(index) {
-            if (activeUser && users[activeUser][index]) {
-                users[activeUser][index].important = !users[activeUser][index].important;
+        function toggleImportance(username, index) {
+            if (users[username] && users[username][index]) {
+                users[username][index].important = !users[username][index].important;
                 saveToLocalStorage();
                 renderMessages();
             }
@@ -202,11 +277,11 @@
                     hideContextMenu();
                 });
             } else if (contextTarget.type === 'message') {
-                const index = contextTarget.target;
-                const currentMessage = users[activeUser][index].text;
+                const { user, index } = contextTarget.target;
+                const currentMessage = users[user][index].text;
                 showPopup('Edit message:', true, (newMessage) => {
                     if (newMessage) {
-                        users[activeUser][index].text = newMessage;
+                        users[user][index].text = newMessage;
                         saveToLocalStorage();
                         renderMessages();
                     }
@@ -229,8 +304,8 @@
                     hideContextMenu();
                 });
             } else if (contextTarget.type === 'message') {
-                const index = contextTarget.target;
-                users[activeUser].splice(index, 1);
+                const { user, index } = contextTarget.target;
+                users[user].splice(index, 1);
                 saveToLocalStorage();
                 renderMessages();
                 hideContextMenu();
