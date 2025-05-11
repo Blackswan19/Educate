@@ -20,17 +20,17 @@
         }
 
         function addRecentlyWatched(videoUrl) {
-            const videos = getRecentlyWatched();
-            if (!videos.some(video => video.url === videoUrl)) {
-                videos.unshift({
-                    url: videoUrl,
-                    isPinned: true, // Pin all new videos by default
-                    timestamp: Date.now() // Store current timestamp
-                });
-                if (videos.length > 10) videos.pop(); // Limit to 10 videos
-                localStorage.setItem(localStorageKey, JSON.stringify(videos));
-            }
-        }
+    const videos = getRecentlyWatched();
+    if (!videos.some(video => video.url === videoUrl)) {
+        videos.unshift({
+            url: videoUrl,
+            isPinned: false, // Do not pin new videos by default
+            timestamp: Date.now() // Store current timestamp
+        });
+        if (videos.length > 10) videos.pop(); // Limit to 10 videos
+        localStorage.setItem(localStorageKey, JSON.stringify(videos));
+    }
+}
 
         // Function to toggle pinned state
         function togglePinned(videoUrl) {
