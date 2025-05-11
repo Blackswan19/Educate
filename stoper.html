@@ -1,4 +1,4 @@
-<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>BsAdstoper</title> <link rel="icon" type="image/x-icon" href="https://i.ibb.co/DgWHFgR/roralogo.png"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald|Noto+Sans"> <link rel="stylesheet" href="css.css"> <link rel="stylesheet" href="css2.css"> </head> <body> <img id="menuIcon" src="https://twice.jype.com/Content/Pc/images/common/menu.png" alt="Menu Icon" width="30" height="30"> <div id="menu"> <a href="https://blackswan19.github.io/bscrop/watchin/mylist.html">Save the video?</a><br><br> <a href="addhome.html">Add to home screen?</a><br><br> <a href="savelink.html">Save the link?</a><br><br> <a href="howtodo.mp4">Help?</a> </div> <script> document.getElementById("menuIcon").addEventListener("click", function() { var menu = document.getElementById("menu"); menu.style.display = menu.style.display === "block" ? "none" : "block"; }); </script> <script src="noright.js"></script> <div class="side-section"> <a id="showButton" onclick="showRecommendations()" style="text-decoration: none;"> <i class="fa-solid fa-clock-rotate-left"></i> History</a> </div> <div class="container"> <h2>BsAdstoper</h2> <input type="text" id="userLink" placeholder="Paste any youtube link here..." autocomplete="off"> <br> <button onclick="modifyLink()">Submit</button> <div id="result"></div> </div> <div class="recommendation-section" id="recommendationSection"> <button class="close-button" onclick="closeRecommendations()">×</button> <h3 style="font-size: 30px;"> History</h3> <ul class="video-list" id="videoList"></ul> <p class="small-note">NOTE: Unpinned videos in "History" will disappear after 24 hours. Pin your favorites to keep them permanently!</p> </div> <div class="notification" id="notificationBox">Link copied to clipboard!</div> <p>Note : To play videos from a YouTube playlist, the playlist must be set to public.</p>
+<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>BsAdstoper</title> <link rel="icon" type="image/x-icon" href="https://i.ibb.co/DgWHFgR/roralogo.png"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald|Noto+Sans"> <link rel="stylesheet" href="css.css"> <link rel="stylesheet" href="css2.css"> </head> <body> <img id="menuIcon" src="https://twice.jype.com/Content/Pc/images/common/menu.png" alt="Menu Icon" width="30" height="30"> <div id="menu"> <a href="https://blackswan19.github.io/bscrop/watchin/mylist.html">Save the video?</a><br><br> <a href="addhome.html">Add to home screen?</a><br><br> <a href="savelink.html">Save the link?</a><br><br> <a href="howtodo.mp4">Help?</a> </div> <script> document.getElementById("menuIcon").addEventListener("click", function() { var menu = document.getElementById("menu"); menu.style.display = menu.style.display === "block" ? "none" : "block"; }); </script> <script src="noright.js"></script> <div class="side-section"> <a id="showButton" onclick="showRecommendations()" style="text-decoration: none;"> <i class="fa-solid fa-clock-rotate-left"></i> History</a> </div> <div class="container"> <h2>BsAdstoper</h2> <input type="text" id="userLink" placeholder="Paste any youtube link here..." autocomplete="off"> <br> <button onclick="modifyLink()">Submit</button> <div id="result"></div> </div> <div class="recommendation-section" id="recommendationSection"> <button class="close-button" onclick="closeRecommendations()">×</button> <h3 style="font-size: 30px;"> History</h3> <ul class="video-list" id="videoList"></ul> <p class="small-note">NOTE: Videos in "History" are pinned by default. Unpin videos to allow removal if desired.</p> </div> <div class="notification" id="notificationBox">Link copied to clipboard!</div> <p>Note : To play videos from a YouTube playlist, the playlist must be set to public.</p>
     <script>
         // Function to store and retrieve recently watched videos
         const localStorageKey = 'recentlyWatched';
@@ -7,13 +7,11 @@
             const videos = localStorage.getItem(localStorageKey);
             let parsedVideos = videos ? JSON.parse(videos) : [];
             
-            // Filter out unpinned videos older than 24 hours
-            const now = Date.now();
-            parsedVideos = parsedVideos.filter(video => {
-                if (video.isPinned) return true; // Keep pinned videos
-                const ageInHours = (now - video.timestamp) / (1000 * 60 * 60);
-                return ageInHours <= 24;
-            });
+            // Retroactively pin all existing videos
+            parsedVideos = parsedVideos.map(video => ({
+                ...video,
+                isPinned: true // Pin all videos by default
+            }));
             
             localStorage.setItem(localStorageKey, JSON.stringify(parsedVideos));
             return parsedVideos;
@@ -24,7 +22,7 @@
             if (!videos.some(video => video.url === videoUrl)) {
                 videos.unshift({
                     url: videoUrl,
-                    isPinned: false, // Default: not pinned
+                    isPinned: true, // Pin new videos by default
                     timestamp: Date.now() // Store current timestamp
                 });
                 if (videos.length > 10) videos.pop(); // Limit to 10 videos
@@ -39,7 +37,7 @@
             if (video) {
                 video.isPinned = !video.isPinned;
                 localStorage.setItem(localStorageKey, JSON.stringify(videos));
-                showNotification(video.isPinned ? "Pinned !" : "Unpinned !");
+                showNotification(video.isPinned ? "Pinned!" : "Unpinned!");
                 showRecommendations(); // Refresh the list
             }
         }
