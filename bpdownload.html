@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BsBookpad - Download</title>
+    <link rel="icon" type="image/x-icon" href="https://i.ibb.co/s2hfQSZ/bokpad.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <style>
+       @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Orbitron:wght@400..900&family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&family=Strait&display=swap');
+        * {
+            color: rgb(219, 219, 219);
+        }
+        ::-webkit-scrollbar{
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-thumb{
+            background-color: #4a4a4a;
+            border-radius: 0px;
+            cursor: pointer;
+            width: 120px;
+        }
+        ::-webkit-scrollbar-thumb:hover{
+            background-color: #8f8f8f;
+        }
+        ::-webkit-scrollbar-track{
+            background-color: #2e2e2e;
+            bottom: 0px;
+        }
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 95%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #121212;
+    position: fixed;
+    font-family: "Red Hat Display", sans-serif;
+     letter-spacing: 0.4px;
+}
+.logo{
+    position: fixed;
+    top: 31px;
+    left: 40px;
+    font-size: 24px;
+    color: #004cff;
+    font-weight: 600;
+    text-decoration: none;
+}
+.fullscreen-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 60px;
+    z-index: -100;
+}
+
+textarea {
+    width: 80%;
+    height: 500px;
+    padding: 20px;
+    font-size: 16px;
+    background-color: #1b1b1b;
+    color: #c6c6c6;
+    border-radius: 10px;
+    border: solid 1.5px rgb(255 255 255 / 0%);
+    resize: none;
+    margin-bottom: 20px;
+    position: relative;
+    top: 30px;
+    outline: none;
+    font-family: "Red Hat Display", sans-serif;
+    letter-spacing: 0.5px;
+    font-weight: 500;
+}
+textarea:focus{
+    background-color: #3a3a3a8d;
+}
+
+textarea::-webkit-scrollbar-track {
+    background: transparent;
+    margin-left: 35px;
+    margin-right: 35px;
+    margin-top: 35px;
+    margin-bottom: 35px;
+}
+.icon-buttons {
+    display: flex;
+    gap: 20px;
+    position: fixed;
+    bottom: 20px;
+    padding: 20px;
+    border-radius: 15px;
+}
+::placeholder{
+    color: #c6c6c6;
+}
+.icon-buttons i {
+    font-size: 20px;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.delete-icon {
+    background-color: #ff0d00;
+    color: white;
+}
+
+.copy-single-icon {
+    background-color: #00e208c1;
+    color: white;
+}
+
+.uppercase-icon {
+    background-color: #bc00ff;
+    color: white;
+}
+
+.download-image-icon {
+    background-color: #ff0056;
+    color: white;
+}
+
+.download-pdf-icon {
+    background-color: #008eff;
+    color: white;
+}
+
+.delete-icon:hover {
+    background-color: #ff0d00c3;
+}
+
+.copy-single-icon:hover {
+    background-color: #00e20882;
+}
+
+.uppercase-icon:hover {
+    background-color: #bb00ffca;
+}
+
+.download-image-icon:hover {
+    background-color:#ff0056b0;
+}
+
+.download-pdf-icon:hover {
+    background-color: #008cffb9;
+}
+
+
+.color-picker-container {
+    position: fixed;
+    bottom: 25px;
+    right: 175px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+    background: #424242;
+        padding: 10px;
+        border-radius: 13px;
+}
+div {
+    display: flex
+;
+    align-items: center;
+}
+.color-picker-label {
+    font-size: 14px;
+    color: #c6c6c6;
+}
+
+.color-picker {
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+    border-radius: 5px;
+}
+
+p {
+    font-size: 1.2rem;
+    margin-top: 20px;
+    text-align: center;
+    width: 100%;
+    word-wrap: break-word;
+}
+
+.message {
+    margin-top: 10px;
+    color: rgb(255, 255, 255);
+    text-align: center;
+    position: fixed;
+    top: 30px;
+    font-weight: 400;
+    padding: 10px 20px;
+    z-index: 10000000;
+    background: #2f2f2f;
+    border-radius: 9px;
+    border: none;
+    right: 45px;
+}
+
+.icon-buttons i:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Watermark style for image */
+.watermark {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    font-size: 5px;
+    opacity: 0.7;
+    font-family: "Red Hat Display", sans-serif;
+}
+.watermark a {
+    color: inherit; /* Inherit color from parent (user-selected text color) */
+    text-decoration: none; /* Remove underline for cleaner look */
+}
+
+/* Ensure text preserves line breaks in image */
+.text-content {
+    white-space: pre-wrap; /* Preserve line breaks and spaces */
+}
+
+@media (max-width: 768px) {
+    .fullscreen-container {
+        padding: 40px;
+    }
+
+    textarea {
+        height: 35%;
+        padding: 15px;
+        font-size: 1rem;
+    }
+
+    .icon-buttons i {
+        font-size: 0.9rem;
+        padding: 8px 16px;
+    }
+
+    .message {
+        font-size: 1rem;
+    }
+
+    p {
+        font-size: 1rem;
+    }
+
+    .color-picker-container {
+        bottom: 70px;
+        right: 20px;
+    }
+
+    .color-picker-label {
+        font-size: 12px;
+    }
+
+ alarms .color-picker {
+        width: 30px;
+        height: 30px;
+    }
+}
+
+@media (max-width: 480px) {
+    .fullscreen-container {
+        padding: 20px;
+    }
+
+    textarea {
+        height: 60%;
+        padding: 30px;
+        font-size: 14px;
+        width: 90%;
+    }
+
+    .icon-buttons i {
+        font-size: 15px;
+    }
+
+    .icon-buttons {
+        gap: 9px;
+        position: fixed;
+        bottom: 10px;
+    }
+
+    .message{        
+        font-size: 13px;
+        top: 0px;
+        right: 10px;
+    }
+
+    p {
+        font-size: 0.9rem;
+    }
+
+    .logo{
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        font-size: 18px;
+    }
+
+    .color-picker-container {
+       bottom: 80px;
+        right: 5px;
+        background: #424242;
+        padding: 10px;
+        border-radius: 13px;
+    }
+
+    .color-picker-label {
+        font-size: 11px;
+    }
+
+    .color-picker {
+        width: 25px;
+        height: 25px;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <div class="logo">BsBookpad <i style="display: flex
+;
+    flex-direction: column;
+    align-items: flex-end;
+    background: #424242;
+    padding: 12px 10px;
+    border-radius: 13px;
+    font-size: 18px;
+    margin-left: 10px;" class="fa-solid fa-cloud-arrow-down"></i></div>
+    
+    <div class="fullscreen-container">
+        <textarea id="paragraphInput" placeholder="Type your paragraph..."></textarea>
+        <div class="icon-buttons">
+            <i class="fa-solid fa-arrow-up-a-z uppercase-icon" onclick="toggleCase()" title="Toggle Case"></i>
+            <i class="fa-solid fa-text-slash delete-icon" onclick="newInput()" title="Clear Field"></i>
+            <i class="fa-regular fa-copy copy-single-icon" onclick="copySingleLine()" title="Copy Text"></i>
+            <i class="fa-solid fa-image download-image-icon" onclick="downloadAsImage()" title="Download as Image"></i>
+            <i class="fa-solid fa-file-pdf download-pdf-icon" onclick="downloadAsPDF()" title="Download as PDF"></i>
+        </div>
+    
+        <div class="message" id="message"><a href="https://blackswan19.github.io/bscrop/formbs" style="text-decoration: none;">#BsWorld</a></div>
+        <div class="color-picker-container">
+            <div>
+                <span class="color-picker-label">Image Background:</span>
+                <input type="color" id="imageBackgroundColor" class="color-picker" value="#1b1b1b" title="Select Image Background Color">
+            </div>
+            <div>
+                <span class="color-picker-label">Image Text:</span>
+                <input type="color" id="imageTextColor" class="color-picker" value="#c6c6c6" title="Select Image Text Color">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let isUpperCase = false;
+
+        function newInput() {
+            const textarea = document.getElementById('paragraphInput');
+            textarea.value = '';
+            displayMessage("Cleared..!");
+        }
+
+        function copySingleLine() {
+            const textarea = document.getElementById('paragraphInput');
+            const text = textarea.value;
+    
+            if (text.trim() === "") {
+                displayMessage("Nothing to copy..!");
+                return;
+            }
+
+            const tempTextarea = document.createElement('textarea');
+            tempTextarea.value = text;
+            document.body.appendChild(tempTextarea);
+            tempTextarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextarea);
+    
+            displayMessage("Copied..!");
+        }
+    
+        function toggleCase() {
+            const textarea = document.getElementById('paragraphInput');
+            const text = textarea.value.trim();
+            
+            if (text === "") {
+                displayMessage("Enter text first..!");
+                return;
+            }
+            
+            if (!isUpperCase) {
+                textarea.value = text.toUpperCase();
+                displayMessage("Uppercase..!");
+            } else {
+                textarea.value = text.toLowerCase();
+                displayMessage("Lowercase..!");
+            }
+            isUpperCase = !isUpperCase;
+        }
+
+        function downloadAsImage() {
+            const textarea = document.getElementById('paragraphInput');
+            if (!textarea.value.trim()) {
+                displayMessage("Nothing to download..!");
+                return;
+            }
+
+            const backgroundColor = document.getElementById('imageBackgroundColor').value;
+            const textColor = document.getElementById('imageTextColor').value;
+
+            // Create temporary container
+            const tempContainer = document.createElement('div');
+            tempContainer.style.backgroundColor = backgroundColor;
+            tempContainer.style.padding = '20px';
+            tempContainer.style.color = textColor; // Apply text color to container (affects watermark)
+            tempContainer.style.fontFamily = '"Red Hat Display", sans-serif';
+            tempContainer.style.fontSize = '16px';
+            tempContainer.style.borderRadius = '0px';
+            tempContainer.style.position = 'absolute';
+            tempContainer.style.left = '-9999px';
+            tempContainer.style.display = 'flex';
+            tempContainer.style.flexDirection = 'column';
+            tempContainer.style.lineHeight = '1.5';
+
+            // Create text content with preserved line breaks
+            const textContent = document.createElement('div');
+            textContent.className = 'text-content'; 
+            textContent.textContent = textarea.value; 
+            textContent.style.color = textColor;
+            textContent.style.flexGrow = '1';
+            tempContainer.appendChild(textContent);
+
+            // Add watermark as a link
+            const watermark = document.createElement('div');
+            watermark.className = 'watermark';
+            const link = document.createElement('a');
+            link.href = 'https://blackswan19.github.io/bscrop/formbs';
+            link.textContent = 'Made in BsBookpad';
+            watermark.appendChild(link);
+            tempContainer.appendChild(watermark);
+
+            // Append container to body to measure size
+            document.body.appendChild(tempContainer);
+
+            // Calculate dimensions based on text content
+            const textWidth = Math.min(textContent.offsetWidth + 40, 800); // Add padding, max 800px
+            const textHeight = textContent.offsetHeight + 40; // Add padding
+            tempContainer.style.width = `${textWidth}px`;
+            tempContainer.style.minHeight = `${textHeight}px`;
+
+            // Capture image with html2canvas
+            html2canvas(tempContainer, {
+                width: textWidth,
+                height: textHeight,
+                scale: 2
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'bs/bookpad.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                document.body.removeChild(tempContainer);
+                displayMessage("Downloaded as Image!");
+            }).catch(err => {
+                console.error('Error generating image:', err);
+                document.body.removeChild(tempContainer);
+                displayMessage("Error downloading image!");
+            });
+        }
+
+        function downloadAsPDF() {
+            const textarea = document.getElementById('paragraphInput');
+            if (!textarea.value.trim()) {
+                displayMessage("Nothing to download..!");
+                return;
+            }
+
+            const backgroundColor = document.getElementById('imageBackgroundColor').value;
+            const textColor = document.getElementById('imageTextColor').value;
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            doc.setFont("helvetica");
+            doc.setFontSize(12);
+
+            // Convert hex background color to RGB
+            const bgHex = backgroundColor.replace('#', '');
+            const bgR = parseInt(bgHex.substring(0, 2), 16);
+            const bgG = parseInt(bgHex.substring(2, 4), 16);
+            const bgB = parseInt(bgHex.substring(4, 6), 16);
+
+            // Convert hex text color to RGB
+            const textHex = textColor.replace('#', '');
+            const textR = parseInt(textHex.substring(0, 2), 16);
+            const textG = parseInt(textHex.substring(2, 4), 16);
+            const textB = parseInt(textHex.substring(4, 6), 16);
+
+            const text = textarea.value;
+            const margin = 10;
+            const maxWidth = 190;
+            const lines = doc.splitTextToSize(text, maxWidth);
+            
+            let cursorY = 10;
+            let pageCount = 1;
+
+            // Function to add watermark to a page
+            function addWatermark() {
+                doc.setFontSize(4); // Smaller watermark font size
+                doc.setTextColor(textR, textG, textB);
+                const watermarkText = 'BsBookpad';
+                const watermarkX = 5; // 5px from left
+                const watermarkY = 5; // 5px from top
+                doc.text(watermarkText, watermarkX, watermarkY);
+                // Add clickable link
+                const textWidth = doc.getTextWidth(watermarkText);
+                doc.link(watermarkX, watermarkY - 3, textWidth, 4, {
+                    url: 'https://blackswan19.github.io/bscrop/formbs'
+                });
+                doc.setFontSize(12); // Reset font size for main text
+            }
+
+            // Initial page setup
+            doc.setFillColor(bgR, bgG, bgB);
+            doc.rect(0, 0, 210, 297, 'F');
+            doc.setTextColor(textR, textG, textB);
+            addWatermark();
+
+            lines.forEach(line => {
+                if (cursorY > 280) {
+                    doc.addPage();
+                    pageCount++;
+                    cursorY = 10;
+                    doc.setFillColor(bgR, bgG, bgB);
+                    doc.rect(0, 0, 210, 297, 'F');
+                    doc.setTextColor(textR, textG, textB);
+                    addWatermark();
+                }
+                doc.text(line, margin, cursorY);
+                cursorY += 7;
+            });
+
+            doc.save('bs/bookpad.pdf');
+            displayMessage("Downloaded as PDF!");
+        }
+    
+        function displayMessage(message) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = message;
+    
+            setTimeout(() => {
+                messageDiv.textContent = '';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
