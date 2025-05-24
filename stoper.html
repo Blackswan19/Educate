@@ -1,4 +1,4 @@
-<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>BsAdstoper</title> <link rel="icon" type="image/x-icon" href="https://i.ibb.co/DgWHFgR/roralogo.png"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald|Noto+Sans"> <link rel="stylesheet" href="css.css"> <link rel="stylesheet" href="css2.css"> </head> <body> <img id="menuIcon" src="https://twice.jype.com/Content/Pc/images/common/menu.png" alt="Menu Icon" width="30" height="30"> <div id="menu"> <a href="https://blackswan19.github.io/bscrop/watchin/mylist.html">Save the video?</a><br><br> <a href="addhome.html">Add to home screen?</a><br><br> <a href="savelink.html">Save the link?</a><br><br> <a href="howtodo.mp4">Help?</a> </div> <script> document.getElementById("menuIcon").addEventListener("click", function() { var menu = document.getElementById("menu"); menu.style.display = menu.style.display === "block" ? "none" : "block"; }); </script> <script src="noright.js"></script> <div class="side-section"> <a id="showButton" onclick="showRecommendations()" style="text-decoration: none;"> <i class="fa-solid fa-clock-rotate-left"></i> History</a> </div> <div class="container"> <h2>BsAdstoper</h2> <input type="text" id="userLink" placeholder="Paste any youtube link here..." autocomplete="off"> <br> <button onclick="modifyLink()">Submit</button> <div id="result"></div> </div> <div class="recommendation-section" id="recommendationSection"> <button class="close-button" onclick="closeRecommendations()">×</button> <h3 style="font-size: 30px;"> History</h3> <ul class="video-list" id="videoList"></ul> <p class="small-note">NOTE: Unpinned videos in "History" will disappear after 24 hours. Pin your favorites to keep them permanently!</p> </div> <div class="notification" id="notificationBox">Link copied to clipboard!</div> <p>Note : To play videos from a YouTube playlist, the playlist must be set to public.</p>
+<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>BsAdstoper</title> <link rel="icon" type="image/x-icon" href="https://i.ibb.co/DgWHFgR/roralogo.png"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald|Noto+Sans"> <link rel="stylesheet" href="css.css"> <link rel="stylesheet" href="css2.css"> </head> <body> <img id="menuIcon" src="https://twice.jype.com/Content/Pc/images/common/menu.png" alt="Menu Icon" width="30" height="30"> <div id="menu"> <a href="https://blackswan19.github.io/bscrop/watchin/mylist.html">Save the video?</a><br><br> <a href="addhome.html">Add to home screen?</a><br><br> <a href="savelink.html">Save the link?</a><br><br> <a href="howtodo.mp4">Help?</a> </div> <script> document.getElementById("menuIcon").addEventListener("click", function() { var menu = document.getElementById("menu"); menu.style.display = menu.style.display === "block" ? "none" : "block"; }); </script> <script src="noright.js"></script> <div class="side-section"> <a id="showButton" onclick="showRecommendations()" style="text-decoration: none;"> <i class="fa-solid fa-clock-rotate-left"></i> History</a> </div> <div class="container"> <h2>BsAdstoper</h2> <input type="text" id="userLink" placeholder="Paste any youtube link here..." autocomplete="off"> <br> <button onclick="modifyLink()">Submit</button> <div id="result"></div> </div> <div class="recommendation-section" id="recommendationSection"> <button class="close-button" onclick="closeRecommendations()">×</button> <h3 style="font-size: 30px;"> History</h3> <ul class="video-list" id="videoList"></ul> <p class="small-note">NOTE: Unpinned videos in "History" will disappear after 24 hours. Pin your favorites to keep them permanently!</p> </div> <div class="notification" id="notificationBox">Link copied to clipboard!</div> <p>Note: To play videos from a YouTube playlist, the playlist must be set to public.</p>
     <script>
         // Function to store and retrieve recently watched videos
         const localStorageKey = 'recentlyWatched';
@@ -31,7 +31,7 @@
         }
 
         function getThumbnailUrl(videoId) {
-            return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+            return videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : 'adstptumb.png';
         }
 
         function addRecentlyWatched(videoUrl) {
@@ -61,6 +61,14 @@
             }
         }
 
+        // Function to truncate long links
+        function truncateLink(link, maxLength = 35) {
+            if (link.length > maxLength) {
+                return link.substring(0, maxLength - 3) + '...';
+            }
+            return link;
+        }
+
         // Function to display recently watched videos
         function showRecommendations() {
             const recommendationSection = document.getElementById('recommendationSection');
@@ -74,10 +82,11 @@
             } else {
                 videos.forEach(video => {
                     const li = document.createElement('li');
+                    const displayLink = truncateLink(video.url); // Truncate the link for display
                     li.innerHTML = `
                         <div style="display: flex; align-items: center;">
                             <img src="${video.thumbnail}" alt="Video Thumbnail" class="thumbnail-circle">
-                            <a href="${video.url}" target="_self">#BS//${video.url}//Adstoper</a>
+                            <a href="${video.url}" target="_self">#BS//${displayLink}//Adstoper</a>
                         </div>
                         <div class="action-buttons">
                             <i class="fa-solid ${video.isPinned ? 'fa-toggle-on' : 'fa-toggle-off'}" 
@@ -101,22 +110,39 @@
 
         function modifyLink() {
             const userLink = document.getElementById("userLink").value.trim();
-            let modifiedLink = userLink;
-
-            if (userLink.toLowerCase().includes("youtu.be")) {
-                modifiedLink = `https://www.yout-ube.com/watch?v=${userLink.split("youtu.be/")[1].split("?")[0]}`;
-            } else if (userLink.toLowerCase().includes("youtube.com")) {
-                modifiedLink = userLink.replace(/youtube/i, "yout-ube");
+            if (!userLink) {
+                document.getElementById("result").innerHTML = "Invalid URL: No URL provided";
+                return;
             }
 
-            if (modifiedLink.includes("yout-ube.com/watch?v=")) {
+            let modifiedLink = userLink;
+            const videoId = getVideoId(userLink);
+
+            if (!videoId) {
+                document.getElementById("result").innerHTML = "Invalid URL: No video ID found";
+                return;
+            }
+
+            if (userLink.toLowerCase().includes("youtu.be")) {
+                const queryParams = userLink.split("?")[1] || "";
+                modifiedLink = `https://www.yout-ube.com/watch?v=${videoId}${queryParams ? `&${queryParams}` : ''}`;
+            } else if (userLink.toLowerCase().includes("youtube.com")) {
+                // Replace only the domain, preserving path and query parameters
+                modifiedLink = userLink.replace(/youtube\.com/i, "yout-ube.com");
+            } else {
+                document.getElementById("result").innerHTML = "Invalid URL: Must be a YouTube link";
+                return;
+            }
+
+            // Validate that the modified link has a video ID
+            if (getVideoId(modifiedLink)) {
                 document.getElementById("result").innerHTML = `
                     <button id="playButton" onclick="playVideo('${modifiedLink}')">Play in full screen</button>
                 `;
                 addRecentlyWatched(modifiedLink); // Store the link in local storage
                 document.getElementById("userLink").value = "";
             } else {
-                document.getElementById("result").innerHTML = "Invalid URL";
+                document.getElementById("result").innerHTML = "Invalid URL: Unable to process video link";
             }
         }
 
