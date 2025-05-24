@@ -1,4 +1,4 @@
-<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>BsAdstoper</title> <link rel="icon" type="image/x-icon" href="https://i.ibb.co/DgWHFgR/roralogo.png"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald|Noto+Sans"> <link rel="stylesheet" href="css.css"> <link rel="stylesheet" href="css2.css"> </head> <body> <img id="menuIcon" src="https://twice.jype.com/Content/Pc/images/common/menu.png" alt="Menu Icon" width="30" height="30"> <div id="menu"> <a href="https://blackswan19.github.io/bscrop/watchin/mylist.html">Save the video?</a><br><br> <a href="addhome.html">Add to home screen?</a><br><br> <a href="savelink.html">Save the link?</a><br><br> <a href="howtodo.mp4">Help?</a> </div> <script> document.getElementById("menuIcon").addEventListener("click", function() { var menu = document.getElementById("menu"); menu.style.display = menu.style.display === "block" ? "none" : "block"; }); </script> <script src="noright.js"></script> <div class="side-section"> <a id="showButton" onclick="showRecommendations()" style="text-decoration: none;"> <i class="fa-solid fa-clock-rotate-left"></i> History</a> </div> <div class="container"> <h2>BsAdstoper</h2> <input type="text" id="userLink" placeholder="Paste any youtube link here..." autocomplete="off"> <br> <button onclick="modifyLink()">Submit</button> <div id="result"></div> </div> <div class="recommendation-section" id="recommendationSection"> <button class="close-button" onclick="closeRecommendations()">×</button> <h3 style="font-size: 30px;"> History</h3> <ul class="video-list" id="videoList"></ul> <p class="small-note">NOTE: Unpinned videos in "History" will disappear after 24 hours. Pin your favorites to keep them permanently!</p> </div> <div class="notification" id="notificationBox">Link copied to clipboard!</div> <p>Note: To play videos from a YouTube playlist, the playlist must be set to public.</p>
+<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>BsAdstoper</title> <link rel="icon" type="image/x-icon" href="https://i.ibb.co/DgWHFgR/roralogo.png"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald|Noto+Sans"> <link rel="stylesheet" href="css.css"> <link rel="stylesheet" href="css2.css"> <style> /* Popup styles for full-screen image */ .image-popup { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); z-index: 1000; justify-content: center; align-items: center; } .image-popup img { max-width: 90%; max-height: 90%; object-fit: contain; } .image-popup .close-popup { position: absolute; top: 20px; right: 20px; font-size: 30px; color: white; cursor: pointer; background: none; border: none; } </style> </head> <body> <img id="menuIcon" src="https://twice.jype.com/Content/Pc/images/common/menu.png" alt="Menu Icon" width="30" height="30"> <div id="menu"> <a href="https://blackswan19.github.io/bscrop/watchin/mylist.html">Save the video?</a><br><br> <a href="addhome.html">Add to home screen?</a><br><br> <a href="savelink.html">Save the link?</a><br><br> <a href="howtodo.mp4">Help?</a> </div> <script> document.getElementById("menuIcon").addEventListener("click", function() { var menu = document.getElementById("menu"); menu.style.display = menu.style.display === "block" ? "none" : "block"; }); </script> <script src="noright.js"></script> <div class="side-section"> <a id="showButton" onclick="showRecommendations()" style="text-decoration: none;"> <i class="fa-solid fa-clock-rotate-left"></i> History</a> </div> <div class="container"> <h2>BsAdstoper</h2> <input type="text" id="userLink" placeholder="Paste any youtube link here..." autocomplete="off"> <br> <button onclick="modifyLink()">Submit</button> <div id="result"></div> </div> <div class="recommendation-section" id="recommendationSection"> <button class="close-button" onclick="closeRecommendations()">×</button> <h3 style="font-size: 30px;"> History</h3> <ul class="video-list" id="videoList"></ul> <p class="small-note">NOTE: Unpinned videos in "History" will disappear after 24 hours. Pin your favorites to keep them permanently!</p> </div> <div class="notification" id="notificationBox">Link copied to clipboard!</div> <div class="image-popup" id="imagePopup"> <button class="close-popup" onclick="closeImagePopup()">×</button> <img id="popupImage" src="" alt="Full Screen Thumbnail"> </div> <p>Note: To play videos from a YouTube playlist, the playlist must be set to public.</p>
     <script>
         // Function to store and retrieve recently watched videos
         const localStorageKey = 'recentlyWatched';
@@ -34,13 +34,28 @@
             return videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : 'adstptumb.png';
         }
 
-        function addRecentlyWatched(videoUrl) {
+        // Function to fetch video title using YouTube oEmbed API
+        async function getVideoTitle(videoUrl) {
+            try {
+                const response = await fetch(`https://www.youtube.com/oembed?url=${encodeURIComponent(videoUrl)}&format=json`);
+                if (!response.ok) return 'Unknown Title';
+                const data = await response.json();
+                return data.title || 'Unknown Title';
+            } catch (error) {
+                console.error('Error fetching video title:', error);
+                return 'Unknown Title';
+            }
+        }
+
+        async function addRecentlyWatched(videoUrl) {
             const videos = getRecentlyWatched();
             const videoId = getVideoId(videoUrl);
             if (!videos.some(video => video.url === videoUrl) && videoId) {
+                const title = await getVideoTitle(videoUrl);
                 videos.unshift({
                     url: videoUrl,
                     thumbnail: getThumbnailUrl(videoId),
+                    title: title,
                     isPinned: false,
                     timestamp: Date.now()
                 });
@@ -61,12 +76,12 @@
             }
         }
 
-        // Function to truncate long links
-        function truncateLink(link, maxLength = 35) {
-            if (link.length > maxLength) {
-                return link.substring(0, maxLength - 3) + '...';
+        // Function to truncate long titles
+        function truncateTitle(title, maxLength = 35) {
+            if (title.length > maxLength) {
+                return title.substring(0, maxLength - 3) + '...';
             }
-            return link;
+            return title;
         }
 
         // Function to display recently watched videos
@@ -82,11 +97,11 @@
             } else {
                 videos.forEach(video => {
                     const li = document.createElement('li');
-                    const displayLink = truncateLink(video.url); // Truncate the link for display
+                    const displayTitle = truncateTitle(video.title || 'Unknown Title'); // Use title instead of link
                     li.innerHTML = `
                         <div style="display: flex; align-items: center;">
-                            <img src="${video.thumbnail}" alt="Video Thumbnail" class="thumbnail-circle">
-                            <a href="${video.url}" target="_self">#BS//${displayLink}//Adstoper</a>
+                            <img src="${video.thumbnail}" alt="Video Thumbnail" class="thumbnail-circle" onclick="showImagePopup('${video.thumbnail}')" style="cursor: pointer;">
+                            <a href="${video.url}" target="_self">#BS//${displayTitle}//Adstoper</a>
                         </div>
                         <div class="action-buttons">
                             <i class="fa-solid ${video.isPinned ? 'fa-toggle-on' : 'fa-toggle-off'}" 
@@ -108,7 +123,7 @@
             recommendationSection.style.display = 'none'; // Hide the section
         }
 
-        function modifyLink() {
+        async function modifyLink() {
             const userLink = document.getElementById("userLink").value.trim();
             if (!userLink) {
                 document.getElementById("result").innerHTML = "Invalid URL: No URL provided";
@@ -139,7 +154,7 @@
                 document.getElementById("result").innerHTML = `
                     <button id="playButton" onclick="playVideo('${modifiedLink}')">Play in full screen</button>
                 `;
-                addRecentlyWatched(modifiedLink); // Store the link in local storage
+                await addRecentlyWatched(modifiedLink); // Store the link and title in local storage
                 document.getElementById("userLink").value = "";
             } else {
                 document.getElementById("result").innerHTML = "Invalid URL: Unable to process video link";
@@ -172,6 +187,20 @@
             setTimeout(() => {
                 notificationBox.classList.remove("show");
             }, 2000);
+        }
+
+        // Function to show full-screen image popup
+        function showImagePopup(imageUrl) {
+            const popup = document.getElementById('imagePopup');
+            const popupImage = document.getElementById('popupImage');
+            popupImage.src = imageUrl;
+            popup.style.display = 'flex';
+        }
+
+        // Function to close full-screen image popup
+        function closeImagePopup() {
+            const popup = document.getElementById('imagePopup');
+            popup.style.display = 'none';
         }
     </script>
 </body>
