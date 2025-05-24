@@ -10,27 +10,44 @@
             // Filter out unpinned videos older than 24 hours
             const now = Date.now();
             parsedVideos = parsedVideos.filter(video => {
-                if (video.isPinned) return true; // Keep pinned videos
+                if (video.isPinned) return true; // Keep pinned videos permanently
                 const ageInHours = (now - video.timestamp) / (1000 * 60 * 60);
-                return ageInHours <= 24;
+                return ageInHours <= 24; // Remove unpinned videos older than 24 hours
             });
             
             localStorage.setItem(localStorageKey, JSON.stringify(parsedVideos));
             return parsedVideos;
         }
 
+        function getVideoId(url) {
+            let videoId = '';
+            if (url.includes('youtu.be')) {
+                videoId = url.split('youtu.be/')[1].split('?')[0];
+            } else if (url.includes('youtube.com') || url.includes('yout-ube.com')) {
+                const urlParams = new URLSearchParams(url.split('?')[1] || '');
+                videoId = urlParams.get('v') || '';
+            }
+            return videoId;
+        }
+
+        function getThumbnailUrl(videoId) {
+            return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+        }
+
         function addRecentlyWatched(videoUrl) {
-    const videos = getRecentlyWatched();
-    if (!videos.some(video => video.url === videoUrl)) {
-        videos.unshift({
-            url: videoUrl,
-            isPinned: false, // Do not pin new videos by default
-            timestamp: Date.now() // Store current timestamp
-        });
-        if (videos.length > 10) videos.pop(); // Limit to 10 videos
-        localStorage.setItem(localStorageKey, JSON.stringify(videos));
-    }
-}
+            const videos = getRecentlyWatched();
+            const videoId = getVideoId(videoUrl);
+            if (!videos.some(video => video.url === videoUrl) && videoId) {
+                videos.unshift({
+                    url: videoUrl,
+                    thumbnail: getThumbnailUrl(videoId),
+                    isPinned: false,
+                    timestamp: Date.now()
+                });
+                if (videos.length > 10) videos.pop(); // Limit to 10 videos
+                localStorage.setItem(localStorageKey, JSON.stringify(videos));
+            }
+        }
 
         // Function to toggle pinned state
         function togglePinned(videoUrl) {
@@ -58,7 +75,10 @@
                 videos.forEach(video => {
                     const li = document.createElement('li');
                     li.innerHTML = `
-                        <a href="${video.url}" target="_self">#BS//${video.url}//Adstoper</a>
+                        <div style="display: flex; align-items: center;">
+                            <img src="${video.thumbnail}" alt="Video Thumbnail" class="thumbnail-circle">
+                            <a href="${video.url}" target="_self">#BS//${video.url}//Adstoper</a>
+                        </div>
                         <div class="action-buttons">
                             <i class="fa-solid ${video.isPinned ? 'fa-toggle-on' : 'fa-toggle-off'}" 
                                onclick="togglePinned('${video.url}')" 
