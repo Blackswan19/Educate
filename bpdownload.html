@@ -579,10 +579,12 @@
             wrapper.style.padding = '40px';
             wrapper.style.boxSizing = 'border-box';
 
+            // Get the actual width of the editable div
+            const editableDivWidth = editableDiv.offsetWidth;
+
             // Create a div to hold the content
             const clonedDiv = document.createElement('div');
-            clonedDiv.style.width = 'auto';
-            clonedDiv.style.maxWidth = '800px'; // Prevent overly wide images
+            clonedDiv.style.width = `${editableDivWidth}px`; // Match the editable div's width
             clonedDiv.style.height = 'auto';
             clonedDiv.style.overflow = 'visible';
             clonedDiv.style.border = 'none';
@@ -668,8 +670,7 @@
             // Calculate dimensions with extra padding
             const extraPadding = 80;
             const scrollHeight = clonedDiv.scrollHeight;
-            const scrollWidth = Math.max(clonedDiv.scrollWidth, 300);
-            const textWidth = scrollWidth + extraPadding;
+            const textWidth = editableDivWidth + extraPadding; // Use the editable div's width
             const textHeight = scrollHeight + extraPadding;
 
             // Set wrapper dimensions
@@ -823,6 +824,21 @@
                 messageDiv.textContent = '';
             }, 3000);
         }
+
+             document.addEventListener("DOMContentLoaded", () => {
+            const customMenu = document.querySelector(".custom-menu");
+            document.addEventListener("contextmenu", (event) => {
+                event.preventDefault();
+                if (customMenu) {
+                    customMenu.style.display = "block";
+                    customMenu.style.top = `${event.pageY}px`;
+                    customMenu.style.left = `${event.pageX}px`;
+                }
+            });
+            document.addEventListener("click", () => {
+                if (customMenu) customMenu.style.display = "none";
+            });
+        });
     </script>
 </body>
 </html>
