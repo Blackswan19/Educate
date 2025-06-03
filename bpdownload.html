@@ -148,6 +148,9 @@
             }
 
             const backgroundColor = document.getElementById('imageBackgroundColor').value;
+            const textColor = document.getElementById('imageTextColor').value;
+            const fontSize = document.getElementById('fontSizeSelect').value;
+            const fontWeight = document.getElementById('fontWeightSelect').value;
 
             // Create a wrapper for the editable div and watermark
             const wrapper = document.createElement('div');
@@ -155,33 +158,55 @@
             wrapper.style.left = '-9999px';
             wrapper.style.backgroundColor = backgroundColor;
             wrapper.style.padding = '40px';
-            wrapper.style.borderRadius = '0px';
             wrapper.style.boxSizing = 'border-box';
 
-            // Clone the editable div
-            const clonedDiv = editableDiv.cloneNode(true);
-            clonedDiv.style.width = 'auto'; // Allow natural width
-            clonedDiv.style.height = 'auto'; // Allow natural height
-            clonedDiv.style.maxWidth = '800px'; // Set a reasonable max width
-            clonedDiv.style.overflow = 'visible'; // Ensure all content is visible
+            // Create a div to hold the content
+            const clonedDiv = document.createElement('div');
+            clonedDiv.style.width = 'auto';
+            clonedDiv.style.maxWidth = '800px'; // Prevent overly wide images
+            clonedDiv.style.height = 'auto';
+            clonedDiv.style.overflow = 'visible';
             clonedDiv.style.border = 'none';
             clonedDiv.style.margin = '0';
             clonedDiv.style.position = 'static';
-            clonedDiv.style.top = '0';
             clonedDiv.style.whiteSpace = 'pre-wrap';
-            clonedDiv.style.display = 'inline-block';
-            clonedDiv.style.lineHeight = editableDiv.style.lineHeight;
-            clonedDiv.style.fontSize = editableDiv.style.fontSize;
-            clonedDiv.style.fontWeight = editableDiv.style.fontWeight;
-            clonedDiv.style.color = editableDiv.style.color;
+            clonedDiv.style.lineHeight = '1.5';
+            clonedDiv.style.fontSize = `${fontSize}px`;
+            clonedDiv.style.fontWeight = fontWeight;
+            clonedDiv.style.color = textColor;
+            clonedDiv.style.fontFamily = '"Red Hat Display", sans-serif';
+            clonedDiv.style.letterSpacing = '0.5px';
+            clonedDiv.style.padding = '20px';
 
-            // Ensure all child elements inherit styles
-            const allElements = clonedDiv.querySelectorAll('*');
-            allElements.forEach(element => {
-                element.style.color = document.getElementById('imageTextColor').value;
-                element.style.fontSize = editableDiv.style.fontSize;
-                element.style.fontWeight = element.style.fontWeight || editableDiv.style.fontWeight;
-            });
+            // Process child nodes to preserve formatting and line breaks
+            function processNodes(nodes) {
+                nodes.forEach(node => {
+                    if (node.nodeType === Node.TEXT_NODE) {
+                        const text = node.textContent;
+                        if (text.trim()) {
+                            const span = document.createElement('span');
+                            span.style.color = textColor;
+                            span.style.fontWeight = fontWeight;
+                            span.style.fontSize = `${fontSize}px`;
+                            span.textContent = text;
+                            clonedDiv.appendChild(span);
+                        }
+                    } else if (node.nodeName === 'SPAN') {
+                        const span = document.createElement('span');
+                        span.style.color = textColor;
+                        span.style.fontWeight = node.style.fontWeight || fontWeight;
+                        span.style.fontSize = `${fontSize}px`;
+                        span.textContent = node.textContent;
+                        clonedDiv.appendChild(span);
+                    } else if (node.nodeName === 'BR') {
+                        clonedDiv.appendChild(document.createElement('br'));
+                    } else if (node.childNodes.length > 0) {
+                        processNodes(node.childNodes);
+                    }
+                });
+            }
+
+            processNodes(editableDiv.childNodes);
 
             wrapper.appendChild(clonedDiv);
 
@@ -315,7 +340,6 @@
                     } else if (node.nodeName === 'BR') {
                         textLines.push({ text: '', bold: false });
                     } else if (node.childNodes.length > 0) {
-                        // Recursively process child nodes
                         const childLines = processNodes(node.childNodes);
                         textLines.push(...childLines);
                     }
@@ -361,21 +385,6 @@
                 messageDiv.textContent = '';
             }, 3000);
         }
-
-        document.addEventListener("DOMContentLoaded", () => {
-            const customMenu = document.querySelector(".custom-menu");
-            document.addEventListener("contextmenu", (event) => {
-                event.preventDefault();
-                if (customMenu) {
-                    customMenu.style.display = "block";
-                    customMenu.style.top = `${event.pageY}px`;
-                    customMenu.style.left = `${event.pageX}px`;
-                }
-            });
-            document.addEventListener("click", () => {
-                if (customMenu) customMenu.style.display = "none";
-            });
-        });
     </script>
 </body>
 </html>
