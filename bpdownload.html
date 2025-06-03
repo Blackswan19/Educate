@@ -582,71 +582,42 @@
             // Get the actual width of the editable div
             const editableDivWidth = editableDiv.offsetWidth;
 
-            // Create a div to hold the content
-            const clonedDiv = document.createElement('div');
-            clonedDiv.style.width = `${editableDivWidth}px`; // Match the editable div's width
+            // Clone the editable div
+            const clonedDiv = editableDiv.cloneNode(true);
+            clonedDiv.style.width = `${editableDivWidth}px`;
             clonedDiv.style.height = 'auto';
             clonedDiv.style.overflow = 'visible';
             clonedDiv.style.border = 'none';
             clonedDiv.style.margin = '0';
             clonedDiv.style.position = 'static';
-            clonedDiv.style.whiteSpace = 'pre-wrap';
-            clonedDiv.style.lineHeight = '1.5';
-            clonedDiv.style.fontSize = `${fontSize}px`;
-            clonedDiv.style.fontWeight = fontWeight;
-            clonedDiv.style.color = textColor;
-            clonedDiv.style.fontFamily = '"Red Hat Display", sans-serif';
-            clonedDiv.style.letterSpacing = '0.5px';
+            clonedDiv.style.backgroundColor = 'transparent'; // Background is set on the wrapper
+            clonedDiv.style.borderRadius = '0';
             clonedDiv.style.padding = '20px';
 
-            // Process child nodes to preserve formatting and line breaks
-            function processNodes(nodes) {
-                nodes.forEach(node => {
-                    if (node.nodeType === Node.TEXT_NODE) {
-                        const text = node.textContent;
-                        if (text.trim()) {
-                            // Split text by newlines and create spans for each line
-                            const lines = text.split('\n');
-                            lines.forEach((line, index) => {
-                                if (line.trim()) {
-                                    const span = document.createElement('span');
-                                    span.style.color = textColor;
-                                    span.style.fontWeight = fontWeight;
-                                    span.style.fontSize = `${fontSize}px`;
-                                    span.textContent = line;
-                                    clonedDiv.appendChild(span);
-                                }
-                                // Add a <br> after each line except the last
-                                if (index < lines.length - 1) {
-                                    clonedDiv.appendChild(document.createElement('br'));
-                                }
-                            });
-                        }
-                    } else if (node.nodeName === 'SPAN') {
-                        // Split span text by newlines and create spans for each line
-                        const lines = node.textContent.split('\n');
-                        lines.forEach((line, index) => {
-                            if (line.trim()) {
-                                const span = document.createElement('span');
-                                span.style.color = textColor;
-                                span.style.fontWeight = node.style.fontWeight || fontWeight;
-                                span.style.fontSize = `${fontSize}px`;
-                                span.textContent = line;
-                                clonedDiv.appendChild(span);
-                            }
-                            if (index < lines.length - 1) {
-                                clonedDiv.appendChild(document.createElement('br'));
-                            }
-                        });
-                    } else if (node.nodeName === 'BR') {
-                        clonedDiv.appendChild(document.createElement('br'));
-                    } else if (node.childNodes.length > 0) {
-                        processNodes(node.childNodes);
-                    }
-                });
-            }
+            // Remove any contenteditable attributes or pseudo-elements
+            clonedDiv.removeAttribute('contenteditable');
+            clonedDiv.removeAttribute('data-placeholder');
 
-            processNodes(editableDiv.childNodes);
+            // Normalize line breaks (replace <div> with <br> for consistency)
+            const divs = clonedDiv.querySelectorAll('div');
+            divs.forEach(div => {
+                const br = document.createElement('br');
+                div.replaceWith(br, ...div.childNodes);
+            });
+
+            // Apply consistent styles to all child elements
+            const allElements = clonedDiv.querySelectorAll('*');
+            allElements.forEach(element => {
+                element.style.color = textColor;
+                element.style.fontSize = `${fontSize}px`;
+                element.style.fontFamily = '"Red Hat Display", sans-serif';
+                element.style.letterSpacing = '0.5px';
+                element.style.lineHeight = '1.5';
+                // Preserve font weight if set, otherwise use selected font weight
+                if (!element.style.fontWeight) {
+                    element.style.fontWeight = fontWeight;
+                }
+            });
 
             wrapper.appendChild(clonedDiv);
 
@@ -670,7 +641,7 @@
             // Calculate dimensions with extra padding
             const extraPadding = 80;
             const scrollHeight = clonedDiv.scrollHeight;
-            const textWidth = editableDivWidth + extraPadding; // Use the editable div's width
+            const textWidth = editableDivWidth + extraPadding;
             const textHeight = scrollHeight + extraPadding;
 
             // Set wrapper dimensions
