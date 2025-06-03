@@ -34,7 +34,7 @@
         // Function to get contrasting color based on background luminance
         function getContrastColor(hex) {
             const luminance = getLuminance(hex);
-            return luminance > 0.5 ? '#000000' : '#FFFFFF'; // Black for light backgrounds, white for dark
+            return luminance > 0.5 ? '#000000' : '#FFFFFF';
         }
 
         function newInput() {
@@ -95,10 +95,10 @@
             // Create temporary container
             const tempContainer = document.createElement('div');
             tempContainer.style.backgroundColor = backgroundColor;
-            tempContainer.style.padding = '10px 13px 10px 13px'; // Adjusted padding for balance
+            tempContainer.style.padding = '10px 13px 10px 13px';
             tempContainer.style.color = textColor;
             tempContainer.style.fontFamily = '"Red Hat Display", sans-serif';
-            tempContainer.style.fontSize = `${fontSize}px`;
+            tempContainer.style.fontSize = `${fontSize}px`; // Apply selected font size
             tempContainer.style.borderRadius = '0px';
             tempContainer.style.position = 'absolute';
             tempContainer.style.left = '-9999px';
@@ -111,6 +111,7 @@
             textContent.className = 'text-content';
             textContent.textContent = textarea.value;
             textContent.style.color = textColor;
+            textContent.style.fontSize = `${fontSize}px`; // Explicitly set font size
             textContent.style.flexGrow = '1';
             tempContainer.appendChild(textContent);
 
@@ -132,9 +133,9 @@
             // Append container to body
             document.body.appendChild(tempContainer);
 
-            // Calculate dimensions
-            const textWidth = Math.min(textContent.offsetWidth + 40, 800);
-            const textHeight = textContent.offsetHeight + 40;
+            // Calculate dimensions with extra padding for larger fonts
+            const textWidth = Math.min(textContent.offsetWidth + 40, 1000); // Increased max width for larger fonts
+            const textHeight = textContent.offsetHeight + 40 + parseInt(fontSize) * 0.5; // Extra padding for font size
             tempContainer.style.width = `${textWidth}px`;
             tempContainer.style.minHeight = `${textHeight}px`;
 
@@ -201,7 +202,7 @@
 
             // Function to add watermark
             function addWatermark() {
-                doc.setFontSize(4); // Match CSS watermark size
+                doc.setFontSize(8);
                 doc.setTextColor(watermarkR, watermarkG, watermarkB);
                 const watermarkText = 'Made in BsBookpad';
                 const watermarkX = 2;
