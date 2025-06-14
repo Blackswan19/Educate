@@ -7,8 +7,17 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
     />
-    <title>Data Entry Form</title>
+    <title>BsCourse | Take Course Form</title>
     <style>
+        * {
+  -webkit-tap-highlight-color: transparent;
+}
+body {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
       body {
         background-color: #e9ecef;
         font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -195,7 +204,7 @@
             <label class="radio">
               <input type="radio" name="like to take courses" value="Yes" required />
               Yes
-            </label>
+            </label><br>
             <label class="radio">
               <input type="radio" name="like to take courses" value="No" /> No
             </label>
@@ -383,6 +392,27 @@
           }, 4000);
         }
       });
+    </script>
+    <script>
+        
+        document.addEventListener("DOMContentLoaded", () => {
+            const customMenu = document.querySelector(".custom-menu");
+
+            document.addEventListener("contextmenu", (event) => {
+                event.preventDefault();
+                if (customMenu) {
+                    customMenu.style.display = "block";
+                    customMenu.style.top = `${event.pageY}px`;
+                    customMenu.style.left = `${event.pageX}px`;
+                }
+            });
+
+            document.addEventListener("click", () => {
+                if (customMenu) {
+                    customMenu.style.display = "none";
+                }
+            });
+        });
     </script>
   </body>
 </html>
