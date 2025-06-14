@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
+    />
+    <title>Data Entry Form</title>
+    <style>
+      body {
+        background-color: #e9ecef;
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      }
+      .hero.is-blue {
+        background: linear-gradient(135deg, #0051a1, #003087);
+      }
+      .hero-body .title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #ffffff;
+        text-align: center;
+      }
+      .form-container {
+        background: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        padding: 2.5rem;
+        max-width: 650px;
+        margin: 2rem auto;
+      }
+      .field {
+        margin-bottom: 1.75rem;
+      }
+      .label {
+        font-weight: 600;
+        color: #003087;
+        font-size: 1.1rem;
+      }
+      .input,
+      .button {
+        border-radius: 8px;
+        transition: all 0.3s ease;
+      }
+      .input {
+        border: 1px solid #b0c4de;
+        color: #003087;
+      }
+      .input:focus {
+        border-color: #0051a1;
+        box-shadow: 0 0 0 0.15em rgba(0, 81, 161, 0.3);
+      }
+      .button.is-blue {
+        background-color: #0051a1;
+        color: #ffffff;
+      }
+      .button.is-blue:hover {
+        background-color: #003087;
+      }
+      .button.is-secondary {
+        background-color: #4682b4;
+        color: #ffffff;
+      }
+      .button.is-secondary:hover {
+        background-color: #3a6b9a;
+      }
+      .button.is-cancel {
+        background-color: #d3e0f0;
+        color: #003087;
+        border: 1px solid #b0c4de;
+      }
+      .button.is-cancel:hover {
+        background-color: #b0c4de;
+      }
+      #message {
+        transition: opacity 0.3s ease-in-out;
+        border: 1px solid transparent;
+      }
+      .message-success {
+        background-color: #e6f0fa;
+        color: #003087;
+        border-color: #b0c4de;
+      }
+      .message-error {
+        background-color: #f8e1e9;
+        color: #a10035;
+        border-color: #e6b8c6;
+      }
+      .message-submitting {
+        background-color: #d3e0f0;
+        color: #003087;
+        border-color: #b0c4de;
+      }
+      .subject-field {
+        margin-bottom: 0.75rem;
+      }
+      .help.is-danger {
+        color: #a10035;
+      }
+      @media (max-width: 768px) {
+        .form-container {
+          padding: 1.75rem;
+          margin: 1rem;
+        }
+        .hero-body .title {
+          font-size: 2rem;
+        }
+        .field {
+          margin-bottom: 1.25rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <section class="hero is-blue is-bold">
+      <div class="hero-body">
+        <div class="container">
+          <h1 class="title">Take Course Form</h1>
+        </div>
+      </div>
+    </section>
+    <div class="form-container">
+      <form id="form">
+        <div class="field">
+          <label class="label">Name</label>
+          <div class="control">
+            <input
+              class="input"
+              type="text"
+              placeholder="Your Name"
+              name="Name"
+              required
+            />
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Phone Number</label>
+          <div class="control">
+            <input
+              class="input"
+              type="tel"
+              placeholder="Your Phone Number"
+              name="Phone number"
+              pattern="[0-9]{10}"
+              title="Please enter a 10-digit phone number"
+              required
+            />
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Password</label>
+          <div class="control">
+            <input
+              class="input"
+              type="password"
+              placeholder="Your Password"
+              name="password"
+              required
+            />
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Subjects</label>
+          <div class="control" id="subjects-container">
+            <div class="field has-addons subject-field">
+              <div class="control is-expanded">
+                <input
+                  class="input"
+                  type="text"
+                  name="Subjects"
+                  placeholder="Enter a subject (e.g., Math)"
+                  required
+                />
+              </div>
+              <div class="control">
+                <button
+                  type="button"
+                  class="button is-secondary"
+                  id="add-subject"
+                  onclick="addSubjectInput()"
+                >
+                  +
+                </button>
+              </div>
+            </div>
+          </div>
+          <p class="help is-danger" id="subjects-error" style="display: none;">
+            Please enter at least one valid subject.
+          </p>
+        </div>
+        <div class="field">
+          <label class="label">Like to Take Courses</label>
+          <div class="control">
+            <label class="radio">
+              <input type="radio" name="like to take courses" value="Yes" required />
+              Yes
+            </label>
+            <label class="radio">
+              <input type="radio" name="like to take courses" value="No" /> No
+            </label>
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Total Amount</label>
+          <div class="control">
+            <input
+              class="input"
+              type="number"
+              placeholder="Total Amount"
+              name="total amount its displayed"
+              step="0.01"
+              min="0"
+              required
+            />
+          </div>
+        </div>
+        <div class="field is-grouped is-grouped-right">
+          <div class="control">
+            <button class="button is-blue" type="submit" id="submit-button">
+              Sign Up
+            </button>
+          </div>
+          <div class="control">
+            <button
+              class="button is-cancel"
+              type="button"
+              onclick="resetForm()"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </form>
+      <div
+        id="message"
+        style="
+          display: none;
+          margin-top: 1.5rem;
+          padding: 1rem;
+          border-radius: 8px;
+          font-weight: 600;
+          text-align: center;
+        "
+      ></div>
+    </div>
+
+    <script>
+      const form = document.getElementById("form");
+      const submitButton = document.getElementById("submit-button");
+      const addSubjectButton = document.getElementById("add-subject");
+      const messageDiv = document.getElementById("message");
+      const subjectsError = document.getElementById("subjects-error");
+      const subjectsContainer = document.getElementById("subjects-container");
+      const maxSubjects = 10;
+
+      function addSubjectInput() {
+        const subjectCount = subjectsContainer.children.length;
+        if (subjectCount >= maxSubjects) {
+          messageDiv.textContent = `Maximum ${maxSubjects} subjects allowed.`;
+          messageDiv.className = "message-error";
+          messageDiv.style.display = "block";
+          setTimeout(() => {
+            messageDiv.textContent = "";
+            messageDiv.style.display = "none";
+            messageDiv.className = "";
+          }, 3000);
+          return;
+        }
+
+        const newField = document.createElement("div");
+        newField.className = "field has-addons subject-field";
+        newField.innerHTML = `
+          <div class="control is-expanded">
+            <input
+              class="input"
+              type="text"
+              name="Subjects"
+              placeholder="Enter a subject (e.g., Science)"
+            />
+          </div>
+          <div class="control">
+            <button
+              type="button"
+              class="button is-cancel"
+              onclick="this.parentElement.parentElement.remove()"
+            >
+              -
+            </button>
+          </div>
+        `;
+        subjectsContainer.appendChild(newField);
+      }
+
+      function resetForm() {
+        form.reset();
+        while (subjectsContainer.children.length > 1) {
+          subjectsContainer.removeChild(subjectsContainer.lastChild);
+        }
+        const firstSubjectInput = subjectsContainer.querySelector('input[name="Subjects"]');
+        firstSubjectInput.setAttribute("required", "required");
+        messageDiv.style.display = "none";
+        subjectsError.style.display = "none";
+      }
+
+      form.addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        const subjects = form.querySelectorAll('input[name="Subjects"]');
+        const validSubjects = Array.from(subjects)
+          .map((input) => input.value.trim())
+          .filter((value) => value !== "");
+
+        if (validSubjects.length === 0) {
+          subjectsError.textContent = "Please enter at least one valid subject.";
+          subjectsError.style.display = "block";
+          return;
+        } else {
+          subjectsError.style.display = "none";
+        }
+
+        messageDiv.textContent = "Submitting...";
+        messageDiv.style.display = "block";
+        messageDiv.className = "message-submitting";
+        submitButton.disabled = true;
+        submitButton.classList.add("is-loading");
+
+        try {
+          const formData = new FormData(this);
+          const formDataObj = {};
+
+          for (let [key, value] of formData.entries()) {
+            if (key === "Subjects") {
+              if (!formDataObj[key]) formDataObj[key] = [];
+              if (value.trim() !== "") formDataObj[key].push(value);
+            } else {
+              formDataObj[key] = value;
+            }
+          }
+
+          // Option 1: Send subjects as an array (current behavior)
+          // formDataObj["Subjects"] = validSubjects;
+
+          // Option 2: Send subjects as a comma-separated string (uncomment if server expects this)
+          formDataObj["Subjects"] = validSubjects.join(",");
+
+          console.log("Submitting data:", formDataObj);
+
+          const scriptURL =
+            "https://script.google.com/macros/s/AKfycbxc3CVGLUxOLvFzO7a6zgrI2bBL8o35n1ptrDEeo837pDyBsFp-GyudreQrEYgBEfUGFQ/exec";
+
+          const response = await fetch(scriptURL, {
+            redirect: "follow",
+            method: "POST",
+            body: JSON.stringify(formDataObj),
+            headers: {
+              "Content-Type": "text/plain;charset=utf-8",
+            },
+          });
+
+          const data = await response.json();
+
+          if (data.status === "success") {
+            messageDiv.textContent =
+              data.message || "Data submitted successfully!";
+            messageDiv.className = "message-success";
+            resetForm();
+          } else {
+            throw new Error(data.message || "Submission failed");
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          messageDiv.textContent = "Error: " + error.message;
+          messageDiv.className = "message-error";
+        } finally {
+          submitButton.disabled = false;
+          submitButton.classList.remove("is-loading");
+
+          setTimeout(() => {
+            messageDiv.textContent = "";
+            messageDiv.style.display = "none";
+            messageDiv.className = "";
+          }, 4000);
+        }
+      });
+    </script>
+  </body>
+</html>
