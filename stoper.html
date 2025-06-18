@@ -56,7 +56,7 @@
             margin: 0;
             font-weight: 100;
         }
-        .custom-menu {
+         .custom-menu {
             display: none;
             position: absolute;    background: #282828;
     border: none;
@@ -79,7 +79,7 @@
             border-radius: 3px;
         }
         .custom-menu div:hover {
-            background: #f0f0f052;
+            background: #f0f0f01d;
         }
     </style>
 </head>
@@ -147,8 +147,8 @@
                 customMenu.classList.remove("active");
             });
 
-            // Prevent default context menu on input
-            userLink.addEventListener("contextmenu", (event) => {
+            // Prevent right-click everywhere
+            document.addEventListener("contextmenu", (event) => {
                 event.preventDefault();
             });
         });
