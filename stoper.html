@@ -1,1 +1,49 @@
-<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>BsAdstoper</title> <link rel="icon" type="image/x-icon" href="https://i.ibb.co/DgWHFgR/roralogo.png"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald|Noto+Sans"> <link rel="stylesheet" href="css.css"> <link rel="stylesheet" href="css2.css"> <style> * { -webkit-tap-highlight-color: transparent; } body { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; letter-spacing: 0.8px; } input:focus { -webkit-user-select: text; -moz-user-select: text; -ms-user-select: text; user-select: text; } .image-popup { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); z-index: 1000; justify-content: center; align-items: center; } .image-popup img { object-fit: contain; width: 90%; max-width: 900px; } .image-popup .close-popup { position: absolute; top: 5px; right: 5px; font-size: 30px; color: white; cursor: pointer; background: none; border: none; width: 0%; margin: 0px; font-weight: 100; } </style> </head> <body> <img id="menuIcon" src="https://twice.jype.com/Content/Pc/images/common/menu.png" alt="Menu Icon" width="30" height="30"> <div id="menu"><script src="functionstop.js"></script> <a href="https://blackswan19.github.io/bscrop/watchin/mylist.html">Save the video?</a><br><br> <a href="addhome.html">Add to home screen?</a><br><br> <a href="savelink.html">Save the link?</a><br><br> <a href="howtodo.mp4">Help?</a> </div> <script> document.getElementById("menuIcon").addEventListener("click", function() { var menu = document.getElementById("menu"); menu.style.display = menu.style.display === "block" ? "none" : "block"; }); </script> <script src="noright.js"></script> <div class="side-section"> <a id="showButton" onclick="showRecommendations()" style="text-decoration: none;"> <i class="fa-solid fa-clock-rotate-left"></i> History</a> </div> <div class="container"> <h2>BsAdstoper</h2> <input type="text" id="userLink" placeholder="Paste any youtube link here..." autocomplete="off"> <br> <button onclick="modifyLink()">Submit</button> <div id="result"></div> </div> <div class="recommendation-section" id="recommendationSection"> <button class="close-button" onclick="closeRecommendations()">×</button> <h3 style="font-size: 30px;"> History</h3> <ul class="video-list" id="videoList"></ul> <p class="small-note">NOTE: Unpinned videos in "History" will disappear after 24 hours. Pin your favorites to keep them permanently!</p> </div> <div class="notification" id="notificationBox">Link copied to clipboard!</div> <div class="image-popup" id="imagePopup"> <button class="close-popup" onclick="closeImagePopup()">×</button> <img id="popupImage" src="" alt="Full Screen Thumbnail"> </div> <p>Note: Videos have to be in public to play.</p> </body> </html>
+<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>BsAdstoper</title> <link rel="icon" type="image/x-icon" href="https://i.ibb.co/DgWHFgR/roralogo.png"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald|Noto+Sans"> <link rel="stylesheet" href="css.css"> <link rel="stylesheet" href="css2.css"> <style> * { -webkit-tap-highlight-color: transparent; } body { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; letter-spacing: 0.8px; } input:focus { -webkit-user-select: text; -moz-user-select: text; -ms-user-select: text; user-select: text; } .image-popup { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); z-index: 1000; justify-content: center; align-items: center; } .image-popup img { object-fit: contain; width: 90%; max-width: 900px; } .image-popup .close-popup { position: absolute; top: 5px; right: 5px; font-size: 30px; color: white; cursor: pointer; background: none; border: none; width: 0%; margin: 0px; font-weight: 100; } </style> </head> <body> <img id="menuIcon" src="https://twice.jype.com/Content/Pc/images/common/menu.png" alt="Menu Icon" width="30" height="30"> <div id="menu"> <script src="functionstop.js"></script> <a href="https://blackswan19.github.io/bscrop/watchin/mylist.html">Save the video?</a><br><br> <a href="addhome.html">Add to home screen?</a><br><br> <a href="savelink.html">Save the link?</a><br><br> <a href="howtodo.mp4">Help?</a> </div> <script> document.getElementById("menuIcon").addEventListener("click", function() { var menu = document.getElementById("menu"); menu.style.display = menu.style.display === "block" ? "none" : "block"; }); </script> <script src="noright.js"></script> <div class="side-section"> <a id="showButton" onclick="showRecommendations()" style="text-decoration: none;"> <i class="fa-solid fa-clock-rotate-left"></i> History</a> </div> <div class="container"> <h2>BsAdstoper</h2> <input type="text" id="userLink" placeholder="Paste any youtube link here..." autocomplete="off"> <br> <button onclick="modifyLink()">Submit</button> <div id="result"></div> </div> <div class="recommendation-section" id="recommendationSection"> <button class="close-button" onclick="closeRecommendations()">×</button> <h3 style="font-size: 30px;"> History</h3> <ul class="video-list" id="videoList"></ul> <p class="small-note">NOTE: Unpinned videos in "History" will disappear after 24 hours. Pin your favorites to keep them permanently!</p> </div> <div class="notification" id="notificationBox">Link copied to clipboard!</div> <div class="image-popup" id="imagePopup"> <button class="close-popup" onclick="closeImagePopup()">×</button> <img id="popupImage" src="" alt="Full Screen Thumbnail"> </div> <p>Note: Videos have to be in public to play.</p>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const customMenu = document.querySelector(".custom-menu");
+            const userLinkInput = document.getElementById("userLink");
+
+            // Allow default context menu for the input field to enable paste
+            document.addEventListener("contextmenu", (event) => {
+                if (event.target.id === "userLink") {
+                    // Allow default context menu for the input field
+                    return;
+                }
+                event.preventDefault();
+                if (customMenu) {
+                    customMenu.style.display = "block";
+                    customMenu.style.top = `${event.pageY}px`;
+                    customMenu.style.left = `${event.pageX}px`;
+                }
+            });
+
+            // Hide custom menu on click
+            document.addEventListener("click", () => {
+                if (customMenu) {
+                    customMenu.style.display = "none";
+                }
+            });
+
+            // Optional: Handle paste event to process the pasted link
+            userLinkInput.addEventListener("paste", (event) => {
+                const pastedText = (event.clipboardData || window.clipboardData).getData("text");
+                // Optionally validate or process the pasted link
+                if (pastedText.includes("youtube.com") || pastedText.includes("youtu.be")) {
+                    console.log("Valid YouTube link pasted:", pastedText);
+                    // You can call modifyLink() or other processing here if needed
+                } else {
+                    console.log("Invalid link pasted:", pastedText);
+                    // Optionally show a notification or alert
+                    const notificationBox = document.getElementById("notificationBox");
+                    notificationBox.textContent = "Please paste a valid YouTube link!";
+                    notificationBox.style.display = "block";
+                    setTimeout(() => {
+                        notificationBox.style.display = "none";
+                    }, 3000);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
