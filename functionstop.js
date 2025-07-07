@@ -18,15 +18,22 @@
         }
 
         function getVideoId(url) {
-            let videoId = '';
-            if (url.includes('youtu.be')) {
-                videoId = url.split('youtu.be/')[1].split('?')[0];
-            } else if (url.includes('youtube.com') || url.includes('yout-ube.com')) {
-                const urlParams = new URLSearchParams(url.split('?')[1] || '');
-                videoId = urlParams.get('v') || '';
-            }
-            return videoId;
+    let videoId = '';
+    if (url.includes('youtu.be')) {
+        videoId = url.split('youtu.be/')[1].split('?')[0];
+    } else if (url.includes('youtube.com') || url.includes('yout-ube.com')) {
+        if (url.includes('/live/')) {
+            // Handle YouTube live URLs like https://www.youtube.com/live/VIDEO_ID
+            const parts = url.split('/live/')[1];
+            videoId = parts ? parts.split('?')[0] : '';
+        } else {
+            // Handle standard YouTube URLs like https://www.youtube.com/watch?v=VIDEO_ID
+            const urlParams = new URLSearchParams(url.split('?')[1] || '');
+            videoId = urlParams.get('v') || '';
         }
+    }
+    return videoId;
+}
 
         function getThumbnailUrl(videoId) {
             return videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : 'adstptumb.png';
