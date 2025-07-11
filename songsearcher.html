@@ -1,85 +1,103 @@
-<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>BSongsearch</title> <link rel="icon" type="image/x-icon" href="https://i.ibb.co/gW8Py0B/BS.png"> <style> @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Orbitron:wght@400..900&family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&family=Strait&display=swap'); * { color: #ededed; font-family: "Red Hat Display", sans-serif; letter-spacing: 0.5px; box-sizing: border-box; } a { text-decoration: none; } body { font-family: 'Roboto', sans-serif; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; background-color: #000000; color: #d7d7d7; text-align: center; } .container { display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; } .search-box { display: flex; justify-content: center; align-items: center; flex-direction: column; width: 100%; } .input-container { display: flex; align-items: center; position: relative; width: 100%; max-width: 550px; } input[type="text"] { flex: 1; padding: 14px 40px 14px 40px; font-size: 15px; background-color: #1d1d1d; color: #d7d7d7; border: 1px solid #333333; border-radius: 24px; outline: none; transition: box-shadow 0.3s ease; } input[type="text"]:focus { border: 1px solid #525252; color: #ffffff; background-color: #3c3c3c; } .clear-icon { position: absolute; right: 20px; cursor: pointer; font-size: 30px; color: #d7d7d7; visibility: hidden; transition: color 0.3s ease; } .clear-icon:hover { color: white; } select { width: 115px; padding: 10px 5px; margin: 15px 0; font-size: 15px; background-color: #1d1d1d; color: #d7d7d7; border: 1px solid #333333; border-radius: 5px; outline: none; transition: box-shadow 0.3s ease; } select:hover { color: #ffffff; background-color: #3c3c3c; } .buttons { display: flex; justify-content: center; margin-top: 15px; } .buttons input[type="button"] { background-color: #1d1d1d; color: #d7d7d7; border: 1px solid #333333; padding: 10px 25px; font-size: 14px; margin: 15px; cursor: pointer; border-radius: 5px; transition: background-color 0.3s ease; } .buttons input[type="button"]:hover { background-color: #3c3c3c; color: #ffffff; } .footer { color: #e8eaed; position: fixed; bottom: 10px; font-size: 12px; } /* Logo Style */ .logo { font-size: 33px; font-weight: 690; color: #0044ff; margin-bottom: 20px; letter-spacing: 0.5px; } ::-webkit-scrollbar{ background: none; } /* Mobile responsiveness */ @media (max-width: 600px) { .input-container { width: 97%; } input[type="text"] { padding: 13px 40px 13px 20px; } .clear-icon { font-size: 18px; } .buttons input[type="button"] { font-size: 14px; } select#languageSelect { padding: 5px 10px; text-align: justify; } .logo { font-size: 45px; margin-bottom: 2px; } .footer { font-size: 10px; } } .suggestions { position: absolute; top: 60px; width: 100%; max-width: 550px; background-color: #1d1d1d; border: 1px solid #333333; border-radius: 10px; max-height: 200px; overflow-y: auto; z-index: 10; } .suggestion-item { padding: 10px 20px; cursor: pointer; color: #a2a2a2; font-size: 14px; transition: background-color 0.2s ease; text-transform: capitalize; } .suggestion-item:hover { font-weight: 900; color: rgb(0, 98, 255); text-decoration: underline; } </style> </head> <body> <div class="s" style="position: fixed; top: 14px; text-align: end; right: 16px;"> <a href="https://blackswan19.github.io/Educate/stoper.html" style="color: white;font-size: 14px;">BsAdstoper?</a><br><br> </div> <div class="container"> <div class="logo">BSongsearch</div> <div class="search-box"> <div class="input-container"> <input type="text" id="searchQuery" placeholder="Enter the song name here..." onkeydown="checkEnter(event)" autocomplete="off" oninput="toggleClearIcon(); showSuggestions()"> <span class="clear-icon" onclick="clearInput()" id="clearIcon">×</span> <!-- Clear icon --> <div class="suggestions" id="suggestionsBox" style="display: none;"></div> </div> </div> <div class="buttons"> <input type="button" value="Search" onclick="performSongSearch()"> <select id="languageSelect"> <option value="all" selected>All</option> <option value="telugu">Telugu</option> <option value="hindi">Hindi</option> <option value="korean">Korean</option> <option value="english">English</option> <option value="japanese">Japanese</option> <option value="chinese">Chinese</option> </select> </div> <script src="noright.js"></script> <div class="footer"> #Powered by <a href="https://blackswan19.github.io/bscrop/formbs.html" style="text-decoration: none;">@FromBs</a> </div> </div>
-    <script>
-        // Initialize an array to store search history
-        let searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];
+<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>BSongsearch</title> <link rel="icon" type="image/x-icon" href="https://i.ibb.co/gW8Py0B/BS.png"> <style> @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Orbitron:wght@400..900&family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&family=Strait&display=swap'); * { color: #ededed; font-family: "Red Hat Display", sans-serif; letter-spacing: 0.5px; box-sizing: border-box; } * { -webkit-tap-highlight-color: transparent; } body { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; } body { font-family: 'Arial', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; background-color: #121212; color: #ffffff; font-size: 16px; } .container { text-align: center; } .logo { font-size: 30px; font-weight: bold; color: #0045ff; margin-bottom: 1rem; } input[type="text"] { padding: 10px; width: 85%; margin: 0.5rem auto; border: 1px solid #333; border-radius: 100px; background-color: #282828; color: #ffffff; font-size: 20px; outline: none; box-sizing: border-box; text-align: center; } input[type="text"]::placeholder { color: #b3b3b3; } input[type="text"]:focus { border: solid 2px white; } .options { display: flex; justify-content: center; gap: 0.75rem; margin: 0.75rem 0; flex-wrap: wrap; } .option-btn { padding: 8px 20px; background-color: #ffffff11; color: #ffffff; border: none; border-radius: 40px; cursor: pointer; font-size: 0.9rem; font-weight: 400; transition: background-color 0.2s; } .option-btn:hover { background-color: #ffffff2b; } .option-btn.selected { background-color: #0045ff; border: 2px solid #0045ff; } .add-btn { background-color: #ffffff; color: #000000; } .add-btn:hover { background-color: #ffffffb3; } .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7); justify-content: center; align-items: center; z-index: 1000; overflow: auto; } .modal-content { background-color: #1c1c1c; padding: 1.5rem; border-radius: 12px; width: 90%; max-width: 400px; text-align: center; margin: 1rem; } .modal-content h2 { font-size: 1.2rem; margin: 0 0 1rem; } .modal-content input { width: 100%; margin: 0.5rem 0; padding: 0.75rem; border: 1px solid #333; border-radius: 8px; background-color: #282828; color: #ffffff; font-size: 1rem; box-sizing: border-box; } .modal-content input::placeholder { color: #b3b3b3; } .modal-content button { padding: 0.75rem 1.25rem; margin: 0.5rem; border: none; border-radius: 20px; cursor: pointer; font-size: 0.9rem; font-weight: bold; text-transform: uppercase; min-height: 44px; } .modal-content .add-site-btn { background-color: #ffffff; color: #000000; } .modal-content .add-site-btn:hover { background-color: #1C86EE; } .modal-content .cancel-btn { background-color: #ff4d4d; color: #ffffff; } .modal-content .cancel-btn:hover { background-color: #cc0000; } @media (max-width: 600px) { body { font-size: 14px; } .container { padding: 1rem; margin: 0.5rem; } .logo { font-size: 2rem; } input[type="text"] { width: 100%; } .option-btn, .modal-content button { padding: 0.6rem 1rem; font-size: 0.8rem; min-height: 40px; } .options { gap: 0.5rem; } .modal-content { padding: 1rem; } .modal-content h2 { font-size: 1rem; } .modal-content input { padding: 0.6rem; font-size: 0.9rem; } } </style> </head> <body> <div class="container"> <div class="logo">BSongsearch</div> <input type="text" id="searchInput" placeholder="Enter search query"> <div class="options" id="siteOptions"> <button class="option-btn" data-url="https://www.google.com/search?q=">Chrome</button> <button class="option-btn" data-url="https://www.youtube.com/results?search_query=">YouTube</button> <button class="option-btn" data-url="https://music.youtube.com/search?q=">YTMusic</button> <button class="option-btn" data-url="https://open.spotify.com/search/">Spotify</button> <button class="option-btn" data-url="https://music.apple.com/us/search?term=">Apple Music</button> <button class="add-btn option-btn" onclick="toggleAddSiteModal()">Add</button> </div> </div> <div id="addSiteModal" class="modal"> <div class="modal-content"> <h2>Add New Site</h2> <input type="text" id="newSiteName" placeholder="Site Name"> <input type="text" id="newSiteUrl" placeholder="Search URL (e.g., https://example.com/search?q=)"> <button class="add-site-btn" onclick="addNewSite()">Add Site</button> <button class="cancel-btn" onclick="toggleAddSiteModal()">Cancel</button> </div> </div>
+<script>
+        let selectedSite = 'https://www.google.com/search?q='; // Default to Chrome
+        let selectedButton = document.querySelector('.option-btn[data-url="https://www.google.com/search?q="]');
+        selectedButton.classList.add('selected');
 
-        // Function to display suggestions based on search history
-        function showSuggestions() {
-            const query = document.getElementById('searchQuery').value.toLowerCase();
-            const suggestionsBox = document.getElementById('suggestionsBox');
-            suggestionsBox.innerHTML = ''; // Clear previous suggestions
-
-            if (query) {
-                const filteredSuggestions = searchHistory.filter(search =>
-                    search.toLowerCase().includes(query)
-                );
-
-                // Populate suggestions box
-                filteredSuggestions.forEach(search => {
-                    const suggestionItem = document.createElement('div');
-                    suggestionItem.classList.add('suggestion-item');
-                    suggestionItem.innerText = search;
-                    suggestionItem.onclick = () => selectSuggestion(search);
-                    suggestionsBox.appendChild(suggestionItem);
-                });
-
-                suggestionsBox.style.display = filteredSuggestions.length > 0 ? 'block' : 'none';
-            } else {
-                suggestionsBox.style.display = 'none';
-            }
-        }
-
-        // Function to handle suggestion selection
-        function selectSuggestion(search) {
-            document.getElementById('searchQuery').value = search;
-            document.getElementById('suggestionsBox').style.display = 'none';
-            toggleClearIcon();
-        }
-
-        // Hide suggestions when clicking outside
-        document.addEventListener('click', function(event) {
-            const suggestionsBox = document.getElementById('suggestionsBox');
-            if (!event.target.closest('.input-container')) {
-                suggestionsBox.style.display = 'none';
-            }
+        // Load saved sites from localStorage
+        const siteOptions = document.getElementById('siteOptions');
+        const savedSites = JSON.parse(localStorage.getItem('customSites')) || [];
+        savedSites.forEach(site => {
+            const button = document.createElement('button');
+            button.className = 'option-btn';
+            button.dataset.url = site.url;
+            button.textContent = site.name;
+            button.onclick = () => selectSite(button, site.url);
+            siteOptions.insertBefore(button, siteOptions.lastElementChild);
         });
 
-        // Modified search function to store the input
-        function performSongSearch() {
-            var query = document.getElementById('searchQuery').value;
-            var language = document.getElementById('languageSelect').value;
-            if (query) {
-                // Add to search history if not already present
-                if (!searchHistory.includes(query)) {
-                    searchHistory.unshift(query); // Add to beginning of array
-                    if (searchHistory.length > 10) { // Limit to 10 recent searches
-                        searchHistory.pop();
-                    }
-                    localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
-                }
-                
-                var searchUrl = "https://www.google.com/search?q=" + encodeURIComponent("i want a song called " + query + ", display all " + language + " songs with " + query + " title name ");
+        // Select a site and trigger search if query exists
+        function selectSite(button, url) {
+            document.querySelectorAll('.option-btn').forEach(btn => btn.classList.remove('selected'));
+            button.classList.add('selected');
+            selectedSite = url;
+            performSearch(); // Trigger search immediately
+        }
+
+        // Show/hide the add site modal
+        function toggleAddSiteModal() {
+            const modal = document.getElementById('addSiteModal');
+            modal.style.display = modal.style.display === 'none' ? 'flex' : 'none';
+        }
+
+        // Perform search when a site is selected
+        function performSearch() {
+            const query = document.getElementById('searchInput').value.trim();
+            if (selectedSite && query) {
+                const searchUrl = selectedSite + encodeURIComponent(query);
                 window.open(searchUrl, '_blank');
             }
         }
 
-        function checkEnter(event) {
-            if (event.key === "Enter") {
-                performSongSearch();
+        // Add event listeners to site buttons
+        document.querySelectorAll('.option-btn[data-url]').forEach(button => {
+            button.onclick = () => selectSite(button, button.dataset.url);
+        });
+
+        function addNewSite() {
+            const siteName = document.getElementById('newSiteName').value.trim();
+            const siteUrl = document.getElementById('newSiteUrl').value.trim();
+
+            if (siteName && siteUrl) {
+                // Validate URL format
+                try {
+                    new URL(siteUrl);
+                    const button = document.createElement('button');
+                    button.className = 'option-btn';
+                    button.dataset.url = siteUrl;
+                    button.textContent = siteName;
+                    button.onclick = () => selectSite(button, siteUrl);
+                    siteOptions.insertBefore(button, siteOptions.lastElementChild);
+
+                    // Save to localStorage
+                    savedSites.push({ name: siteName, url: siteUrl });
+                    localStorage.setItem('customSites', JSON.stringify(savedSites));
+
+                    // Reset form and hide modal
+                    document.getElementById('newSiteName').value = '';
+                    document.getElementById('newSiteUrl').value = '';
+                    toggleAddSiteModal();
+
+                    // Select the new site
+                    selectSite(button, siteUrl);
+                } catch (e) {
+                    alert('Please enter a valid URL.');
+                }
+            } else {
+                alert('Please enter both a site name and a valid search URL.');
             }
         }
+    </script>
+    <script>
+        
+        document.addEventListener("DOMContentLoaded", () => {
+            const customMenu = document.querySelector(".custom-menu");
 
-        function clearInput() {
-            document.getElementById('searchQuery').value = '';
-            toggleClearIcon();
-            document.getElementById('suggestionsBox').style.display = 'none';
-        }
+            document.addEventListener("contextmenu", (event) => {
+                event.preventDefault();
+                if (customMenu) {
+                    customMenu.style.display = "block";
+                    customMenu.style.top = `${event.pageY}px`;
+                    customMenu.style.left = `${event.pageX}px`;
+                }
+            });
 
-        function toggleClearIcon() {
-            var input = document.getElementById('searchQuery');
-            var clearIcon = document.getElementById('clearIcon');
-            clearIcon.style.visibility = input.value ? 'visible' : 'hidden';
-        }
+            document.addEventListener("click", () => {
+                if (customMenu) {
+                    customMenu.style.display = "none";
+                }
+            });
+        });
     </script>
 </body>
 </html>
