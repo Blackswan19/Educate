@@ -624,55 +624,45 @@
             wrapper.style.position = 'absolute';
             wrapper.style.left = '-9999px';
             wrapper.style.backgroundColor = backgroundColor;
-            wrapper.style.padding = '40px';
+            wrapper.style.padding = '20px';
             wrapper.style.boxSizing = 'border-box';
             wrapper.style.fontFamily = '"Red Hat Display", sans-serif';
             wrapper.style.letterSpacing = '0.5px';
             wrapper.style.lineHeight = '1.5';
             wrapper.style.whiteSpace = 'pre-wrap';
 
-            // Create a new div for the text content
-            const textDiv = document.createElement('div');
-            textDiv.style.fontSize = fontSize;
-            textDiv.style.fontWeight = fontWeight;
-            textDiv.style.color = textColor;
-            textDiv.style.maxWidth = '800px';
-            textDiv.style.overflow = 'visible';
-            textDiv.style.border = 'none';
-            textDiv.style.margin = '0';
-            textDiv.style.padding = '20px';
-            textDiv.style.backgroundColor = backgroundColor;
+            // Clone the editable div
+            const clonedDiv = editableDiv.cloneNode(true);
+            clonedDiv.style.width = editableDiv.offsetWidth + 'px';
+            clonedDiv.style.height = 'auto';
+            clonedDiv.style.maxWidth = '800px';
+            clonedDiv.style.overflow = 'visible';
+            clonedDiv.style.border = 'none';
+            clonedDiv.style.margin = '0';
+            clonedDiv.style.padding = '20px';
+            clonedDiv.style.backgroundColor = backgroundColor;
+            clonedDiv.style.fontSize = fontSize;
+            clonedDiv.style.fontWeight = fontWeight;
+            clonedDiv.style.color = textColor;
+            clonedDiv.style.position = 'static';
+            clonedDiv.removeAttribute('contenteditable'); // Remove contenteditable to avoid artifacts
+            clonedDiv.style.overflowY = 'visible';
 
-            // Process the content to preserve formatting
-            function processNodes(nodes) {
-                let html = '';
-                nodes.forEach(node => {
-                    if (node.nodeType === Node.TEXT_NODE) {
-                        const text = node.textContent;
-                        if (text.trim()) {
-                            html += `<span style="color: ${textColor}; font-weight: ${fontWeight}; font-size: ${fontSize};">${text}</span>`;
-                        }
-                    } else if (node.nodeName === 'SPAN') {
-                        const nodeFontWeight = node.style.fontWeight || fontWeight;
-                        const nodeColor = node.style.color || textColor;
-                        const lines = node.textContent.split('\n');
-                        lines.forEach(line => {
-                            if (line.trim()) {
-                                html += `<span style="color: ${nodeColor}; font-weight: ${nodeFontWeight}; font-size: ${fontSize};">${line}</span>`;
-                            }
-                            html += '<br>';
-                        });
-                    } else if (node.nodeName === 'BR') {
-                        html += '<br>';
-                    } else if (node.childNodes.length > 0) {
-                        html += processNodes(node.childNodes);
-                    }
-                });
-                return html;
-            }
+            // Remove pseudo-element placeholder
+            clonedDiv.style.setProperty('::before', 'none');
 
-            textDiv.innerHTML = processNodes(editableDiv.childNodes);
-            wrapper.appendChild(textDiv);
+            // Ensure all child elements inherit styles
+            const allElements = clonedDiv.querySelectorAll('*');
+            allElements.forEach(element => {
+                element.style.color = textColor;
+                element.style.fontSize = fontSize;
+                element.style.fontWeight = element.style.fontWeight || fontWeight;
+                element.style.fontFamily = '"Red Hat Display", sans-serif';
+                element.style.letterSpacing = '0.5px';
+                element.style.lineHeight = '1.5';
+            });
+
+            wrapper.appendChild(clonedDiv);
 
             // Add watermark
             const watermark = document.createElement('div');
@@ -691,9 +681,9 @@
             document.body.appendChild(wrapper);
 
             // Calculate dimensions
-            const extraPadding = 80;
-            const scrollHeight = textDiv.scrollHeight;
-            const scrollWidth = Math.max(textDiv.scrollWidth, 300);
+            const extraPadding = 40;
+            const scrollHeight = clonedDiv.scrollHeight;
+            const scrollWidth = Math.max(clonedDiv.scrollWidth, 300);
             const textWidth = scrollWidth + extraPadding;
             const textHeight = scrollHeight + extraPadding;
 
@@ -710,7 +700,7 @@
                 scrollY: 0,
                 windowWidth: textWidth,
                 windowHeight: textHeight,
-                logging: true // Enable logging for debugging
+                logging: true
             }).then(canvas => {
                 const link = document.createElement('a');
                 link.download = 'bs_bookpad.png';
