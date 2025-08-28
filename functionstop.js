@@ -82,7 +82,7 @@
         }
 
         // Function to truncate long titles
-        function truncateTitle(title, maxLength = 35) {
+        function truncateTitle(title, maxLength = 25) {
             if (title.length > maxLength) {
                 return title.substring(0, maxLength - 3) + '...';
             }
