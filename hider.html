@@ -295,7 +295,7 @@
             }
             .media-grid {
                 grid-template-columns: repeat(2, 1fr);
-                        margin-top: 370px;
+                        margin-top: 340px;
             }
             .close {
                 position: absolute;
@@ -346,7 +346,12 @@
             <input type="file" id="fileInput" accept="image/*,video/*" multiple style="display: none;">
             <button onclick="saveMedia()">Save Media</button>
         </div>
-        <h2>Stored Media:</h2>
+        <h5 style="    color: #afafaf;
+    margin-top: 0px;
+    font-weight: 500;
+    font-size: 12px;
+    position: relative;
+    left: 3px;">Uploading Media: Below 3500 kb</h5>
     </div>
     <div id="mediaContainer"></div>
     <!-- Modal for Preview -->
@@ -468,7 +473,7 @@
             const files = fileInput.files;
 
             if (files.length === 0) {
-                alert('Please select files to upload.');
+                alert('Select files to upload.');
                 return;
             }
 
