@@ -55,7 +55,6 @@
             border-radius: 50px;
             font-size: 10px;
             text-align: center;
-            z-index: 1;
         }
         .media-item {
             position: relative;
@@ -275,7 +274,7 @@
         .topmain{
             position: fixed;
     top: 0px;
-    z-index: 2;
+    z-index: 1;
     background: black;
     width: 100%;
         }
@@ -328,11 +327,12 @@
     </style>
 </head>
 <body>
-    <div class="s" style="position: fixed; top: 0px; text-align: end; right: 0px; z-index: 10;">
+    <div class="s" style="position: fixed; top: 0px; text-align: end; right: 0px; z-index: 2;">
         <a href="https://blackswan19.github.io/Educate/imgsaver" style="color: white; text-decoration: none; padding: 8px 6px 8px 14px; background: #404040; border-radius: 0px 0px 0px 13px; font-size: 11px; font-weight: 500; box-shadow: 0px 0px 10px black;">BsImgsaver?</a><br><br>
     </div>
      <div class="topmain">
-        <div class="logo">
+        <div class="logo" style="position: relative;
+    left: -10px;">
         <img src="https://i.ibb.co/dpGFPx7/logohider.png" alt="">
         </div>
         <div class="inputs">
