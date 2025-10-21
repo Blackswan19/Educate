@@ -1,4 +1,7 @@
-// Function to store and retrieve recently watched videos
+function clearInput() {
+            document.getElementById("userLink").value = "";
+        }
+        // Function to store and retrieve recently watched videos
         const localStorageKey = 'recentlyWatched';
 
         function getRecentlyWatched() {
@@ -82,7 +85,7 @@
         }
 
         // Function to truncate long titles
-        function truncateTitle(title, maxLength = 25) {
+        function truncateTitle(title, maxLength = 30) {
             if (title.length > maxLength) {
                 return title.substring(0, maxLength - 3) + '...';
             }
@@ -90,15 +93,19 @@
         }
 
         // Function to display recently watched videos
-        function showRecommendations() {
+        function showRecommendations(searchQuery = '') {
             const recommendationSection = document.getElementById('recommendationSection');
             const videoList = document.getElementById('videoList');
-            const videos = getRecentlyWatched();
+            let videos = getRecentlyWatched();
+
+            if (searchQuery) {
+                videos = videos.filter(video => video.title.toLowerCase().includes(searchQuery.toLowerCase()));
+            }
 
             videoList.innerHTML = ''; // Clear previous list
 
             if (videos.length === 0) {
-                videoList.innerHTML = '<li>No videos watched recently.</li>';
+                videoList.innerHTML = '<li>No videos found.</li>';
             } else {
                 videos.forEach(video => {
                     const li = document.createElement('li');
@@ -112,8 +119,8 @@
                             <i class="fa-solid ${video.isPinned ? 'fa-toggle-on' : 'fa-toggle-off'}" 
                                onclick="togglePinned('${video.url}')" 
                                style="cursor: pointer; margin-right: 10px;"></i>
-                            <button onclick="copyToClipboard('${video.url}')">Copy</button>
-                            <button onclick="deleteVideo('${video.url}')">Remove</button>
+                            <button class='copybtn' onclick="copyToClipboard('${video.url}')">Copy</button>
+                            <button class='deletebtn' onclick="deleteVideo('${video.url}')">Remove</button>
                         </div>
                     `;
                     videoList.appendChild(li);
@@ -131,7 +138,7 @@
         async function modifyLink() {
             const userLink = document.getElementById("userLink").value.trim();
             if (!userLink) {
-                document.getElementById("result").innerHTML = "Invalid URL: No URL provided";
+                document.getElementById("result").innerHTML = "Provide URL first...!";
                 return;
             }
 
@@ -139,7 +146,7 @@
             const videoId = getVideoId(userLink);
 
             if (!videoId) {
-                document.getElementById("result").innerHTML = "Invalid URL: No video ID found";
+                document.getElementById("result").innerHTML = "Invalid URL...!";
                 return;
             }
 
@@ -150,7 +157,7 @@
                 // Replace only the domain, preserving path and query parameters
                 modifiedLink = userLink.replace(/youtube\.com/i, "yout-ube.com");
             } else {
-                document.getElementById("result").innerHTML = "Invalid URL: Must be a YouTube link";
+                document.getElementById("result").innerHTML = "Not an YouTube link...!";
                 return;
             }
 
@@ -162,7 +169,7 @@
                 await addRecentlyWatched(modifiedLink); // Store the link and title in local storage
                 document.getElementById("userLink").value = "";
             } else {
-                document.getElementById("result").innerHTML = "Invalid URL: Unable to process video link";
+                document.getElementById("result").innerHTML = "Invalid URL...!";
             }
         }
 
@@ -172,9 +179,9 @@
 
         function copyToClipboard(link) {
             navigator.clipboard.writeText(link).then(() => {
-                showNotification("Link copied to clipboard!");
+                showNotification("Link copied..!");
             }).catch(() => {
-                showNotification("Failed to copy the link!");
+                showNotification("Failed to copy...!");
             });
         }
 
@@ -182,7 +189,7 @@
             let videos = getRecentlyWatched();
             videos = videos.filter(video => video.url !== videoUrl); // Remove the selected video
             localStorage.setItem(localStorageKey, JSON.stringify(videos));
-            showRecommendations(); // Refresh the list
+            showRecommendations(document.getElementById('searchHistory').value); // Refresh the list with current search
         }
 
         function showNotification(message) {
@@ -207,5 +214,81 @@
             const popup = document.getElementById('imagePopup');
             popup.style.display = 'none';
         }
-  
-     
+
+        // New Feature: Theme Toggle
+        function toggleTheme() {
+            document.body.classList.toggle('light-mode');
+            const themeIcon = document.getElementById('themeToggle');
+            if (document.body.classList.contains('light-mode')) {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            } else {
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+            }
+        }
+
+        // New Feature: Search History
+        function searchHistory() {
+            const searchQuery = document.getElementById('searchHistory').value;
+            showRecommendations(searchQuery);
+        }
+
+        // New Feature: Clear All History
+        function clearAllHistory() {
+            if (confirm('Are you sure you want to clear all history? This cannot be undone.')) {
+                localStorage.removeItem(localStorageKey);
+                showRecommendations();
+                showNotification('History cleared!');
+            }
+        }
+
+        // New Feature: Export History
+        function exportHistory() {
+            const videos = getRecentlyWatched();
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(videos));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", "watch_history.json");
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+            showNotification('History exported!');
+        }
+
+        // New Feature: Import History
+        function importHistory(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const importedVideos = JSON.parse(e.target.result);
+                        localStorage.setItem(localStorageKey, JSON.stringify(importedVideos));
+                        showRecommendations();
+                        showNotification('History imported!');
+                    } catch (error) {
+                        showNotification('Invalid file format!');
+                    }
+                };
+                reader.readAsText(file);
+            }
+        }
+        document.addEventListener("DOMContentLoaded", () => {
+            const customMenu = document.querySelector(".custom-menu");
+
+            document.addEventListener("contextmenu", (event) => {
+                event.preventDefault();
+                if (customMenu) {
+                    customMenu.style.display = "block";
+                    customMenu.style.top = `${event.pageY}px`;
+                    customMenu.style.left = `${event.pageX}px`;
+                }
+            });
+
+            document.addEventListener("click", () => {
+                if (customMenu) {
+                    customMenu.style.display = "none";
+                }
+            });
+        });
