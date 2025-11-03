@@ -1,20 +1,12 @@
-// ADSTOPPER GANG - FIXED AUTO-PASTE WHEN AUTOPLAY ON 🔥💀🚀
-// NOW: AUTOPLAY ON = **INSTANT AUTO-PASTE & PLAY** NO DELAY
-// AUTOPLAY OFF = **PASTE ONCE, THEN REMEMBERS** NO SPAM POPUP
-// PASTE ANY BULLSHIT TEXT → EXTRACTS YOUTUBE → YOUT-UBE.COM
-// NO FUCKING ERRORS
 
-// MENU TOGGLE
 document.getElementById("menuIcon").addEventListener("click", () => {
     let menu = document.getElementById("menu");
     menu.style.display = menu.style.display === "block" ? "none" : "block";
 });
 
-// LOCAL STORAGE KEYS
 const localStorageKey = 'recentlyWatched';
 const autoPlayKey = 'autoPlayPref';
 
-// === UTILS ===
 function getRecentlyWatched() {
     let v = localStorage.getItem(localStorageKey);
     let arr = v ? JSON.parse(v) : [];
@@ -98,7 +90,6 @@ function updateSubmitButton() {
     }
 }
 
-// === EXTRACT YOUTUBE FROM ANY TEXT ===
 async function extractAndModifyYouTubeLink(inputText) {
     if (!inputText) return;
 
@@ -136,7 +127,6 @@ async function extractAndModifyYouTubeLink(inputText) {
     }
 }
 
-// === PLAY ===
 function manualPlay() {
     let url = document.getElementById("userLink").value.trim();
     if (url) playVideo(url);
@@ -150,7 +140,6 @@ function clearInput() {
     document.getElementById("userLink").value = "";
 }
 
-// === HISTORY ===
 function showRecommendations(searchQuery = '') {
     const section = document.getElementById('recommendationSection');
     const list = document.getElementById('videoList');
@@ -219,7 +208,6 @@ function showNotification(msg) {
     setTimeout(() => box.classList.remove("show"), 2000);
 }
 
-// === INPUT AUTO-EXTRACT ===
 document.getElementById("userLink").addEventListener("input", () => {
     const text = document.getElementById("userLink").value;
     if (text.length > 10) {
@@ -227,7 +215,6 @@ document.getElementById("userLink").addEventListener("input", () => {
     }
 });
 
-// === CLIPBOARD MAGIC: FIXED AUTO-PASTE WHEN ON ===
 let clipboardInterval = null;
 let hasPermission = false; // Track permission
 
@@ -247,7 +234,6 @@ async function checkClipboardForYouTube() {
             hasPermission = true; // Got it!
         }
     } catch (err) {
-        // Denied? Wait for manual paste
         hasPermission = false;
     }
 }
@@ -256,22 +242,18 @@ function restartClipboardMagic() {
     if (clipboardInterval) clearInterval(clipboardInterval);
 
     if (autoToggle.checked) {
-        // AUTOPLAY ON: AGGRESSIVE CHECK EVERY 1.5s
         checkClipboardForYouTube();
         clipboardInterval = setInterval(checkClipboardForYouTube, 1500);
         showNotification("AUTO-PASTE ACTIVATED 🔥");
     } else {
-        // AUTOPLAY OFF: Check ONCE to trigger permission
         setTimeout(checkClipboardForYouTube, 800);
     }
 }
 
-// === START ON LOAD ===
 document.addEventListener("DOMContentLoaded", () => {
     updateSubmitButton();
     restartClipboardMagic(); // 🔥 START MAGIC
 
-    // RIGHT-CLICK MENU
     const customMenu = document.querySelector(".custom-menu");
     document.addEventListener("contextmenu", (event) => {
         event.preventDefault();
@@ -285,3 +267,4 @@ document.addEventListener("DOMContentLoaded", () => {
         if (customMenu) customMenu.style.display = "none";
     });
 });
+
