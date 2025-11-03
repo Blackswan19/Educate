@@ -1,4 +1,3 @@
-
 document.getElementById("menuIcon").addEventListener("click", () => {
     let menu = document.getElementById("menu");
     menu.style.display = menu.style.display === "block" ? "none" : "block";
@@ -140,6 +139,43 @@ function clearInput() {
     document.getElementById("userLink").value = "";
 }
 
+// === THUMBNAIL POPUP FUNCTIONS ===
+function escapeJsString(str) {
+    return str.replace(/'/g, "\\'").replace(/"/g, "\\\"");
+}
+
+function openThumbPopup(videoId, title, url) {
+    const popup = document.getElementById('thumbPopup');
+    const img = document.getElementById('popupImage');
+    const titleEl = document.getElementById('popupTitle');
+
+    // Use higher quality thumbnail
+    img.src = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+    img.onerror = () => {
+        img.src = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`; // fallback
+    };
+
+    titleEl.textContent = title;
+    popup.style.display = 'flex';
+
+    // Click title to play video
+    titleEl.onclick = () => {
+        playVideo(url);
+        closeThumbPopup();
+    };
+    titleEl.style.cursor = 'pointer';
+    titleEl.title = 'Click to play video';
+}
+
+function closeThumbPopup() {
+    document.getElementById('thumbPopup').style.display = 'none';
+}
+
+// Close popup on Escape key
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeThumbPopup();
+});
+
 function showRecommendations(searchQuery = '') {
     const section = document.getElementById('recommendationSection');
     const list = document.getElementById('videoList');
@@ -151,14 +187,20 @@ function showRecommendations(searchQuery = '') {
         list.innerHTML = '<li>paste the right link...!</li>';
     } else {
         videos.forEach(video => {
+            let vid = getVideoId(video.url); // Extract video ID
             let li = document.createElement('li');
             li.innerHTML = `
                 <div style="display:flex; align-items:center;">
-                    <img src="${video.thumbnail}" class="thumbnail-circle">
+                    <img src="${video.thumbnail}" 
+                         class="thumbnail-circle" 
+                         onclick="openThumbPopup('${vid}', '${escapeJsString(video.title)}', '${video.url}')" 
+                         style="cursor: pointer; transition: transform 0.2s;" 
+                         onmouseover="this.style.transform='scale(1.1)'" 
+                         onmouseout="this.style.transform='scale(1)'">
                     <a href="${video.url}" target="_self">#BS// ${video.title} //Adstoper</a>
                 </div>
                 <div class="action-buttons">
-                    <i class="fa-solid ${video.isPinned ? 'fa-toggle-on' : 'fa-toggle-off'}"
+                    <i style='margin: 5px;' class="fa-solid ${video.isPinned ? 'fa-toggle-on' : 'fa-toggle-off'}"
                        onclick="togglePinned('${video.url}')"></i>
                     <button onclick="copyToClipboard('${video.url}')">Copy</button>
                     <button onclick="deleteVideo('${video.url}')">Remove</button>
@@ -255,14 +297,6 @@ document.addEventListener("DOMContentLoaded", () => {
     restartClipboardMagic();
 
     const customMenu = document.querySelector(".custom-menu");
-    document.addEventListener("contextmenu", (event) => {
-        event.preventDefault();
-        if (customMenu) {
-            customMenu.style.display = "block";
-            customMenu.style.top = `${event.pageY}px`;
-            customMenu.style.left = `${event.pageX}px`;
-        }
-    });
     document.addEventListener("click", () => {
         if (customMenu) customMenu.style.display = "none";
     });
