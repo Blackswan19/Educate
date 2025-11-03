@@ -77,7 +77,7 @@ updateSubmitButton();
 autoToggle.addEventListener('change', () => {
     localStorage.setItem(autoPlayKey, autoToggle.checked);
     updateSubmitButton();
-    restartClipboardMagic(); // 🔥 RESTART ON TOGGLE
+    restartClipboardMagic(); 
 });
 
 function updateSubmitButton() {
@@ -85,7 +85,7 @@ function updateSubmitButton() {
     if (!autoToggle.checked) {
         submitContainer.innerHTML = `
             <button onclick="manualPlay()" style="width: 45%; max-width:150px; white-space: nowrap;">
-                Play Now 🔥
+                Play Now
             </button>`;
     }
 }
@@ -97,7 +97,7 @@ async function extractAndModifyYouTubeLink(inputText) {
     const match = inputText.match(youtubeRegex);
 
     if (!match) {
-        document.getElementById("result").innerHTML = "NO LINK FOUND!";
+        document.getElementById("result").innerHTML = "Paste the proper link..!";
         return;
     }
 
@@ -121,9 +121,9 @@ async function extractAndModifyYouTubeLink(inputText) {
 
     if (autoToggle.checked) {
         playVideo(modifiedLink);
-        showNotification("AUTO-PASTED & PLAYED 🔥");
+        showNotification("Auto-pasted & playing..!");
     } else {
-        showNotification("PASTED! HIT PLAY");
+        showNotification("Pasted...!");
     }
 }
 
@@ -148,7 +148,7 @@ function showRecommendations(searchQuery = '') {
 
     list.innerHTML = '';
     if (videos.length === 0) {
-        list.innerHTML = '<li>NO VIDS!</li>';
+        list.innerHTML = '<li>paste the right link...!</li>';
     } else {
         videos.forEach(video => {
             let li = document.createElement('li');
@@ -184,7 +184,7 @@ function togglePinned(url) {
     if (v) {
         v.isPinned = !v.isPinned;
         localStorage.setItem(localStorageKey, JSON.stringify(videos));
-        showNotification(v.isPinned ? 'PINNED!' : 'UNPINNED!');
+        showNotification(v.isPinned ? 'Pinned..!' : 'Unpinned..!');
         showRecommendations();
     }
 }
@@ -244,7 +244,7 @@ function restartClipboardMagic() {
     if (autoToggle.checked) {
         checkClipboardForYouTube();
         clipboardInterval = setInterval(checkClipboardForYouTube, 1500);
-        showNotification("AUTO-PASTE ACTIVATED 🔥");
+        showNotification("Auto-paste activated..!");
     } else {
         setTimeout(checkClipboardForYouTube, 800);
     }
@@ -252,7 +252,7 @@ function restartClipboardMagic() {
 
 document.addEventListener("DOMContentLoaded", () => {
     updateSubmitButton();
-    restartClipboardMagic(); // 🔥 START MAGIC
+    restartClipboardMagic();
 
     const customMenu = document.querySelector(".custom-menu");
     document.addEventListener("contextmenu", (event) => {
@@ -267,4 +267,3 @@ document.addEventListener("DOMContentLoaded", () => {
         if (customMenu) customMenu.style.display = "none";
     });
 });
-
