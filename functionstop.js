@@ -1,75 +1,47 @@
 
 document.addEventListener('contextmenu', e => e.preventDefault());
 document.getElementById("menuIcon").addEventListener("click", () => {
-    const menu = document.getElementById("menu");
+    let menu = document.getElementById("menu");
     menu.style.display = menu.style.display === "block" ? "none" : "block";
 });
 
 const localStorageKey = 'recentlyWatched';
-const autoPlayKey     = 'autoPlayPref';
+const autoPlayKey = 'autoPlayPref';
 
+// === GET RECENTLY WATCHED ===
 function getRecentlyWatched() {
-    const v   = localStorage.getItem(localStorageKey);
-    const arr = v ? JSON.parse(v) : [];
+    let v = localStorage.getItem(localStorageKey);
+    let arr = v ? JSON.parse(v) : [];
     const now = Date.now();
-    const filtered = arr.filter(v => v.isPinned || ((now - v.timestamp) / (1000 * 60 * 60) <= 24));
-    localStorage.setItem(localStorageKey, JSON.stringify(filtered));
-    return filtered;
+    arr = arr.filter(video => video.isPinned || ((now - video.timestamp) / (1000 * 60 * 60) <= 24));
+    localStorage.setItem(localStorageKey, JSON.stringify(arr));
+    return arr;
 }
 
 function getVideoId(url) {
-    try {
-        const u = new URL(url.startsWith('http') ? url : 'https://' + url);
-        const host = u.hostname.toLowerCase();   // only host is lower-cased for matching
-
-        // embed: /embed/VIDEO_ID
-        if (host === 'youtube.com' && u.pathname.startsWith('/embed/')) {
-            return u.pathname.split('/')[2].split('?')[0];
+    let id = '';
+    if (url.includes('youtu.be')) id = url.split('youtu.be/')[1].split('?')[0];
+    else if (url.includes('youtube.com') || url.includes('yout-ube.com')) {
+        if (url.includes('/live/')) {
+            let p = url.split('/live/')[1];
+            id = p ? p.split('?')[0] : '';
+        } else {
+            let p = new URLSearchParams(url.split('?')[1] || '');
+            id = p.get('v') || '';
         }
-        // live: /live/VIDEO_ID
-        if (host === 'youtube.com' && u.pathname.startsWith('/live/')) {
-            return u.pathname.split('/')[2].split('?')[0];
-        }
-        // short: youtu.be/VIDEO_ID
-        if (host === 'youtu.be') {
-            return u.pathname.split('/')[1].split('?')[0];
-        }
-
-        // ?v=VIDEO_ID (any host)
-        const v = u.searchParams.get('v');
-        if (v) return v.split('&')[0];
-
-        // Fallback regex (still case-insensitive on host)
-        const m = url.match(/(?:youtube\.com|youtu\.be)\/(?:.*?(?:v=|\/))([a-zA-Z0-9_-]{11})/i);
-        return m ? m[1] : '';
-    } catch (_) {
-        return '';
     }
+    return id;
 }
 
-function transformToYoutUbe(originalUrl) {
-    try {
-        const u = new URL(originalUrl.startsWith('http') ? originalUrl : 'https://' + originalUrl);
-        const hostLower = u.hostname.toLowerCase();
-
-        // Replace only the host part: youtube.com → yout-ube.com
-        if (hostLower.includes('youtube.com') || hostLower.includes('youtu.be')) {
-            const newHost = u.hostname.replace(/youtube/i, 'yout-ube');
-            u.hostname = newHost;
-        }
-        return u.toString();
-    } catch (_) {
-        return originalUrl;
-    }
-}
 function getThumbnailUrl(id) {
     return id ? `https://img.youtube.com/vi/${id}/hqdefault.jpg` : 'adstptumb.png';
 }
+
 async function getVideoTitle(url) {
     try {
-        const res = await fetch(`https://www.youtube.com/oembed?url=${encodeURIComponent(url)}&format=json`);
+        let res = await fetch(`https://www.youtube.com/oembed?url=${encodeURIComponent(url)}&format=json`);
         if (!res.ok) return 'Unknown Title';
-        const d = await res.json();
+        let d = await res.json();
         return d.title || 'Unknown Title';
     } catch {
         return 'Unknown Title';
@@ -77,31 +49,28 @@ async function getVideoTitle(url) {
 }
 
 async function addRecentlyWatched(url) {
-    const videos = getRecentlyWatched();
-    const vid = getVideoId(url);
-    if (!vid || videos.some(v => v.url === url)) return;
-
-    const title = await getVideoTitle(url);
-    videos.unshift({
-        url,
-        title,
-        thumbnail: getThumbnailUrl(vid),
-        isPinned: false,
-        timestamp: Date.now()
-    });
-    if (videos.length > 10) videos.pop();
-    localStorage.setItem(localStorageKey, JSON.stringify(videos));
+    let videos = getRecentlyWatched();
+    let vid = getVideoId(url);
+    if (!videos.some(v => v.url === url) && vid) {
+        let title = await getVideoTitle(url);
+        videos.unshift({
+            url,
+            title,
+            thumbnail: getThumbnailUrl(vid),
+            isPinned: false,
+            timestamp: Date.now()
+        });
+        if (videos.length > 10) videos.pop();
+        localStorage.setItem(localStorageKey, JSON.stringify(videos));
+    }
 }
 
-const autoToggle      = document.getElementById('autoPlayToggle');
+// === AUTO PLAY TOGGLE ===
+const autoToggle = document.getElementById('autoPlayToggle');
 const submitContainer = document.getElementById('submitContainer');
-
-function loadAutoPref() {
-    const saved = localStorage.getItem(autoPlayKey);
-    if (saved !== null) autoToggle.checked = (saved === 'true');
-    updateSubmitButton();
-}
-loadAutoPref();
+const savedAuto = localStorage.getItem(autoPlayKey);
+if (savedAuto !== null) autoToggle.checked = (savedAuto === 'true');
+updateSubmitButton();
 
 autoToggle.addEventListener('change', () => {
     localStorage.setItem(autoPlayKey, autoToggle.checked);
@@ -113,35 +82,43 @@ function updateSubmitButton() {
     submitContainer.innerHTML = '';
     if (!autoToggle.checked) {
         submitContainer.innerHTML = `
-            <button onclick="manualPlay()" style="width:45%;max-width:150px;white-space:nowrap;">
+            <button onclick="manualPlay()" style="width: 45%; max-width:150px; white-space: nowrap;">
                 Play Now
             </button>`;
     }
-}
-
-async function extractAndModifyYouTubeLink(inputText) {
+}async function extractAndModifyYouTubeLink(inputText) {
     if (!inputText) return;
 
-    const urlRegex = /(https?:\/\/)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
-    const candidates = inputText.match(urlRegex) || [];
-    const rawUrl = candidates.find(u => /youtube\.com|youtu\.be|yout-ube\.com/i.test(u)) || '';
+    // --- Normalize and insert dash after 't' ---
+    inputText = inputText
+        .replace(/youtube\.com/gi, "yout-ube.com")
+        .replace(/youtu\.be/gi, "yout-ube.be");
 
-    if (!rawUrl) {
-        document.getElementById("result").innerHTML = "Paste a YouTube link..!";
-        return;
-    }
+    // --- Extract video ID from any format ---
+    let vidId = "";
 
-    const vidId = getVideoId(rawUrl);
-    if (!vidId || vidId.length !== 11) {
+    // Match youtu.be short links
+    const shortMatch = inputText.match(/yout-ube\.be\/([a-zA-Z0-9_-]{11})/i);
+    // Match /watch?v= links
+    const watchMatch = inputText.match(/[?&]v=([a-zA-Z0-9_-]{11})/i);
+    // Match /live/ links
+    const liveMatch = inputText.match(/\/live\/([a-zA-Z0-9_-]{11})/i);
+
+    if (shortMatch) vidId = shortMatch[1];
+    else if (watchMatch) vidId = watchMatch[1];
+    else if (liveMatch) vidId = liveMatch[1];
+
+    if (!vidId) {
         document.getElementById("result").innerHTML = "BAD LINK!";
         return;
     }
 
-    const modifiedLink = transformToYoutUbe(rawUrl);
-
+    // --- Construct modified link ---
+    const modifiedLink = `https://www.yout-ube.com/watch?v=${vidId}`;
     document.getElementById("userLink").value = modifiedLink;
     document.getElementById("result").innerHTML = "";
 
+    // --- Add to history and play ---
     await addRecentlyWatched(modifiedLink);
     updateSubmitButton();
 
@@ -153,64 +130,75 @@ async function extractAndModifyYouTubeLink(inputText) {
     }
 }
 
+
+
 function manualPlay() {
-    const url = document.getElementById("userLink").value.trim();
+    let url = document.getElementById("userLink").value.trim();
     if (url) playVideo(url);
 }
+
 function playVideo(url) {
     window.open(url, "_self");
 }
+
 function clearInput() {
     document.getElementById("userLink").value = "";
 }
 
-/* ---------- THUMBNAIL POPUP ---------- */
+// === THUMBNAIL POPUP ===
 function escapeJsString(str) {
     return str.replace(/'/g, "\\'").replace(/"/g, "\\\"");
 }
-function openThumbPopup(videoId, title, url) {
-    const popup   = document.getElementById('thumbPopup');
-    const img     = document.getElementById('popupImage');
-    const titleEl = document.getElementById('popupTitle');
 
+function openThumbPopup(videoId, title, url) {
+    const popup = document.getElementById('thumbPopup');
+    const img = document.getElementById('popupImage');
+    const titleEl = document.getElementById('popupTitle');
     img.src = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
-    img.onerror = () => { img.src = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`; };
+    img.onerror = () => img.src = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
     titleEl.textContent = title;
     popup.style.display = 'flex';
-
-    titleEl.onclick = () => { playVideo(url); closeThumbPopup(); };
+    titleEl.onclick = () => {
+        playVideo(url);
+        closeThumbPopup();
+    };
     titleEl.style.cursor = 'pointer';
     titleEl.title = 'Click to play video';
 }
+
 function closeThumbPopup() {
     document.getElementById('thumbPopup').style.display = 'none';
 }
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeThumbPopup(); });
 
+document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeThumbPopup();
+});
+
+// === RECOMMENDATIONS ===
 function showRecommendations(searchQuery = '') {
     const section = document.getElementById('recommendationSection');
-    const list    = document.getElementById('videoList');
-    let videos    = getRecentlyWatched();
+    const list = document.getElementById('videoList');
+    let videos = getRecentlyWatched();
     if (searchQuery) videos = videos.filter(v => v.title.toLowerCase().includes(searchQuery.toLowerCase()));
-
     list.innerHTML = '';
-    if (!videos.length) {
+    if (videos.length === 0) {
         list.innerHTML = '<li>paste the right link...!</li>';
     } else {
         videos.forEach(video => {
-            const vid = getVideoId(video.url);
-            const li  = document.createElement('li');
+            let vid = getVideoId(video.url);
+            let li = document.createElement('li');
             li.innerHTML = `
-                <div style="display:flex;align-items:center;">
-                    <img src="${video.thumbnail}" class="thumbnail-circle"
-                         onclick="openThumbPopup('${vid}','${escapeJsString(video.title)}','${video.url}')"
-                         style="cursor:pointer;transition:transform .2s;"
+                <div style="display:flex; align-items:center;">
+                    <img src="${video.thumbnail}"
+                         class="thumbnail-circle"
+                         onclick="openThumbPopup('${vid}', '${escapeJsString(video.title)}', '${video.url}')"
+                         style="cursor: pointer; transition: transform 0.2s;"
                          onmouseover="this.style.transform='scale(1.1)'"
                          onmouseout="this.style.transform='scale(1)'">
-                    <a href="${video.url}" target="_self">#BS ${video.title} //Adstoper</a>
+                    <a href="${video.url}" target="_self">#BS// ${video.title} //Adstoper</a>
                 </div>
                 <div class="action-buttons">
-                    <i style="margin:5px;" class="fa-solid ${video.isPinned ? 'fa-toggle-on' : 'fa-toggle-off'}"
+                    <i style='margin: 5px;' class="fa-solid ${video.isPinned ? 'fa-toggle-on' : 'fa-toggle-off'}"
                        onclick="togglePinned('${video.url}')"></i>
                     <button onclick="copyToClipboard('${video.url}')">Copy</button>
                     <button onclick="deleteVideo('${video.url}')">Remove</button>
@@ -220,17 +208,19 @@ function showRecommendations(searchQuery = '') {
     }
     section.style.display = 'block';
 }
+
 function closeRecommendations() {
     document.getElementById('recommendationSection').style.display = 'none';
 }
+
 function searchHistory() {
     const q = document.getElementById('searchHistory').value;
     showRecommendations(q);
 }
 
 function togglePinned(url) {
-    const videos = getRecentlyWatched();
-    const v = videos.find(v => v.url === url);
+    let videos = getRecentlyWatched();
+    let v = videos.find(v => v.url === url);
     if (v) {
         v.isPinned = !v.isPinned;
         localStorage.setItem(localStorageKey, JSON.stringify(videos));
@@ -238,9 +228,11 @@ function togglePinned(url) {
         showRecommendations();
     }
 }
+
 function copyToClipboard(link) {
     navigator.clipboard.writeText(link).then(() => showNotification("COPIED!"));
 }
+
 function deleteVideo(url) {
     let videos = getRecentlyWatched();
     videos = videos.filter(v => v.url !== url);
@@ -250,36 +242,32 @@ function deleteVideo(url) {
 }
 
 function showNotification(msg) {
-    const box = document.getElementById("notificationBox");
+    let box = document.getElementById("notificationBox");
     box.textContent = msg;
     box.classList.add("show");
     setTimeout(() => box.classList.remove("show"), 2000);
 }
 
 document.getElementById("userLink").addEventListener("input", () => {
-    const txt = document.getElementById("userLink").value;
-    if (txt.length > 10) extractAndModifyYouTubeLink(txt);
+    const text = document.getElementById("userLink").value;
+    if (text.length > 10) extractAndModifyYouTubeLink(text);
 });
 
+// === CLIPBOARD MAGIC ===
 let clipboardInterval = null;
-let hasPermission     = false;
 
 async function checkClipboardForYouTube() {
     if (!navigator.clipboard?.readText) return;
     try {
-        const text    = await navigator.clipboard.readText();
+        const text = await navigator.clipboard.readText();
         const trimmed = text.trim();
-        if (trimmed.length > 10 &&
+        if (trimmed.length > 10 && 
             (trimmed.includes("youtube.com") || trimmed.includes("youtu.be")) &&
             document.getElementById("userLink").value === "") {
-
             document.getElementById("userLink").value = trimmed;
             await extractAndModifyYouTubeLink(trimmed);
-            hasPermission = true;
         }
-    } catch (err) {
-        hasPermission = false;
-    }
+    } catch {}
 }
 
 function restartClipboardMagic() {
@@ -296,9 +284,4 @@ function restartClipboardMagic() {
 document.addEventListener("DOMContentLoaded", () => {
     updateSubmitButton();
     restartClipboardMagic();
-
-    const customMenu = document.querySelector(".custom-menu");
-    document.addEventListener("click", () => {
-        if (customMenu) customMenu.style.display = "none";
-    });
 });
