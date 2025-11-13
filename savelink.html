@@ -1,5 +1,5 @@
-<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>BsLinksaver</title> <link rel="icon" type="image/x-icon" href="https://i.ibb.co/0DBHQHG/linksave.png"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> <style> @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Orbitron:wght@400..900&family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&family=Strait&display=swap'); * { font-family: "Red Hat Display", sans-serif; list-style: none; box-sizing: border-box; margin: 0; padding: 0; } * { -webkit-tap-highlight-color: transparent; } body { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; } body { background-color: #121212; color: #E0E0E0; display: flex; justify-content: center; align-items: center; overflow-x: hidden; line-height: 1.6; padding: 15px; letter-spacing: 0.3px; } .container { background-color: #181818; padding: 15px; border-radius: 12px; max-width: 800px; width: 100%; text-align: left; box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5); } h1 { font-size: 1.4rem; margin-bottom: 15px; color: #0049ff; font-weight: 800; letter-spacing: 1px; } .search-section { margin-bottom: 20px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; } input[type="text"], input[type="url"], input[type="search"], select { padding: 8px; margin: 0; flex: 1; background-color: #282828; color: #E0E0E0; border: 1px solid #3a3a3a; border-radius: 8px; font-size: 0.95rem; outline: none; transition: border-color 0.3s ease; width: 100%; } input:focus, select:focus { border-color: #0049ff; } button { padding: 10px 18px; background-color: #2e2e2e; border: none; color: #ffffffde; cursor: pointer; font-weight: 600; border-radius: 8px; transition: all 0.3s ease; } button:hover { background-color: #0049ff; color: #fff; } .create-btn { background-color: #0049ff; color: #fff; display: flex; align-items: center; gap: 5px; } .create-btn:hover { background-color: #003bb3; } .filter-section { margin-bottom: 20px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; } .filter-section button { padding: 8px 12px; background-color: #282828; border: none; color: #b3b3b3; cursor: pointer; border-radius: 20px; font-size: 0.85rem; transition: all 0.3s ease; } .filter-section button.active { background-color: #0049ff; color: #fff; } .filter-section button:hover { background-color: #3a3a3a; color: #fff; } .add-category-btn { padding: 8px; font-size: 0.9rem; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; } .link-list { margin-bottom: 20px; max-height: 400px; overflow-y: auto; padding: 8px; background-color: #181818; border-radius: 8px; } .table-header, .link-item { display: grid; grid-template-columns: minmax(0, 1fr) 100px; gap: 8px; padding: 8px; align-items: center; border-bottom: 1px solid #282828; } .table-header div:nth-child(1), .link-item .title-container { text-align: left; justify-self: start; } .table-header div:nth-child(2), .link-item div:nth-child(2) { text-align: right; justify-self: end; } div { font-size: 11px; font-weight: 800; color: gray; } div a { font-weight: 800; color: gray; font-size: 15px; } .table-header div { font-weight: 600; color: #ffffff; text-transform: uppercase; font-size: 9px; white-space: nowrap; } .link-item:hover { background-color: #282828; } a { color: #fff; font-size: 0.95rem; text-decoration: none; transition: color 0.3s ease; } a:hover { color: white; text-decoration: underline; } .link-list::-webkit-scrollbar { width: 6px; } .link-list::-webkit-scrollbar-thumb { background-color: #898989; border-radius: 4px; } .modal, .create-modal, .edit-modal, .category-modal, .title-modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.95); justify-content: center; align-items: center; } .modal-content, .create-modal-content, .edit-modal-content, .category-modal-content, .title-modal-content { background-color: #1a1a1a; padding: 15px; border-radius: 10px; width: 90%; max-width: 320px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7); } .modal-content p, .title-modal-content p { margin-bottom: 15px; font-size: 1rem; } .close-btn, .save-btn { background-color: #0049ff; padding: 8px 20px; border-radius: 8px; font-weight: 600; } .close-btn:hover, .save-btn:hover { background-color: #003bb3; } .create-modal-content h2, .edit-modal-content h2, .category-modal-content h2, .title-modal-content h2 { font-size: 1.3rem; margin-bottom: 12px; color: #fff; } .create-modal-content .form-group, .edit-modal-content .form-group, .category-modal-content .form-group { margin-bottom: 12px; } .create-modal-content .form-group label, .edit-modal-content .form-group label, .category-modal-content .form-group label { display: block; margin-bottom: 4px; font-size: 0.95rem; color: #b3b3b3; } .title-container { display: flex; align-items: center; gap: 6px; } .view-title-btn { background-color: transparent; padding: 4px; font-size: 14px; color: gray; cursor: pointer; border: none; } .view-title-btn:hover i { color: #ffffff; } .context-menu { display: none; position: absolute; background-color: #1a1a1a; border-radius: 8px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7); z-index: 1001; min-width: 110px; } .context-menu-item { padding: 8px 12px; color: #E0E0E0; cursor: pointer; font-size: 0.85rem; display: flex; align-items: center; gap: 8px; } .context-menu-item:hover { background-color: #282828; } .context-menu-item.delete:hover { color: #ff0d00; } @media (max-width: 480px) { body { padding: 10px; } .container { padding: 12px; } .table-header, .link-item { grid-template-columns: minmax(0, 1fr) 80px; gap: 6px; padding: 6px; font-size: 0.85rem; } h1 { font-size: 1.2rem; margin-bottom: 12px; } .search-section { flex-direction: column; gap: 6px; } input[type="text"], input[type="url"], input[type="search"], select { font-size: 0.85rem; padding: 6px; } button { padding: 8px 12px; font-size: 0.85rem; } .create-btn { width: 100%; justify-content: center; } .filter-section { gap: 6px; } .filter-section button { padding: 6px 10px; font-size: 0.75rem; } .add-category-btn { width: 30px; height: 30px; font-size: 0.8rem; } .link-list { padding: 6px; max-height: 300px; } div a { font-size: 14px; } .view-title-btn { font-size: 13px; padding: 3px; } .modal-content, .create-modal-content, .edit-modal-content, .category-modal-content, .title-modal-content { padding: 12px; max-width: 280px; } .create-modal-content h2, .edit-modal-content h2, .category-modal-content h2, .title-modal-content h2 { font-size: 1.1rem; } .modal-content p, .title-modal-content p { font-size: 0.9rem; } .context-menu { min-width: 100px; } .context-menu-item { padding: 6px 10px; font-size: 0.8rem; } } </style> </head> <body> <div class="container"> <h1>BsLinksaver</h1> <div class="search-section"> <input type="search" id="searchInput" placeholder="Search in your links..." oninput="searchLinks()"> <button class="create-btn" onclick="openCreateModal()"><i class="fa-solid fa-plus"></i> add new</button> </div> <div class="filter-section" id="filterSection"> <button class="filter-btn add-category-btn" onclick="openCategoryModal()"><i class="fa-solid fa-plus"></i></button> <button type="button" class="filter-btn active" data-filter="all">All</button> </div> <div class="link-list" id="linkList"> <div class="table-header"> <div>Title</div> <div>Date Added</div> </div> <div id="allLinks"></div> </div> </div> <div id="modal" class="modal"> <div class="modal-content"> <p id="modalMessage"></p> <button class="close-btn" onclick="closeModal()">OK</button> </div> </div> <div id="createModal" class="create-modal"> <div class="create-modal-content"> <h2>Create Link</h2> <div class="form-group"> <label for="createTitleInput">Title</label> <input type="text" id="createTitleInput" placeholder="Enter the title here..." required> </div> <div class="form-group"> <label for="createUrlInput">Link</label> <input type="url" id="createUrlInput" placeholder="Paste the link here..." required> </div> <div class="form-group"> <label for="createCategoryInput">Category</label> <select id="createCategoryInput"> <option value="all">All</option> </select> </div> <button class="save-btn" onclick="saveLink()">Save</button> <button class="close-btn" onclick="closeCreateModal()">Cancel</button> </div> </div> <div id="editModal" class="edit-modal"> <div class="edit-modal-content"> <h2>Edit Link</h2> <div class="form-group"> <label for="editTitleInput">Title</label> <input type="text" id="editTitleInput" placeholder="Enter the title here..." required> </div> <div class="form-group"> <label for="editUrlInput">Link</label> <input type="url" id="editUrlInput" placeholder="Paste the link here..." required> </div> <div class="form-group"> <label for="editCategoryInput">Category</label> <select id="editCategoryInput"> <option value="all">All</option> </select> </div> <button class="save-btn" onclick="saveEditedLink()">Save</button> <button class="close-btn" onclick="closeEditModal()">Cancel</button> </div> </div> <div id="categoryModal" class="category-modal"> <div class="category-modal-content"> <h2>Add Category</h2> <div class="form-group"> <label for="categoryInput">Category Name</label> <input type="text" id="categoryInput" placeholder="Enter category name..."> </div> <button class="save-btn" onclick="saveCategory()">Save</button> <button class="close-btn" onclick="closeCategoryModal()">Cancel</button> </div> </div> <div id="titleModal" class="title-modal"> <div class="title-modal-content"> <h2>Link Title</h2> <p id="titleModalMessage"></p> <button class="close-btn" onclick="closeTitleModal()">OK</button> </div> </div> <div id="contextMenu" class="context-menu"> <div class="context-menu-item" onclick="copyLinkFromContext()"><i class="fa-solid fa-copy"></i> Copy Link</div> <div class="context-menu-item" onclick="openEditModalFromContext()"><i class="fa-solid fa-edit"></i> Edit Link</div> <div class="context-menu-item delete" onclick="deleteLinkFromContext()"><i class="fa-solid fa-trash"></i> Delete Link</div> </div>
-      <script>
+<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>BsLinksaver</title> <link rel="icon" type="image/x-icon" href="https://i.ibb.co/0DBHQHG/linksave.png"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> <style> @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Orbitron:wght@400..900&family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&family=Strait&display=swap'); * { font-family: "Red Hat Display", sans-serif; list-style: none; box-sizing: border-box; margin: 0; padding: 0; letter-spacing: 0.4px; } * { -webkit-tap-highlight-color: transparent; } body { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; background-color: #121212; color: #E0E0E0; min-height: 100vh; /* full viewport height */ display: flex; justify-content: center; align-items: center; /* vertical centering */ overflow-x: hidden; line-height: 1.6; padding: 15px; letter-spacing: 0.3px; } .container { background-color: #181818; padding: 40px 30px 15px 30px; border-radius: 30px; max-width: 900px; width: 100%; text-align: left; box-shadow: 0 8px 30px rgb(0 0 0 / 66%); } /* ------------------------------------------------- All the rest of your original CSS stays unchanged ------------------------------------------------- */ h1 { font-size: 22px; color: #0049ff; font-weight: 800; letter-spacing: 1px; text-align: center; } .search-section{margin-bottom:20px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;} input[type="text"],input[type="url"],input[type="search"],select{padding: 11px 45px; margin: 0; flex: 1; background-color: #ffffff1a; color: #E0E0E0; border: 1.5px solid #3a3a3a00; border-radius: 135px; font-size: 15px; outline: none; transition: border-color .3s ease; font-weight: 600; width: 100%; } input:focus,select:focus{border-color:#ffffff40;} button{padding:10px 18px;background-color:#2e2e2e;border:none;color:#ffffffde;cursor:pointer;font-weight:600;border-radius:108px;transition:all .3s ease;} button:hover{background-color:#0049ff;color:#fff;} .create-btn{background-color:#0044ff;color:#fff;display:flex;align-items:center;gap:5px; padding: 13px 20px;} .create-btn:hover{background-color:#003bb3;} .filter-section{margin-bottom: 0px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; background: #808080; padding: 5px; border-radius: 100px; overflow: auto;} .filter-section::-webkit-scrollbar{ background-color: transparent; } .filter-section button{padding:8px 12px;background-color:#282828;border:none;color:#b3b3b3;cursor:pointer;border-radius:20px;font-size:.85rem;transition:all .3s ease;} .filter-section button.active{background-color:#0049ff;color:#fff;} .filter-section button:hover{background-color:#3a3a3a;color:#fff;} .add-category-btn{padding:8px;font-size:.9rem;width:32px;height:32px;display:flex;align-items:center;justify-content:center;} .link-list{margin-bottom:20px;max-height:400px;overflow-y:auto;padding:8px;background-color:#181818;border-radius:8px;} .table-header,.link-item{ display: grid; grid-template-columns: minmax(0, 1fr) 100px; gap: 8px; padding: 8px; align-items: center; border-radius: 100px; border-bottom: solid 1px #ffffff1a; } .table-header div:nth-child(1),.link-item .title-container{text-align:left;justify-self:start;} .table-header div:nth-child(2),.link-item div:nth-child(2){text-align:right;justify-self:end;} div{ font-size: 11px; font-weight: 800; color: gray; padding: 4px 10px;} div a{font-weight:800;color:gray;font-size:15px;} .table-header div{font-weight:600;color:#fff;text-transform:uppercase;font-size:9px;white-space:nowrap;} .link-item:hover{background-color:#282828;} a{color:#fff;font-size:.95rem;text-decoration:none;transition:color .3s ease;} a:hover{color:white;text-decoration:underline;} .link-list::-webkit-scrollbar{width:5.5px;} .link-list::-webkit-scrollbar-thumb{background:#ffffff2e;border-radius:0px;} .link-list::-webkit-scrollbar-track{ margin-top: 35px; margin-bottom: 10px; } .modal,.create-modal,.edit-modal,.category-modal,.title-modal{display:none;position:fixed;z-index:1000;left:0;top:0;width:100%;height:100%;background-color:rgb(0 0 0 / 63%);justify-content:center;align-items:center;} .modal-content,.create-modal-content,.edit-modal-content,.category-modal-content,.title-modal-content{ background-color: #272727; padding: 15px; border-radius: 35px; width: 90%; max-width: 400px; text-align: center; }.modal-content p, .title-modal-content p { margin-bottom: 15px; font-size: 1rem; white-space: pre-wrap; } .close-btn,.save-btn{ background-color: #0049ff; padding: 12px 20px; border-radius: 80px; font-weight: 600; width: 100%; margin-top: 10px; font-size: 13px; } .wtd-options { display: flex; gap: 10px; justify-content: center; align-items: center; padding: 3px; } .table-header{ padding: 10px 20px; margin: 10px 0px; position: sticky; top: -10px; backdrop-filter: blur(2px); } .close-btn:hover,.save-btn:hover{background-color:#003bb3;} .create-modal-content h2,.edit-modal-content h2,.category-modal-content h2,.title-modal-content h2{font-size:1.3rem;margin-bottom:12px;color:#fff;} .create-modal-content .form-group,.edit-modal-content .form-group,.category-modal-content .form-group{margin-bottom:12px;} .create-modal-content .form-group label,.edit-modal-content .form-group label,.category-modal-content .form-group label{display: block; margin-bottom: 15px; font-size: 10px;} .title-container{display:flex;align-items:center;gap:6px;} .view-title-btn{background-color:transparent;font-size:14px;color:gray;cursor:pointer;border:none;} .view-title-btn:hover i{color:#fff;} .context-menu{ display: none; position: absolute; background-color: #3e3e3e; border-radius: 16px; box-shadow: 0 0px 20px rgb(0 0 0 / 60%); z-index: 1001; padding: 5px; } .context-menu-item{ padding: 9px 20px; color: #E0E0E0; cursor: pointer; font-size: .85rem; display: flex; align-items: center; gap: 8px; border-radius: 12px; } .context-menu-item:hover{background-color:#1e1e1e;} .context-menu-item.delete:hover{color:#ff0d00;} @media (max-width:480px){ body{padding:10px;} .container{padding:12px;} .table-header,.link-item{padding:0px;top: -5px;} h1{font-size:1.2rem;margin-bottom:12px;} .search-section{flex-direction:column;gap:6px;} input[type=text],input[type=url],input[type=search],select{ padding: 10px 25px; } .create-btn { margin-top: 10px; } div{ padding: 5px; } .filter-section{gap:6px;} .filter-section button{padding:6px 10px;font-size:.75rem;} .add-category-btn{width:30px;height:30px;font-size:.8rem;} .link-list{padding:6px;max-height:300px;} div a{font-size:14px;} .view-title-btn{font-size:13px;padding:3px;} .modal-content,.create-modal-content,.edit-modal-content,.category-modal-content,.title-modal-content{padding:12px;} .create-modal-content h2,.edit-modal-content h2,.category-modal-content h2,.title-modal-content h2{font-size:1.1rem;} .modal-content p,.title-modal-content p{font-size:.9rem;} .context-menu{min-width:100px;} .context-menu-item{padding:6px 10px;font-size:.8rem;} } </style> </head> <body> <div class="container"> <div class="search-section"> <h1>BsLinksaver</h1> <input type="search" id="searchInput" placeholder="Search in your links..." oninput="searchLinks()"> <button class="create-btn" onclick="openCreateModal()"><i class="fa-solid fa-plus"></i> Add new link</button> </div> <div class="filter-section" id="filterSection"> <button class="filter-btn add-category-btn" onclick="openCategoryModal()"><i class="fa-solid fa-plus"></i></button> <button type="button" class="filter-btn active" data-filter="all">All</button> </div> <div class="link-list" id="linkList"> <div class="table-header"> <div>Title</div> <div>Date Added</div> </div> <div id="allLinks"></div> </div> </div> <!-- Modals --> <div id="modal" class="modal"> <div class="modal-content"> <p id="modalMessage"></p> <button class="close-btn" onclick="closeModal()">OK</button> </div> </div> <div id="createModal" class="create-modal"> <div class="create-modal-content"> <h2>Create Link</h2> <div class="form-group"><label for="createTitleInput">Title</label><input type="text" id="createTitleInput" placeholder="Enter the title here..." required></div> <div class="form-group"><label for="createUrlInput">Link</label><input type="url" id="createUrlInput" placeholder="Paste the link here..." required></div> <div class="form-group"><label for="createCategoryInput">Category</label> <select id="createCategoryInput"><option value="all">All</option></select> </div> <div class="wtd-options"> <button class="save-btn" onclick="saveLink()">Save</button> <button class="close-btn" onclick="closeCreateModal()">Cancel</button> </div> </div> </div> <div id="editModal" class="edit-modal"> <div class="edit-modal-content"> <h2>Edit Link</h2> <div class="form-group"><label for="editTitleInput">Title</label><input type="text" id="editTitleInput" placeholder="Enter the title here..." required></div> <div class="form-group"><label for="editUrlInput">Link</label><input type="url" id="editUrlInput" placeholder="Paste the link here..." required></div> <div class="form-group"><label for="editCategoryInput">Category</label> <select id="editCategoryInput"><option value="all">All</option></select> </div> <div class="wtd-options"> <button class="save-btn" onclick="saveLink()">Save</button> <button class="close-btn" onclick="closeEditModal()">Cancel</button> </div> </div> </div> <div id="categoryModal" class="category-modal"> <div class="category-modal-content"> <h2>Add Category</h2> <div class="form-group"><label for="categoryInput">Category Name</label><input type="text" id="categoryInput" placeholder="Enter category name..."></div> <div class="wtd-options"> <button class="save-btn" onclick="saveLink()">Save</button> <button class="close-btn" onclick="closeCategoryModal()">Cancel</button> </div> </div> </div> <div id="titleModal" class="title-modal"> <div class="title-modal-content"> <h2>Link Title</h2> <p id="titleModalMessage"></p> <button class="close-btn" onclick="closeTitleModal()">OK</button> </div> </div> <div id="contextMenu" class="context-menu"> <div class="context-menu-item" onclick="copyLinkFromContext()"><i class="fa-solid fa-copy"></i> Copy Link</div> <div class="context-menu-item" onclick="openEditModalFromContext()"><i class="fa-solid fa-edit"></i> Edit Link</div> <div class="context-menu-item delete" onclick="deleteLinkFromContext()"><i class="fa-solid fa-trash"></i> Delete Link</div> </div>
+    <script>
         let activeFilter = 'all';
         let categories = ['all'];
         let editIndex = -1;
@@ -12,9 +12,7 @@
             setupFilterButtons();
             document.addEventListener('click', hideContextMenu);
             document.addEventListener('contextmenu', (e) => {
-                if (!e.target.closest('.link-item')) {
-                    hideContextMenu();
-                }
+                if (!e.target.closest('.link-item')) hideContextMenu();
             });
         };
 
@@ -41,9 +39,7 @@
             document.getElementById('createCategoryInput').value = 'all';
         }
 
-        function closeCreateModal() {
-            document.getElementById('createModal').style.display = 'none';
-        }
+        function closeCreateModal() { document.getElementById('createModal').style.display = 'none'; }
 
         function openEditModal(index) {
             const links = JSON.parse(localStorage.getItem('youtubeLinks')) || [];
@@ -60,43 +56,31 @@
         }
 
         function openEditModalFromContext() {
-            if (contextIndex !== -1) {
-                openEditModal(contextIndex);
-                hideContextMenu();
-            }
+            if (contextIndex !== -1) { openEditModal(contextIndex); hideContextMenu(); }
         }
 
-        function closeEditModal() {
-            document.getElementById('editModal').style.display = 'none';
-            editIndex = -1;
-        }
+        function closeEditModal() { document.getElementById('editModal').style.display = 'none'; editIndex = -1; }
 
         function openCategoryModal() {
             document.getElementById('categoryModal').style.display = 'flex';
             document.getElementById('categoryInput').value = '';
         }
 
-        function closeCategoryModal() {
-            document.getElementById('categoryModal').style.display = 'none';
-        }
+        function closeCategoryModal() { document.getElementById('categoryModal').style.display = 'none'; }
 
         function openTitleModal(title) {
             document.getElementById('titleModalMessage').innerText = title;
             document.getElementById('titleModal').style.display = 'flex';
         }
 
-        function closeTitleModal() {
-            document.getElementById('titleModal').style.display = 'none';
-        }
+        function closeTitleModal() { document.getElementById('titleModal').style.display = 'none'; }
 
         function showModal(message) {
             document.getElementById('modalMessage').innerText = message;
             document.getElementById('modal').style.display = 'flex';
         }
 
-        function closeModal() {
-            document.getElementById('modal').style.display = 'none';
-        }
+        function closeModal() { document.getElementById('modal').style.display = 'none'; }
 
         function saveCategory() {
             const category = document.getElementById('categoryInput').value.toLowerCase().trim();
@@ -134,7 +118,6 @@
                 const dateAdded = new Date().toISOString();
                 links.unshift({ title, url, category, dateAdded });
                 localStorage.setItem('youtubeLinks', JSON.stringify(links));
-                document.getElementById('allLinks').innerHTML = '';
                 loadLinks();
                 closeCreateModal();
                 showModal('Link added!');
@@ -152,7 +135,6 @@
                 const links = JSON.parse(localStorage.getItem('youtubeLinks')) || [];
                 links[editIndex] = { title, url, category, dateAdded: links[editIndex].dateAdded };
                 localStorage.setItem('youtubeLinks', JSON.stringify(links));
-                document.getElementById('allLinks').innerHTML = '';
                 loadLinks();
                 closeEditModal();
                 showModal('Link updated!');
@@ -175,10 +157,7 @@
         }
 
         function truncateTitle(title) {
-            if (title.length > TITLE_MAX_LENGTH) {
-                return title.substring(0, TITLE_MAX_LENGTH - 3) + '...';
-            }
-            return title;
+            return title.length > TITLE_MAX_LENGTH ? title.substring(0, TITLE_MAX_LENGTH - 3) + '...' : title;
         }
 
         function displayLink(link, index) {
@@ -186,10 +165,7 @@
             const linkItem = document.createElement('div');
             linkItem.className = 'link-item';
             linkItem.setAttribute('data-index', index);
-            linkItem.addEventListener('contextmenu', (e) => {
-                e.preventDefault();
-                showContextMenu(e, index);
-            });
+            linkItem.addEventListener('contextmenu', e => { e.preventDefault(); showContextMenu(e, index); });
             const truncatedTitle = truncateTitle(link.title);
             linkItem.innerHTML = `
                 <div class="title-container">
@@ -229,7 +205,6 @@
                 const links = JSON.parse(localStorage.getItem('youtubeLinks'));
                 links.splice(contextIndex, 1);
                 localStorage.setItem('youtubeLinks', JSON.stringify(links));
-                document.getElementById('allLinks').innerHTML = '';
                 loadLinks();
                 showModal('Link deleted.');
                 hideContextMenu();
@@ -237,51 +212,29 @@
         }
 
         function loadCategories() {
-            const storedCategories = JSON.parse(localStorage.getItem('linkCategories'));
-            if (storedCategories) {
-                categories = storedCategories;
-            }
+            const stored = JSON.parse(localStorage.getItem('linkCategories'));
+            if (stored) categories = stored;
             updateFilterButtons();
         }
 
         function loadLinks() {
             const links = JSON.parse(localStorage.getItem('youtubeLinks')) || [];
             document.getElementById('allLinks').innerHTML = '';
-            const filteredLinks = activeFilter === 'all' 
-                ? links 
-                : links.filter(link => link.category === activeFilter);
-            filteredLinks.forEach((link, index) => displayLink(link, links.indexOf(link)));
-        }
-
-        function copyLink(index) {
-            const links = JSON.parse(localStorage.getItem('youtubeLinks'));
-            navigator.clipboard.writeText(links[index].url).then(() => {
-                showModal('Link copied to clipboard!');
-            });
-        }
-
-        function deleteLink(index) {
-            const links = JSON.parse(localStorage.getItem('youtubeLinks'));
-            links.splice(index, 1);
-            localStorage.setItem('youtubeLinks', JSON.stringify(links));
-            document.getElementById('allLinks').innerHTML = '';
-            loadLinks();
-            showModal('Link deleted.');
+            const filtered = activeFilter === 'all' ? links : links.filter(l => l.category === activeFilter);
+            filtered.forEach((link, i) => displayLink(link, links.indexOf(link)));
         }
 
         function searchLinks() {
             const query = document.getElementById('searchInput').value.toLowerCase();
             const links = JSON.parse(localStorage.getItem('youtubeLinks')) || [];
             document.getElementById('allLinks').innerHTML = '';
-            const filteredLinks = links.filter(link => 
-                link.title.toLowerCase().includes(query) && 
-                (activeFilter === 'all' || link.category === activeFilter)
+            const filtered = links.filter(l => 
+                l.title.toLowerCase().includes(query) && 
+                (activeFilter === 'all' || l.category === activeFilter)
             );
-            filteredLinks.forEach((link, index) => displayLink(link, links.indexOf(link)));
+            filtered.forEach((link, i) => displayLink(link, links.indexOf(link)));
         }
-      </script>
-      <script>
-        
+
         document.addEventListener("DOMContentLoaded", () => {
             const customMenu = document.querySelector(".custom-menu");
 
@@ -303,3 +256,4 @@
     </script>
    </body>
 </html>
+
