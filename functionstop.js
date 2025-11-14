@@ -1,4 +1,3 @@
-
 document.addEventListener('contextmenu', e => e.preventDefault());
 document.getElementById("menuIcon").addEventListener("click", () => {
     let menu = document.getElementById("menu");
@@ -8,20 +7,27 @@ document.getElementById("menuIcon").addEventListener("click", () => {
 const localStorageKey = 'recentlyWatched';
 const autoPlayKey = 'autoPlayPref';
 
-// === GET RECENTLY WATCHED ===
-function getRecentlyWatched() {
+function getRecentlyWatched(raw = false) {
     let v = localStorage.getItem(localStorageKey);
     let arr = v ? JSON.parse(v) : [];
+
+    if (raw) return arr;
+
     const now = Date.now();
-    arr = arr.filter(video => video.isPinned || ((now - video.timestamp) / (1000 * 60 * 60) <= 24));
+    // Keep: pinned OR within 24 hours
+    arr = arr.filter(video =>
+        video.isPinned || ((now - video.timestamp) / (1000 * 60 * 60) <= 24)
+    );
+
     localStorage.setItem(localStorageKey, JSON.stringify(arr));
     return arr;
 }
 
 function getVideoId(url) {
     let id = '';
-    if (url.includes('youtu.be')) id = url.split('youtu.be/')[1].split('?')[0];
-    else if (url.includes('youtube.com') || url.includes('yout-ube.com')) {
+    if (url.includes('youtu.be') || url.includes('yout-ube.be')) {
+        id = url.split(/youtu\.be\/|yout-ube\.be\//i)[1]?.split('?')[0] || '';
+    } else if (url.includes('youtube.com') || url.includes('yout-ube.com')) {
         if (url.includes('/live/')) {
             let p = url.split('/live/')[1];
             id = p ? p.split('?')[0] : '';
@@ -49,23 +55,25 @@ async function getVideoTitle(url) {
 }
 
 async function addRecentlyWatched(url) {
-    let videos = getRecentlyWatched();
+    let videos = getRecentlyWatched(true);
     let vid = getVideoId(url);
-    if (!videos.some(v => v.url === url) && vid) {
-        let title = await getVideoTitle(url);
-        videos.unshift({
-            url,
-            title,
-            thumbnail: getThumbnailUrl(vid),
-            isPinned: false,
-            timestamp: Date.now()
-        });
-        if (videos.length > 10) videos.pop();
-        localStorage.setItem(localStorageKey, JSON.stringify(videos));
-    }
+    if (!vid) return;
+
+    if (videos.some(v => v.url === url)) return;
+
+    let title = await getVideoTitle(url);
+    videos.unshift({
+        url,
+        title,
+        thumbnail: getThumbnailUrl(vid),
+        isPinned: false,
+        timestamp: Date.now()
+    });
+
+    if (videos.length > 50) videos.pop();
+    localStorage.setItem(localStorageKey, JSON.stringify(videos));
 }
 
-// === AUTO PLAY TOGGLE ===
 const autoToggle = document.getElementById('autoPlayToggle');
 const submitContainer = document.getElementById('submitContainer');
 const savedAuto = localStorage.getItem(autoPlayKey);
@@ -86,22 +94,18 @@ function updateSubmitButton() {
                 Play Now
             </button>`;
     }
-}async function extractAndModifyYouTubeLink(inputText) {
+}
+
+async function extractAndModifyYouTubeLink(inputText) {
     if (!inputText) return;
 
-    // --- Normalize and insert dash after 't' ---
     inputText = inputText
         .replace(/youtube\.com/gi, "yout-ube.com")
         .replace(/youtu\.be/gi, "yout-ube.be");
 
-    // --- Extract video ID from any format ---
     let vidId = "";
-
-    // Match youtu.be short links
     const shortMatch = inputText.match(/yout-ube\.be\/([a-zA-Z0-9_-]{11})/i);
-    // Match /watch?v= links
     const watchMatch = inputText.match(/[?&]v=([a-zA-Z0-9_-]{11})/i);
-    // Match /live/ links
     const liveMatch = inputText.match(/\/live\/([a-zA-Z0-9_-]{11})/i);
 
     if (shortMatch) vidId = shortMatch[1];
@@ -113,12 +117,10 @@ function updateSubmitButton() {
         return;
     }
 
-    // --- Construct modified link ---
     const modifiedLink = `https://www.yout-ube.com/watch?v=${vidId}`;
     document.getElementById("userLink").value = modifiedLink;
     document.getElementById("result").innerHTML = "";
 
-    // --- Add to history and play ---
     await addRecentlyWatched(modifiedLink);
     updateSubmitButton();
 
@@ -129,8 +131,6 @@ function updateSubmitButton() {
         showNotification("Pasted...!");
     }
 }
-
-
 
 function manualPlay() {
     let url = document.getElementById("userLink").value.trim();
@@ -174,34 +174,41 @@ document.addEventListener('keydown', e => {
     if (e.key === 'Escape') closeThumbPopup();
 });
 
-// === RECOMMENDATIONS ===
 function showRecommendations(searchQuery = '') {
     const section = document.getElementById('recommendationSection');
     const list = document.getElementById('videoList');
-    let videos = getRecentlyWatched();
-    if (searchQuery) videos = videos.filter(v => v.title.toLowerCase().includes(searchQuery.toLowerCase()));
+
+    let videos = getRecentlyWatched(); // Auto-cleans old unpinned
+
+    if (searchQuery) {
+        videos = videos.filter(v => v.title.toLowerCase().includes(searchQuery.toLowerCase()));
+    }
+
     list.innerHTML = '';
     if (videos.length === 0) {
-        list.innerHTML = '<li>paste the right link...!</li>';
+        list.innerHTML = '<li style="color:#aaa; text-align:center;">Not watched recently.';
     } else {
         videos.forEach(video => {
             let vid = getVideoId(video.url);
             let li = document.createElement('li');
             li.innerHTML = `
-                <div style="display:flex; align-items:center;">
+                <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
                     <img src="${video.thumbnail}"
                          class="thumbnail-circle"
                          onclick="openThumbPopup('${vid}', '${escapeJsString(video.title)}', '${video.url}')"
-                         style="cursor: pointer; transition: transform 0.2s;"
+                         style="cursor:pointer; transition:transform .2s;"
                          onmouseover="this.style.transform='scale(1.1)'"
                          onmouseout="this.style.transform='scale(1)'">
-                    <a href="${video.url}" target="_self">#BS// ${video.title} //Adstoper</a>
+                    <a href="${video.url}" target="_self" style="flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:14px;">
+                        ${video.isPinned ? 'Pinned ' : ''}#BS// ${video.title} //Adstoper
+                    </a>
                 </div>
-                <div class="action-buttons">
-                    <i style='margin: 5px;' class="fa-solid ${video.isPinned ? 'fa-toggle-on' : 'fa-toggle-off'}"
+                <div class="action-buttons" style="display:flex; gap:4px; font-size:12px;">
+                    <i style="cursor:pointer; color:${video.isPinned ? '#4CAF50' : '#666'};"
+                       class="fa-solid ${video.isPinned ? 'fa-thumbtack' : 'fa-toggle-off'}"
                        onclick="togglePinned('${video.url}')"></i>
-                    <button onclick="copyToClipboard('${video.url}')">Copy</button>
-                    <button onclick="deleteVideo('${video.url}')">Remove</button>
+                    <button onclick="copyToClipboard('${video.url}')" style="font-size:11px; padding:2px 6px;">Copy</button>
+                    <button onclick="deleteVideo('${video.url}')" style="font-size:11px; padding:2px 6px; background:#ff4444; color:white;">Remove</button>
                 </div>`;
             list.appendChild(li);
         });
@@ -214,17 +221,17 @@ function closeRecommendations() {
 }
 
 function searchHistory() {
-    const q = document.getElementById('searchHistory').value;
+    const q = document.getElementById('searchHistory').value.trim();
     showRecommendations(q);
 }
 
 function togglePinned(url) {
-    let videos = getRecentlyWatched();
+    let videos = getRecentlyWatched(true);
     let v = videos.find(v => v.url === url);
     if (v) {
         v.isPinned = !v.isPinned;
         localStorage.setItem(localStorageKey, JSON.stringify(videos));
-        showNotification(v.isPinned ? 'Pinned..!' : 'Unpinned..!');
+        showNotification(v.isPinned ? 'Pinned forever!' : 'Unpinned');
         showRecommendations();
     }
 }
@@ -234,7 +241,7 @@ function copyToClipboard(link) {
 }
 
 function deleteVideo(url) {
-    let videos = getRecentlyWatched();
+    let videos = getRecentlyWatched(true);
     videos = videos.filter(v => v.url !== url);
     localStorage.setItem(localStorageKey, JSON.stringify(videos));
     showRecommendations();
@@ -249,11 +256,11 @@ function showNotification(msg) {
 }
 
 document.getElementById("userLink").addEventListener("input", () => {
-    const text = document.getElementById("userLink").value;
-    if (text.length > 10) extractAndModifyYouTubeLink(text);
+    const text = document.getElementById("userLink").value.trim();
+    if (text.length > 10) {
+        extractAndModifyYouTubeLink(text);
+    }
 });
-
-// === CLIPBOARD MAGIC ===
 let clipboardInterval = null;
 
 async function checkClipboardForYouTube() {
@@ -267,7 +274,8 @@ async function checkClipboardForYouTube() {
             document.getElementById("userLink").value = trimmed;
             await extractAndModifyYouTubeLink(trimmed);
         }
-    } catch {}
+    } catch (err) {
+    }
 }
 
 function restartClipboardMagic() {
@@ -275,7 +283,7 @@ function restartClipboardMagic() {
     if (autoToggle.checked) {
         checkClipboardForYouTube();
         clipboardInterval = setInterval(checkClipboardForYouTube, 1500);
-        showNotification("Auto-paste activated..!");
+        showNotification("Auto-paste ON");
     } else {
         setTimeout(checkClipboardForYouTube, 800);
     }
