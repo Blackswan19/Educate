@@ -203,12 +203,12 @@ function showRecommendations(searchQuery = '') {
                         ${video.isPinned ? 'Pinned ' : ''}#BS// ${video.title} //Adstoper
                     </a>
                 </div>
-                <div class="action-buttons" style="display:flex; gap:4px; font-size:12px;">
-                    <i style="cursor:pointer; color:${video.isPinned ? '#4CAF50' : '#666'};"
-                       class="fa-solid ${video.isPinned ? 'fa-thumbtack' : 'fa-toggle-off'}"
+                <div class="action-buttons">
+                    <i style="cursor:pointer; color:${video.isPinned ? '#0040ffff' : '#666'};"
+                       class="fa-solid ${video.isPinned ? 'fa-toggle-on' : 'fa-toggle-off'}"
                        onclick="togglePinned('${video.url}')"></i>
-                    <button onclick="copyToClipboard('${video.url}')" style="font-size:11px; padding:2px 6px;">Copy</button>
-                    <button onclick="deleteVideo('${video.url}')" style="font-size:11px; padding:2px 6px; background:#ff4444; color:white;">Remove</button>
+                    <button onclick="copyToClipboard('${video.url}')">Copy</button>
+                    <button onclick="deleteVideo('${video.url}')">Remove</button>
                 </div>`;
             list.appendChild(li);
         });
