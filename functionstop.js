@@ -95,7 +95,6 @@ function updateSubmitButton() {
             </button>`;
     }
 }
-
 async function extractAndModifyYouTubeLink(inputText) {
     if (!inputText) return;
 
@@ -104,20 +103,34 @@ async function extractAndModifyYouTubeLink(inputText) {
         .replace(/youtu\.be/gi, "yout-ube.be");
 
     let vidId = "";
+    let extraParams = "";
+
     const shortMatch = inputText.match(/yout-ube\.be\/([a-zA-Z0-9_-]{11})/i);
     const watchMatch = inputText.match(/[?&]v=([a-zA-Z0-9_-]{11})/i);
     const liveMatch = inputText.match(/\/live\/([a-zA-Z0-9_-]{11})/i);
+    const embedMatch = inputText.match(/embed\/([a-zA-Z0-9_-]{11})/i);
 
     if (shortMatch) vidId = shortMatch[1];
     else if (watchMatch) vidId = watchMatch[1];
     else if (liveMatch) vidId = liveMatch[1];
+    else if (embedMatch) vidId = embedMatch[1];
 
     if (!vidId) {
         document.getElementById("result").innerHTML = "BAD LINK!";
         return;
     }
 
-    const modifiedLink = `https://www.yout-ube.com/watch?v=${vidId}`;
+    // Preserve playlist and index if they exist
+    const listMatch = inputText.match(/[?&]list=([a-zA-Z0-9_-]+)/i);
+    const indexMatch = inputText.match(/[?&]index=(\d+)/i);
+    const timeMatch = inputText.match(/[?&]t=(\d+s?)/i);
+
+    if (listMatch) extraParams += `&list=${listMatch[1]}`;
+    if (indexMatch) extraParams += `&index=${indexMatch[1]}`;
+    if (timeMatch) extraParams += `&t=${timeMatch[1]}`;
+
+    const modifiedLink = `https://www.yout-ube.com/watch?v=${vidId}${extraParams}`;
+
     document.getElementById("userLink").value = modifiedLink;
     document.getElementById("result").innerHTML = "";
 
@@ -131,7 +144,6 @@ async function extractAndModifyYouTubeLink(inputText) {
         showNotification("Pasted...!");
     }
 }
-
 function manualPlay() {
     let url = document.getElementById("userLink").value.trim();
     if (url) playVideo(url);
