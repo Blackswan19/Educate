@@ -1,4 +1,5 @@
 document.addEventListener('contextmenu', e => e.preventDefault());
+
 document.getElementById("menuIcon").addEventListener("click", () => {
     let menu = document.getElementById("menu");
     menu.style.display = menu.style.display === "block" ? "none" : "block";
@@ -14,13 +15,11 @@ function getRecentlyWatched(raw = false) {
     if (raw) return arr;
 
     const now = Date.now();
-    // Keep: pinned OR within 24 hours
-    arr = arr.filter(video =>
-        video.isPinned || ((now - video.timestamp) / (1000 * 60 * 60) <= 24)
-    );
+    const oneDayMs = 24 * 60 * 60 * 1000;
 
-    localStorage.setItem(localStorageKey, JSON.stringify(arr));
-    return arr;
+    return arr.filter(video => 
+        video.isPinned || (now - video.timestamp) <= oneDayMs
+    );
 }
 
 function getVideoId(url) {
@@ -59,18 +58,26 @@ async function addRecentlyWatched(url) {
     let vid = getVideoId(url);
     if (!vid) return;
 
-    if (videos.some(v => v.url === url)) return;
+    videos = videos.filter(v => v.url !== url);
 
     let title = await getVideoTitle(url);
-    videos.unshift({
+
+    const newVideo = {
         url,
         title,
         thumbnail: getThumbnailUrl(vid),
         isPinned: false,
         timestamp: Date.now()
-    });
+    };
 
-    if (videos.length > 50) videos.pop();
+    videos.unshift(newVideo);
+
+    const now = Date.now();
+    const oneDayMs = 24 * 60 * 60 * 1000;
+    videos = videos.filter(v => v.isPinned || (now - v.timestamp) <= oneDayMs);
+
+    if (videos.length > 100) videos = videos.slice(0, 100);
+
     localStorage.setItem(localStorageKey, JSON.stringify(videos));
 }
 
@@ -95,6 +102,7 @@ function updateSubmitButton() {
             </button>`;
     }
 }
+
 async function extractAndModifyYouTubeLink(inputText) {
     if (!inputText) return;
 
@@ -120,7 +128,6 @@ async function extractAndModifyYouTubeLink(inputText) {
         return;
     }
 
-    // Preserve playlist and index if they exist
     const listMatch = inputText.match(/[?&]list=([a-zA-Z0-9_-]+)/i);
     const indexMatch = inputText.match(/[?&]index=(\d+)/i);
     const timeMatch = inputText.match(/[?&]t=(\d+s?)/i);
@@ -144,6 +151,7 @@ async function extractAndModifyYouTubeLink(inputText) {
         showNotification("Pasted...!");
     }
 }
+
 function manualPlay() {
     let url = document.getElementById("userLink").value.trim();
     if (url) playVideo(url);
@@ -157,7 +165,6 @@ function clearInput() {
     document.getElementById("userLink").value = "";
 }
 
-// === THUMBNAIL POPUP ===
 function escapeJsString(str) {
     return str.replace(/'/g, "\\'").replace(/"/g, "\\\"");
 }
@@ -190,7 +197,7 @@ function showRecommendations(searchQuery = '') {
     const section = document.getElementById('recommendationSection');
     const list = document.getElementById('videoList');
 
-    let videos = getRecentlyWatched(); // Auto-cleans old unpinned
+    let videos = getRecentlyWatched();
 
     if (searchQuery) {
         videos = videos.filter(v => v.title.toLowerCase().includes(searchQuery.toLowerCase()));
@@ -198,7 +205,7 @@ function showRecommendations(searchQuery = '') {
 
     list.innerHTML = '';
     if (videos.length === 0) {
-        list.innerHTML = '<li style="color:#aaa; text-align:center;">Not watched recently.';
+        list.innerHTML = '<li style="color:#aaa; text-align:center;">No recently watched videos.</li>';
     } else {
         videos.forEach(video => {
             let vid = getVideoId(video.url);
@@ -216,7 +223,7 @@ function showRecommendations(searchQuery = '') {
                     </a>
                 </div>
                 <div class="action-buttons">
-                    <i style="cursor:pointer; color:${video.isPinned ? '#0040ffff' : '#666'};"
+                    <i style="cursor:pointer; color:${video.isPinned ? '#0040ffff' : '#666'}; font-size:18px;"
                        class="fa-solid ${video.isPinned ? 'fa-toggle-on' : 'fa-toggle-off'}"
                        onclick="togglePinned('${video.url}')"></i>
                     <button onclick="copyToClipboard('${video.url}')">Copy</button>
@@ -273,6 +280,7 @@ document.getElementById("userLink").addEventListener("input", () => {
         extractAndModifyYouTubeLink(text);
     }
 });
+
 let clipboardInterval = null;
 
 async function checkClipboardForYouTube() {
@@ -286,8 +294,7 @@ async function checkClipboardForYouTube() {
             document.getElementById("userLink").value = trimmed;
             await extractAndModifyYouTubeLink(trimmed);
         }
-    } catch (err) {
-    }
+    } catch (err) {}
 }
 
 function restartClipboardMagic() {
@@ -297,6 +304,8 @@ function restartClipboardMagic() {
         clipboardInterval = setInterval(checkClipboardForYouTube, 1500);
         showNotification("Auto-paste ON");
     } else {
+        clearInterval(clipboardInterval);
+        clipboardInterval = null;
         setTimeout(checkClipboardForYouTube, 800);
     }
 }
