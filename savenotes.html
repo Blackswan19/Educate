@@ -100,7 +100,9 @@ body {
 	box-sizing: border-box;
 	align-items: center;
 }
-
+i.fa-regular.fa-star.star-icon {
+    bottom: 20px;
+}
 ::-webkit-scrollbar {
 	background-color: #44444400;
 	width: 5px;
@@ -153,11 +155,11 @@ scrollbar-width: thin;
     max-width: 520px;
     overflow-y: scroll;
     position: fixed;
-    top: 15%;
-    height: 65vh;
+    top: 19%;
+    height: 55vh;
     padding-bottom: 50px;
     scrollbar-width: auto;
-    width: 89%;
+    width: 86%;
 }
 
 .chat-box::-webkit-scrollbar-track {
@@ -222,7 +224,7 @@ i.fa-solid.fa-bars-staggered {
     padding: 1px 32px;
     max-width: 500px;
     position: fixed;
-    bottom: 100px;
+    bottom: 20px;
     box-shadow: none;
     width: 78%;
     backdrop-filter: blur(20px);
@@ -410,7 +412,13 @@ position: absolute;
 	.container {
 		flex-direction: column;
 	}
+i.fa-regular.fa-star.star-icon {
+    bottom: 90px;
+}	
+.addbtn {
+        bottom: 90px;
 
+	}
 	.user-list {
 		padding: 0;
 		top: 20px;
@@ -441,8 +449,7 @@ position: absolute;
 		color: white;
 		font-size: 15px;
 	}
-.input-container {
-    bottom: 100px;}
+
 	.txtinput {
 		width: 82%;
 		font-size: 15px;
@@ -642,7 +649,6 @@ p {
                 newStarIcon.className = 'fa-regular fa-star star-icon';
                 newStarIcon.style.position = 'fixed';
                 newStarIcon.style.right = '80px';
-                newStarIcon.style.bottom = '20px';
                 newStarIcon.style.fontSize = '18px';
                 newStarIcon.style.padding = '10px';
                 newStarIcon.style.background = 'transparent';
