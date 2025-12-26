@@ -156,7 +156,7 @@ scrollbar-width: thin;
     overflow-y: scroll;
     position: fixed;
     top: 15%;
-    height: 65vh;
+    height: 60vh;
     padding-bottom: 50px;
     scrollbar-width: auto;
     width: 89%;
@@ -303,7 +303,9 @@ button:hover {
 	cursor: pointer;
 	font-weight: 600;
 }
-
+i.fa-regular.fa-star.star-icon {
+    bottom: 20px;
+}
 .context-menu li:hover {
 	background: #212121;
     color: white;
@@ -438,13 +440,15 @@ position: absolute;
 		padding: 8px;
 		font-size: 18px;
 	}
-
+i.fa-regular.fa-star.star-icon {
+    bottom: 70px;
+}
 	.chat-message.user {
 		color: white;
 		font-size: 15px;
 	}
 .input-container {
-    bottom: 100px;}
+    bottom: 10px;}
 	.txtinput {
 		width: 82%;
 		font-size: 15px;
@@ -452,8 +456,11 @@ position: absolute;
 	}
 
 	.addbtn {
-		font-size: 21px;
-		padding: 5px 10px;
+		        font-size: 21px;
+        padding: 5px 10px;
+        bottom: 70px;
+        right: 20px;
+
 	}
 	.chat-header {
 		font-size: 18px;
@@ -644,7 +651,6 @@ p {
                 newStarIcon.className = 'fa-regular fa-star star-icon';
                 newStarIcon.style.position = 'fixed';
                 newStarIcon.style.right = '80px';
-                newStarIcon.style.bottom = '20px';
                 newStarIcon.style.fontSize = '18px';
                 newStarIcon.style.padding = '10px';
                 newStarIcon.style.background = 'transparent';
