@@ -256,7 +256,7 @@ function togglePinned(url) {
 }
 
 function copyToClipboard(link) {
-    navigator.clipboard.writeText(link).then(() => showNotification("COPIED!"));
+    navigator.clipboard.writeText(link).then(() => showNotification("Copied...!"));
 }
 
 function deleteVideo(url) {
@@ -264,7 +264,7 @@ function deleteVideo(url) {
     videos = videos.filter(v => v.url !== url);
     localStorage.setItem(localStorageKey, JSON.stringify(videos));
     showRecommendations();
-    showNotification("DELETED!");
+    showNotification("Deleted..!");
 }
 
 function showNotification(msg) {
