@@ -211,14 +211,14 @@ function showRecommendations(searchQuery = '') {
             let vid = getVideoId(video.url);
             let li = document.createElement('li');
             li.innerHTML = `
-                <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+                <div style="display:flex; align-items:center; gap:8px;">
                     <img src="${video.thumbnail}"
                          class="thumbnail-circle"
                          onclick="openThumbPopup('${vid}', '${escapeJsString(video.title)}', '${video.url}')"
                          style="cursor:pointer; transition:transform .2s;"
                          onmouseover="this.style.transform='scale(1.1)'"
                          onmouseout="this.style.transform='scale(1)'">
-                    <a href="${video.url}" target="_self" style="flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:14px;">
+                    <a href="${video.url}" target="_self" style="flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
                         ${video.isPinned ? 'Pinned ' : ''}#BS// ${video.title} //Adstoper
                     </a>
                 </div>
@@ -226,8 +226,8 @@ function showRecommendations(searchQuery = '') {
                     <i style="cursor:pointer; color:${video.isPinned ? '#0040ffff' : '#666'}; font-size:18px;"
                        class="fa-solid ${video.isPinned ? 'fa-toggle-on' : 'fa-toggle-off'}"
                        onclick="togglePinned('${video.url}')"></i>
-                    <button onclick="copyToClipboard('${video.url}')">Copy</button>
-                    <button onclick="deleteVideo('${video.url}')">Remove</button>
+                    <button onclick="copyToClipboard('${video.url}')"><i class="fa-solid fa-copy"></i></button>
+                    <button onclick="deleteVideo('${video.url}')"><i class="fa-solid fa-ban"></i></button>
                 </div>`;
             list.appendChild(li);
         });
