@@ -1,155 +1,136 @@
-<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>BsFilexplorer</title> <link rel="icon" type="image/x-icon" href="https://png.pngtree.com/png-vector/20190120/ourmid/pngtree-folder-vector-icon-png-image_470289.jpg"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald|Noto+Sans"> <style> *{ font-family: "Noto Sans", sans-serif; } body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #0f0f0f; overflow-x: hidden; } ::-webkit-scrollbar { width: 10px; background-color: rgb(30, 30, 30); } ::-webkit-scrollbar-thumb{ background-color: #464646; } ::-webkit-scrollbar-thumb:hover{ background-color: #004cff; border-radius: 2px; } h2 { color: #007bff; text-align: center; border-bottom: solid 1px #333333; padding: 45px; } .file-list { display: flex; flex-wrap: wrap; width: 100%; position: relative; left: 75px; overflow-x: hidden; } .file { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; border-radius: 5px; /* width: 120px; */ } .file:hover { background-color: #1e1e1e; } .file-name { cursor: pointer; display: contents; font-size: 19px; text-align: center; margin-bottom: 10px; color: #004cff; text-transform: capitalize; } .file-name i { margin-right: 5px; color: #004cff; font-size: 20px; } .file-actions { display: flex; gap: 8px; } button { padding: 6px 12px; cursor: pointer; font-size: 13px; border: none; border-radius: 3px; background-color: #5d5d5d; color: white; transition: background-color 0.3s; margin-top: 15px; } button:hover { background-color: #3c3c3c; } #add-file-btn { background-color: #333333; color: white; font-size: 34px; padding: 0px 15px; border: none; position: fixed; bottom: 30px; right: 30px; transition: background-color 0.3s; } #add-file-btn:hover { background-color: #3d3d3d; } #modal, #upload-modal, #notification { display: none; position: fixed; left: 0; top: 0; width: 100%; height: 100%; background-color: rgb(0 0 0 / 93%); justify-content: center; align-items: center; } #modal-content, #upload-modal-content, #notification-content { background: #272727; padding: 20px; border-radius: 5px; text-align: center; /* width: 300px; */ box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); color: white; } input[type="text"], input[type="file"] { width: calc(100% - 20px); padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; } .uploaded-files { margin-top: 10px; text-align: left; max-height: 200px; overflow-y: auto; border: solid 1px gray; padding: 10px; } #notification-message { margin-bottom: 15px; } span#current-folder-name{ text-transform: uppercase; color: #00ffda; font-size: 20px; font-weight: 900; text-decoration: overline; } span.file-name:hover { text-decoration: underline; } @media (max-width : 480px){ .file-list { display: flex; flex-wrap: wrap; position: relative; left: 0px; width: 100%; } #modal-content, #upload-modal-content, #notification-content { width: 255px; } .file { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; border-radius: 5px; width: 120px; } } </style> </head> <body><script src="noright.js"></script> <div id="file-manager"> <h2 style="color: #004cff;">BsFilexplorer</h2> <div class="file-list" id="file-list"></div> <button id="add-file-btn">+</button> </div> <div id="modal"> <div id="modal-content"> <h3>Add Folder</h3> <input type="text" id="folder-name" placeholder="Enter folder name"> <button id="save-folder-btn">Save</button> <button id="close-modal-btn">Cancel</button> </div> </div> <div id="upload-modal"> <button id="close-upload-modal-btn">×</button> <div id="upload-modal-content"> <h3>Upload Files to <span id="current-folder-name"></span></h3> <input type="file" id="file-input" multiple accept=".pdf, .jpg, .jpeg, .png"> <button id="upload-files-btn">Add the files to the folder</button> <h3>Uploaded Files</h3> <div class="uploaded-files" id="uploaded-files-list"></div> </div> </div> <div id="notification"> <div id="notification-content"> <p id="notification-message"></p> <button id="close-notification-btn" >Close</button> </div> </div>
-    <script>
-        function loadFolders() {
-            const folders = JSON.parse(localStorage.getItem('folders')) || [];
-            folders.forEach(folder => addFolderToList(folder));
-        }
+<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8" /> <meta name="viewport" content="width=device-width, initial-scale=1.0"/> <title>BsFilexplorer</title> <link rel="icon" type="image/x-icon" href="https://t4.ftcdn.net/jpg/09/79/48/67/360_F_979486782_lJw5TBxKXpyhNaPdElww03yej8DbL0Jp.jpg"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/> <style> * { margin: 0; padding: 0; box-sizing: border-box; } * { -webkit-tap-highlight-color: transparent; } body { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; } body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, sans-serif; background: #000000; color: #e3e3e8; min-height: 100vh; padding: 16px; } ::-webkit-scrollbar { width: 4px; } ::-webkit-scrollbar-thumb { background: #2a2a32; border-radius: 2px; } header { text-align: center; padding: 50px 0 50px 0; border-bottom: solid 1.5px #ffffff2e; } h2 { font-size: 26px; font-weight: 500; color: #0040ff; letter-spacing: 0.5px; } .file-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); gap: 25px 10px; padding: 30px 0px 10px 0px; } .file { display: flex; flex-direction: column; align-items: center; padding: 15px 0px 11px 0px; border-radius: 25px; transition: background 0.14s ease; } .file:hover, .file:active { background: #202020; } .file i { font-size: 48px; color: #0040ff; /* ← main color */ margin-bottom: 10px; } .file-name { font-size: 13.5px; text-align: center; line-height: 1.38; color: #d0d0da; max-width: 100%; word-break: break-word; } .file-actions { margin-top: 10px; display: flex; gap: 10px; } .file-actions button { background: none; border: none; color: #ffffff9d; font-size: 13px; padding: 4px 10px; border-radius: 34px; cursor: pointer; transition: all 0.13s; } .file-actions button:hover { background: #ffffff21; color: #ffffffbb; } /* Floating action button */ #add-file-btn { position: fixed; bottom: 24px; right: 24px; width: 40px; height: 40px; border-radius: 12px; background: #0040ff; color: white; font-size: 32px; line-height: 64px; text-align: center; border: none; box-shadow: 0 4px 18px rgba(0, 0, 0, 0.5); cursor: pointer; transition: transform 0.16s, background 0.2s; display: flex; align-items: center; justify-content: center; } #add-file-btn:hover, #add-file-btn:active { background: #1a66ff; transform: scale(1.06); } /* Popups / dialogs */ .overlay { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.21); backdrop-filter: blur(5px); z-index: 1000; align-items: center; justify-content: center; padding: 0 12px 20px; } .dialog { background: #121212; border-radius: 45px; width: 100%; max-width: 420px; padding: 24px 20px 32px; color: #e0e0e8; } .dialog.centered { border-radius: 50px; align-self: center; padding: 28px 24px 21px 24px; } .dialog h3 { font-size: 19px; font-weight: 500; margin-bottom: 20px; color: #ffffff; text-align: center; } input[type="file"]{ background: transparent; border: none; color: #f0f0f5; font-size: 16px; padding: 20px 0px; cursor: pointer; } input[type="text"] { background: transparent; border: none; color: #f0f0f5; font-size: 16px; padding: 12px 0px; cursor: pointer; width: 100%; border-radius: 1000px; text-align: center;} input:focus { outline: none; box-shadow: 0 0 0 1.5px #ffffff21; } .btn-row { display: flex; gap: 12px; margin-top: 20px; } .btn { flex: 1; padding: 12px; font-size: 16px; font-weight: 500; border: none; border-radius: 31px; cursor: pointer; transition: background 0.14s; } .btn-primary { background: #0040ff; /* ← main color */ color: white; } .btn-primary:hover { background: #002aff; } .btn-secondary { background: #ffffff09; color: #ffffff94; } .btn-secondary:hover { background: rgba(255, 255, 255, 0.089); } .close-btn { position: absolute; top: 16px; right: 16px; background: none; border: none; color: #88889a; font-size: 28px; cursor: pointer; } .uploaded-files { margin: 20px 0 -10px 0; max-height: 260px; overflow-y: auto; padding-right: 4px; background: #ffffff0a; border-radius: 30px; } .uploaded-item { padding: 13px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #ffffff1c; } .uploaded-item:last-child { border-bottom: none; } .file-link { color: #0040ff; cursor: pointer; font-size: 15px;overflow: hidden; text-overflow: ellipsis;width: 180px; } .file-link:hover { text-decoration: underline; color: #1a66ff; } #current-folder-name { color: #0040ff; } #notification .dialog { max-width: 360px; text-align: center; border-radius: 45px; } @media (min-width: 500px) { .overlay { align-items: center; } } </style> </head> <body> <header> <h2>BsFilexplorer</h2> </header> <div class="file-list" id="file-list"></div> <button id="add-file-btn">+</button> <!-- Add Folder --> <div id="modal" class="overlay"> <div class="dialog centered"> <h3>New Folder</h3> <input type="text" id="folder-name" placeholder="Folder name" autocomplete="off"/> <div class="btn-row"> <button class="btn btn-secondary" id="close-modal-btn">Cancel</button> <button class="btn btn-primary" id="save-folder-btn">Create</button> </div> </div> </div> <!-- Upload modal --> <div id="upload-modal" class="overlay"> <div class="dialog"> <button class="close-btn" id="close-upload-modal-btn">×</button> <h3>Upload to <span id="current-folder-name"></span></h3> <input type="file" id="file-input" multiple accept=".pdf,.jpg,.jpeg,.png,.gif,.txt,.docx,.zip"/> <button class="btn btn-primary" id="upload-files-btn" style="width:100%; margin: 5px 0 -9px 0;">Add Files</button> <h3 style="margin:24px 0 12px; font-size:17px;">Files</h3> <div class="uploaded-files" id="uploaded-files-list"></div> </div> </div> <!-- Notification --> <div id="notification" class="overlay"> <div class="dialog centered"> <p id="notification-message" style="font-size:16px; margin-bottom:20px;"></p> <button class="btn btn-primary" id="close-notification-btn" style="width:140px;">OK</button> </div> </div>
+<script>
+document.addEventListener('contextmenu', e => e.preventDefault());
+function loadFolders() {
+  const folders = JSON.parse(localStorage.getItem('folders')) || [];
+  folders.forEach(addFolderToList);
+}
 
-        function addFolderToList(folderName) {
-            const fileList = document.getElementById('file-list');
-            const newFileDiv = document.createElement('div');
-            newFileDiv.className = 'file';
-            newFileDiv.innerHTML = `
-                <span class="file-name"><i class="fa-solid fa-folder-open" style="font-size: 45px;
-    text-align: center;
-    position: relative;
-    left: 8px;"></i>${folderName}</span>
-                <div class="file-actions">
-                    <button onclick="openFolder('${folderName}')">Open</button>
-                    <button onclick="deleteFolder('${folderName}')">Delete</button>
-                </div>
-            `;
-            fileList.appendChild(newFileDiv);
-        }
+function addFolderToList(name) {
+  const container = document.getElementById('file-list');
+  const el = document.createElement('div');
+  el.className = 'file';
+  el.innerHTML = `
+    <i class="fa-solid fa-folder"></i>
+    <div class="file-name">${name}</div>
+    <div class="file-actions">
+      <button onclick="openFolder('${name.replace(/'/g,"\\'")}')">Open</button>
+      <button onclick="deleteFolder('${name.replace(/'/g,"\\'")}')">Delete</button>
+    </div>
+  `;
+  container.appendChild(el);
+}
+window.onload = loadFolders;
 
-        window.onload = loadFolders;
+document.getElementById('add-file-btn').onclick = () =>
+  document.getElementById('modal').style.display = 'flex';
 
-        document.getElementById('add-file-btn').addEventListener('click', function() {
-            document.getElementById('modal').style.display = 'flex';
-        });
+document.getElementById('close-modal-btn').onclick = () =>
+  document.getElementById('modal').style.display = 'none';
 
-        document.getElementById('close-modal-btn').addEventListener('click', function() {
-            document.getElementById('modal').style.display = 'none';
-        });
+document.getElementById('save-folder-btn').onclick = () => {
+  const name = document.getElementById('folder-name').value.trim();
+  if (!name) return showNotification("Enter folder name");
 
-        document.getElementById('save-folder-btn').addEventListener('click', function() {
-            const folderName = document.getElementById('folder-name').value.trim();
-            if (folderName) {
-                const folders = JSON.parse(localStorage.getItem('folders')) || [];
-                folders.push(folderName);
-                localStorage.setItem('folders', JSON.stringify(folders));
-                addFolderToList(folderName);
-                document.getElementById('folder-name').value = '';
-                document.getElementById('modal').style.display = 'none';
-                showNotification(`Folder "${folderName}" created successfully.`);
-            } else {
-                showNotification('Enter a folder name.');
-            }
-        });
+  let folders = JSON.parse(localStorage.getItem('folders')) || [];
+  if (folders.includes(name)) return showNotification("Already exists");
 
-        function openFolder(folderName) {
-            document.getElementById('current-folder-name').textContent = folderName;
-            loadUploadedFiles(folderName);
-            document.getElementById('upload-modal').style.display = 'flex';
-        }
+  folders.push(name);
+  localStorage.setItem('folders', JSON.stringify(folders));
+  addFolderToList(name);
+  document.getElementById('folder-name').value = '';
+  document.getElementById('modal').style.display = 'none';
+  showNotification(`Created “${name}”`);
+};
 
-        function loadUploadedFiles(folderName) {
-            const folderFiles = JSON.parse(localStorage.getItem(folderName)) || [];
-            const uploadedFilesList = document.getElementById('uploaded-files-list');
-            uploadedFilesList.innerHTML = '';
+function openFolder(name) {
+  document.getElementById('current-folder-name').textContent = name;
+  loadUploadedFiles(name);
+  document.getElementById('upload-modal').style.display = 'flex';
+}
 
-            if (folderFiles.length > 0) {
-                folderFiles.forEach((file, index) => {
-                    const fileDiv = document.createElement('div');
-                    fileDiv.className = 'file';
-                    fileDiv.innerHTML = `
-                        <span class="file-name" onclick="openFileInNewTab('${file.url}', '${file.type}')">${file.name}</span>
-                        <div class="file-actions">
-                            <button onclick="deleteFile('${folderName}', ${index})">Delete</button>
-                        </div>
-                    `;
-                    uploadedFilesList.appendChild(fileDiv);
-                });
-            } else {
-                uploadedFilesList.textContent = 'No files uploaded yet.';
-            }
-        }
+function loadUploadedFiles(folder) {
+  const files = JSON.parse(localStorage.getItem(folder)) || [];
+  const list = document.getElementById('uploaded-files-list');
+  list.innerHTML = files.length ? '' : '<div style="color:#707080; padding:12px 0; text-align:center;">No files yet</div>';
 
-        function openFileInNewTab(url, type) {
-            const newWindow = window.open();
-            if (type.startsWith('image/')) {
-                newWindow.document.write(`<html><body><img src="${url}" style="width:100%; height:auto;" /></body></html>`);
-            } else if (type === 'application/pdf') {
-                newWindow.document.write(`<html><body><embed src="${url}" type="application/pdf" width="100%" height="100%"></embed></body></html>`);
-            }
-            newWindow.document.close();
-        }
+  files.forEach((f, i) => {
+    const div = document.createElement('div');
+    div.className = 'uploaded-item';
+    div.innerHTML = `
+      <span class="file-link" onclick="openFileInNewTab('${f.url}', '${f.type}')">${f.name}</span>
+      <button onclick="deleteFile('${folder}', ${i})" style="background:none;border:none;cursor: pointer;color:#ff6b6b;font-size:14px;padding:4px 10px;">Delete</button>
+    `;
+    list.appendChild(div);
+  });
+}
 
-        document.getElementById('close-upload-modal-btn').addEventListener('click', function() {
-            document.getElementById('upload-modal').style.display = 'none';
-        });
+function openFileInNewTab(url, type) {
+  const w = window.open();
+  if (!w) return;
+  if (type.startsWith('image/')) {
+    w.document.write(`<body style="margin:0;background:#000"><img src="${url}" style="width:100%;height:100vh;object-fit:contain;"></body>`);
+  } else if (type === 'application/pdf') {
+    w.document.write(`<body style="margin:0"><embed src="${url}" width="100%" height="100%" type="application/pdf"></body>`);
+  } else {
+    w.document.write(`<body style="padding:40px;font-family:sans-serif"><h2>File</h2><p>Preview not available</p></body>`);
+  }
+  w.document.close();
+}
 
-        document.getElementById('upload-files-btn').addEventListener('click', function() {
-            const files = document.getElementById('file-input').files;
-            const folderName = document.getElementById('current-folder-name').textContent;
+document.getElementById('close-upload-modal-btn').onclick = () =>
+  document.getElementById('upload-modal').style.display = 'none';
 
-            if (files.length === 0) {
-                showNotification('Select at least one file to upload.');
-                return;
-            }
+document.getElementById('upload-files-btn').onclick = () => {
+  const files = document.getElementById('file-input').files;
+  const folder = document.getElementById('current-folder-name').textContent;
+  if (!files.length) return showNotification("Select files first");
 
-            const folderFiles = JSON.parse(localStorage.getItem(folderName)) || [];
-            for (const file of files) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const fileData = {
-                        name: file.name,
-                        type: file.type,
-                        url: e.target.result,
-                    };
-                    folderFiles.push(fileData);
-                    localStorage.setItem(folderName, JSON.stringify(folderFiles));
-                    loadUploadedFiles(folderName);
-                };
-                reader.readAsDataURL(file);
-            }
+  let arr = JSON.parse(localStorage.getItem(folder)) || [];
 
-            showNotification(`Uploaded ${files.length} files to "${folderName}".`);
-            document.getElementById('upload-modal').style.display = 'none';
-            document.getElementById('file-input').value = '';
-        });
+  Array.from(files).forEach(file => {
+    const r = new FileReader();
+    r.onload = e => {
+      arr.push({ name: file.name, type: file.type, url: e.target.result });
+      localStorage.setItem(folder, JSON.stringify(arr));
+      loadUploadedFiles(folder);
+    };
+    r.readAsDataURL(file);
+  });
 
-        function deleteFile(folderName, index) {
-            const folderFiles = JSON.parse(localStorage.getItem(folderName)) || [];
-            folderFiles.splice(index, 1); // Remove the file at the specified index
-            localStorage.setItem(folderName, JSON.stringify(folderFiles));
-            loadUploadedFiles(folderName);
-            showNotification('File deleted successfully.');
-        }
+  showNotification(`Added ${files.length} file${files.length>1?'s':''}`);
+  document.getElementById('file-input').value = '';
+};
 
-        function deleteFolder(folderName) {
-            const confirmDelete = confirm(`Are you sure you want to delete ${folderName}?`);
-            if (confirmDelete) {
-                const folders = JSON.parse(localStorage.getItem('folders')) || [];
-                const updatedFolders = folders.filter(folder => folder !== folderName);
-                localStorage.setItem('folders', JSON.stringify(updatedFolders));
-                localStorage.removeItem(folderName);
-                showNotification(`${folderName} deleted.`);
-                loadFolders();
-            }
-        }
+function deleteFile(folder, idx) {
+  let arr = JSON.parse(localStorage.getItem(folder)) || [];
+  arr.splice(idx, 1);
+  localStorage.setItem(folder, JSON.stringify(arr));
+  loadUploadedFiles(folder);
+  showNotification("File removed");
+}
 
-        function showNotification(message) {
-            const notification = document.getElementById('notification');
-            document.getElementById('notification-message').textContent = message;
-            notification.style.display = 'flex';
-        }
+function deleteFolder(name) {
+  if (!confirm(`Delete “${name}” and its files?`)) return;
+  
+  let folders = JSON.parse(localStorage.getItem('folders')) || [];
+  folders = folders.filter(n => n !== name);
+  localStorage.setItem('folders', JSON.stringify(folders));
+  localStorage.removeItem(name);
 
-        document.getElementById('close-notification-btn').addEventListener('click', function() {
-            document.getElementById('notification').style.display = 'none';
-        });
+  document.getElementById('file-list').innerHTML = '';
+  loadFolders();
+  showNotification(`“${name}” deleted`);
+}
 
-    </script>
+function showNotification(text) {
+  document.getElementById('notification-message').textContent = text;
+  document.getElementById('notification').style.display = 'flex';
+}
 
+document.getElementById('close-notification-btn').onclick = () =>
+  document.getElementById('notification').style.display = 'none';
+
+</script>
 </body>
 </html>
