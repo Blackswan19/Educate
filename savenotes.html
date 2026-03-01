@@ -1,327 +1,353 @@
-<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8" /> <meta name="viewport" content="width=device-width, initial-scale=1.0" /> <title>BsNote</title> <link rel="icon" type="image/x-icon" href="https://i.pinimg.com/originals/22/fb/32/22fb32654195b989444117ae2f1a479b.gif" /> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" /> <style> @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Orbitron:wght@400..900&family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&family=Strait&display=swap'); * { color: rgb(219, 219, 219); font-family: "Red Hat Display", sans-serif; } :root { --bg: #000000; --text: #e8e8e8; --text-dim: #777777; --accent: #002aff; --accent-dim: #0040ff; --line: rgba(40,40,40,0.9); --star: #ffcc00; } * { -webkit-tap-highlight-color: transparent; } body { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; } * { margin: 0; padding: 0; box-sizing: border-box; color: var(--text); letter-spacing: 0.2px; -webkit-tap-highlight-color: transparent; user-select: none; } html, body { height: 100%; background: var(--bg); overflow: hidden; } body { display: flex; flex-direction: column; } header { padding: 48px 20px 20px; font-size: 34px; font-weight: 900; letter-spacing: -0.6px; color: var(--accent); text-align: center; background: var(--bg); z-index: 10; flex-shrink: 0; } .folders-container { background: var(--bg); flex-shrink: 0; } .folders { padding: 10px; display: flex; align-items: center; gap: 12px; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; } .folders::-webkit-scrollbar { display: none; } .add-folder-fixed { flex-shrink: 0; padding: 10px 16px; background: linear-gradient(269deg, #002aff, #000000); color: #ffffff; border-radius: 0px 100px 100px 0px; font-size: 15px; cursor: pointer; white-space: nowrap; position: sticky; left: -20px; border: none; backdrop-filter: blur(11px); filter: drop-shadow(10px 0px 5px black); } .folder-btn { flex-shrink: 0; padding: 7px 15px; border-radius: 999px; background: transparent; border: 1.5px solid var(--line); color: var(--text-dim); font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.18s; white-space: nowrap; } .folder-btn.active, .folder-btn:hover { border-color: #ffffff00; color: white; background: var(--accent); } .notes-container { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 24px 20px; } .note { font-size: 16px; line-height: 1.5; margin-bottom: 20px; position: relative; word-break: break-word; padding: 12px 20px 12px 30px; border-radius: 25px; background: rgb(255 255 255 / 8%); transition: background 0.2s; } .note:hover { background: rgba(255, 255, 255, 0.151); } .note:last-child { margin-bottom: 5px; } .note .star { position: absolute; right: 5px; top: 50%; transform: translateY(-50%); font-size: 25px; cursor: pointer; color: #ffffff91; transition: color 0.2s; background: #ffffff1c; width: 35px; height: 35px; display: flex; justify-content: center; align-items: center; border-radius: 100px; backdrop-filter: blur(5px); } .note.important .star { color: #ffffff; background: #002aff; } .note img { max-width: 50%; border-radius: 6px; margin: 0 0 0 -18px; display: block; cursor: pointer; opacity: 60%; } .empty-state { height: 100%; display: flex; align-items: center; justify-content: center; color: var(--text-dim); font-size: 17px; text-align: center; padding: 0 40px; } .input-area { padding: 0px 2px; display: flex; align-items: center; gap: 12px; z-index: 20; flex-shrink: 0; justify-content: center; border-radius: 100px; border: solid 1.5px #ffffff2b; position: relative; bottom: 10px; background: black; } #noteInput { flex: 1; background: rgb(255 255 255 / 12%); border-radius: 16px; font-size: 16px; outline: none; padding: 14px 19px; border: none; position: relative; left: -10px; color: #ffffffc9; } #noteInput::placeholder { color: #555; } ::placeholder { color: white; } .btn { width: 50px; height: 50px; border-radius: 50%; background: var(--accent); border: none; color: white; font-size: 20px; cursor: pointer; display: grid; place-items: center; transition: all 0.2s; } .btn:disabled { opacity: 0.4; cursor: not-allowed; } .attach-label { font-size: 24px; color: var(--text-dim); cursor: pointer; padding: 12px; } #contextMenu { position: fixed; background: rgb(255 255 255 / 17%); border-radius: 25px; padding: 6px 8px; min-width: 100px; z-index: 100; backdrop-filter: blur(5px); list-style: none; text-align: center; } #contextMenu li { padding: 7px 0px; font-size: 15px; cursor: pointer; border-radius: 1000px; } #contextMenu li:hover { background: rgb(255 255 255 / 22%); } #popup { position: fixed; inset: 0; backdrop-filter: blur(10px); display: none; align-items: center; justify-content: center; z-index: 200; cursor: pointer; } .popup-box { background: #282828; border-radius: 40px; padding: 24px; width: 90%; max-width: 500px; text-align: center; position: relative; } .popup-image { max-width: 100%; max-height: 65vh; border-radius: 16px; object-fit: contain; display: block; margin: 0 auto 16px auto; } .popup-msg { font-size: 17px; margin-bottom: 16px; line-height: 1.4; } .popup-buttons { display: flex; gap: 12px; justify-content: center; margin-top: 12px; flex-wrap: wrap; } .popup-btn { padding: 8px 24px; border-radius: 999px; border: none; font-size: 15px; cursor: pointer; min-width: 100px; } .cancel { background: #4c4c4c; color: #ffffffb5; } .danger { background: #ff0d00; color: white; } .confirm { background: var(--accent); color: white; } .download-btn { background: var(--accent); color: white; } ::-webkit-scrollbar { width: 4px; } ::-webkit-scrollbar-thumb { background: #222; border-radius: 4px; } @media (min-width: 768px) { header { font-size: 40px; padding-top: 60px; } } </style> </head> <body> <header id="header">BsNote</header> <div class="folders-container"> <div class="folders" id="folders"></div> </div> <div class="notes-container" id="notes"> <div class="empty-state">Select a folder to view or add notes</div> </div> <div class="input-area" id="inputArea"> <label class="attach-label" for="imageInput"> <svg style="width: 18px;height: 18px;fill: white;background: transparent;" id="clipIcon" onclick="attachImage()" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="512" height="512"><path d="M9,5.5c0-.83,.67-1.5,1.5-1.5s1.5,.67,1.5,1.5-.67,1.5-1.5,1.5-1.5-.67-1.5-1.5Zm15-.5v6c0,2.76-2.24,5-5,5H10c-2.76,0-5-2.24-5-5V5C5,2.24,7.24,0,10,0h9c2.76,0,5,2.24,5,5ZM7,11c0,.77,.29,1.47,.77,2.01l5.24-5.24c.98-.98,2.69-.98,3.67,0l1.04,1.04c.23,.23,.62,.23,.85,0l3.43-3.43v-.38c0-1.65-1.35-3-3-3H10c-1.65,0-3,1.35-3,3v6Zm15,0v-2.79l-2.02,2.02c-.98,.98-2.69,.98-3.67,0l-1.04-1.04c-.23-.23-.61-.23-.85,0l-4.79,4.79c.12,.02,.24,.02,.37,.02h9c1.65,0,3-1.35,3-3Zm-3.91,7.04c-.53-.15-1.08,.17-1.23,.7l-.29,1.06c-.21,.77-.71,1.42-1.41,1.81-.7,.4-1.51,.5-2.28,.29l-8.68-2.38c-1.6-.44-2.54-2.09-2.1-3.69l.96-3.56c.14-.53-.17-1.08-.7-1.23-.53-.14-1.08,.17-1.23,.7L.18,15.29c-.73,2.66,.84,5.42,3.5,6.15l8.68,2.38c.44,.12,.89,.18,1.33,.18,.86,0,1.7-.22,2.47-.66,1.16-.66,1.99-1.73,2.35-3.02l.29-1.06c.15-.53-.17-1.08-.7-1.23Z"/></svg> </label> <input type="file" id="imageInput" accept="image/*" style="display:none" /> <input type="text" id="noteInput" placeholder="Enter note here…" disabled /> <button class="btn" id="sendBtn" disabled> <svg style="width: 18px;height: 18px;fill: white;background: transparent;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="512" height="512"><path d="M1.444,6.669a2,2,0,0,0-.865,3.337l3.412,3.408V20h6.593l3.435,3.43a1.987,1.987,0,0,0,1.408.588,2.034,2.034,0,0,0,.51-.066,1.978,1.978,0,0,0,1.42-1.379L23.991.021ZM2,8.592l17.028-5.02L5.993,16.586v-4Zm13.44,13.424L11.413,18h-4L20.446,4.978Z"/></svg> </button> </div> <!-- Context menu --> <ul id="contextMenu" style="display:none"> <li id="edit">Edit</li> <li id="copy">Copy</li> <li id="delete">Delete</li> </ul> <!-- Popup --> <div id="popup"> <div class="popup-box"> <p class="popup-msg" id="popupMsg"></p> <div id="popupExtra"></div> <div class="popup-buttons" id="popupButtons"></div> </div> </div>
+<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>BsNote</title> <link rel="icon" type="image/x-icon" href="https://i.pinimg.com/originals/22/fb/32/22fb32654195b989444117ae2f1a479b.gif"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <style>@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Orbitron:wght@400..900&family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&family=Strait&display=swap'); * { color: rgb(219, 219, 219); font-family: "Red Hat Display", sans-serif; } * { -webkit-tap-highlight-color: transparent; } body { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; } body { background-color: #000000; margin: 0; padding: 0; list-style: none; letter-spacing: 0.2px; } .container { display: flex; position: relative; } .sidebar { width: 28%; background: #1e1e1e9c; color: white; padding: 60px 40px; box-sizing: border-box; position: absolute; left: -31%; transition: transform 0.3s ease; height: 100vh; z-index: 1000; } .sidebar.show { transform: translateX(100%); } .sidebar h2 { margin-bottom: 20px; } .user-list { list-style: none; padding: 0; position: relative; top: 17px; left: 20px; height: 625px; overflow-y: scroll; } .user-list li { padding: 14px 25px; margin-bottom: 10px; cursor: pointer; text-transform: capitalize; color: gray; font-weight: 600; font-size: 18px; } .chat-message.image { padding: 13px; border-radius: 25px; } .chat-message.image:hover { background: #3c3c3c; } .user-list li:hover { background: #3c3c3c; color: white; font-weight: 800;border-radius: 16px; } .main-content { width: 101%; background: rgb(0, 0, 0); display: flex; flex-direction: column; padding: 20px; box-sizing: border-box; align-items: center; } i.fa-regular.fa-star.star-icon { bottom: 20px; } ::-webkit-scrollbar { background-color: #44444400; width: 5px; height: 5px; border-radius: 100px; overflow: hidden; } ::-webkit-scrollbar-thumb { background-color: #353535; } ::-webkit-scrollbar-button { background-color: #35353500; } ::-webkit-scrollbar-thumb:hover { background-color: #6d6d6d; } .chat-header { font-size: 1.5em; margin-bottom: 20px; color: #686868; position: fixed; top: 5%; font-weight: 600; } i.fa-regular.fa-star.star-icon { border-radius: 13px; background: #ffffff3d; padding: 10px; } i.fa-regular.fa-star.star-icon:hover{ background: #ffffff5f; } .addbtn { position: fixed; bottom: 20px; right: 20px; font-size: 21px; padding: 5px 10px; background: no-repeat; border-radius: 13px; } .chat-box { scrollbar-width: thin; scrollbar-color: auto; flex: 1; overflow:scroll; padding: 10px 20px; margin-bottom: 16px; border-radius: 35px; background: #ffffff1a; max-width: 520px; overflow-y: scroll; position: fixed; top: 20%; height: 45vh; padding-bottom: 50px; scrollbar-width: auto; width: 86%; } .chat-message.user span { width: 80%; white-space: nowrap; overflow: auto; padding: 10px; } .chat-box::-webkit-scrollbar-track { margin-top: 20px; margin-bottom: 20px; margin-left: 20px; margin-right: 20px; } .chat-message { margin: 10px 0; padding: 14px 10px 14px 25px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center; position: relative; letter-spacing: 0.7px; } .chat-message.user { color: gray; font-size: 18px; text-transform: capitalize; font-weight: 500;cursor: pointer; } .chat-message.user:hover { background: #3c3c3c; color: white; font-weight: 700;border-radius: 16px; } .chat-message img { max-width: 250px; height: auto; border-radius: 15px;cursor: pointer; } i.fa-solid.fa-bars-staggered { background: #3c3c3c; border-radius: 10px; font-size: 20px; } .star-icon { cursor: pointer; margin-left: 10px; color: #ffffff; font-size: 16px; } .chat-message.important { background-color: #002aff; border-radius: 25px; } svg{ position: relative; top: 2px; } .input-container { display: flex; gap: 10px; background: #ffffff14; align-items: center; border-radius: 100px; padding: 1px 32px; max-width: 500px; position: fixed; bottom: 20px; box-shadow: none; width: 78%; backdrop-filter: blur(20px); border: solid 1.5px #ffffff1c; max-width: 470px; } ::placeholder{ color: white; } .txtinput { width: 82%; font-size: 18px; color: rgb(255, 255, 255); } input { padding: 10px; border: none; border-radius: 4px; color: white; background: transparent; outline: none; } label { color: white; cursor: pointer; padding: 12px; border-radius: 0px; border: none; background: transparent; outline: none; } label:hover { background-color: #4f4f4f; } button { color: white; cursor: pointer; padding: 13px; border-radius: 0px; border: none; background: transparent; outline: none; font-size: 16px; } button:hover { background-color: #4f4f4f; } .fa-paperclip { font-size: 20px; cursor: pointer; } .context-menu { position: absolute; background: #3c3c3c; z-index: 1000; display: none; list-style: none; font-size: 15px; padding: 8px; text-align: center; color: white; width: 90px; filter: drop-shadow(0px 0px 5px black); border-radius: 23px; } .context-menu li { padding: 5px 10px; cursor: pointer; font-weight: 600; } .context-menu li:hover { background: #212121; color: white; border-radius: 16px; } i.fa-solid.fa-up-right-and-down-left-from-center { position: absolute; right: 2px; top: 3px; color: white; cursor: pointer; background: #00000085; padding: 10px; border-radius: 13px; backdrop-filter: blur(10px); border: solid 1.5px #868686; } .i.fa-solid.fa-up-right-and-down-left-from-center:hover{ background: black; border: black; } .custom-popup { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #1e1e1e; padding: 20px; border-radius: 40px; color: white; z-index: 2000; display: none; box-shadow: 0 0 10px 100em rgba(0, 0, 0, 0.5); width: 80%; max-width: 290px; font-size: 18px; } .custom-popup.image-popup { padding: 0; max-width: 90vw; max-height: 90vh; background: transparent; box-shadow: none; } .popup-image { max-width: 100%; max-height: 90vh; } .popup-content { display: flex; flex-direction: column; gap: 15px; justify-content: center; align-items: center; } .popup-input { padding: 11px 20px; border: none; border-radius: 38px; background: #4f4f4f; color: white; outline: none; width: 81%; text-align: center; font-size: 16px; } .popup-buttons { display: flex; gap: 10px; justify-content: flex-end; } .popup-button { padding: 8px 25px; border: none; border-radius: 26px; background: #4f4f4f8c; color: #ffffffc2; cursor: pointer; font-size: 14px; margin-top: 5px; } .popup-button:hover { background: #6d6d6d; } .popup-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgb(0 0 0 / 0%); z-index: 1999; display: none; backdrop-filter: blur(5px); } @media (max-width: 480px) { .container { flex-direction: column; } i.fa-regular.fa-star.star-icon { bottom: 90px; } .addbtn { bottom: 90px; } .user-list { padding: 0; top: 20px; left: -20px; height: 550px; width: 115%; } .sidebar { width: 100%; position: fixed; top: 0; left: -100%; background: black; } .main-content { width: 100%; padding: 10px; } i.fa-solid.fa-bars-staggered { padding: 8px; font-size: 18px; } .chat-message.user { color: white; font-size: 15px; } .txtinput { width: 82%; font-size: 15px; color: #5b5b5b; } .addbtn { font-size: 21px; padding: 5px 10px; } .chat-header { font-size: 18px; color: white; position: fixed; top: 60px; text-align: center; } } p { position: absolute; right: 0px; top: 0px; color: #ffffff; cursor: pointer; background: rgb(18 0 255); padding: 10px; filter: drop-shadow(2px 4px 16px white); } </style> </head> <body> <div class="container"> <button id="toggleSidebarBtn" style="color: white; cursor: pointer; padding: 13px; border-radius: 0px; border: none; background: #ffffff33; outline: none; font-size: 16px; position: absolute; border-radius: 13px; top: 11px;z-index: 1000000; left: 10px;"><?xml version="1.0" encoding="UTF-8"?><svg style=" width: 20px; height: 16px; fill: white;" svg xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="0 0 24 24" width="512" height="512"><path d="M24,3.5c0,.83-.67,1.5-1.5,1.5H1.5c-.83,0-1.5-.67-1.5-1.5s.67-1.5,1.5-1.5H22.5c.83,0,1.5,.67,1.5,1.5ZM6.5,20H1.5c-.83,0-1.5,.67-1.5,1.5s.67,1.5,1.5,1.5H6.5c.83,0,1.5-.67,1.5-1.5s-.67-1.5-1.5-1.5ZM14.5,11H1.5c-.83,0-1.5,.67-1.5,1.5s.67,1.5,1.5,1.5H14.5c.83,0,1.5-.67,1.5-1.5s-.67-1.5-1.5-1.5Z"/></svg></button> <div class="sidebar"> <div class="logo" style="position: fixed; color: rgb(0 96 255); right: 10px; top: 20px; z-index: 1000; font-size: 20px; font-weight: 600;">#BsNote</div> <ul class="user-list" id="userList"></ul> <button class="addbtn" onclick="addUser()"><?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="0 0 24 24" width="18px" height="18px" fill="white"><path d="M24,8.5c0-.524-.274-1.012-.724-1.283L13.864,1.521c-1.15-.695-2.578-.697-3.728,0L.724,7.217c-.449,.271-.724,.759-.724,1.283s.274,1.012,.724,1.283l9.412,5.696c.575,.348,1.22,.522,1.864,.522s1.289-.174,1.863-.522l9.413-5.696c.449-.271,.724-.759,.724-1.283Zm-11.69,4.413c-.19,.114-.428,.114-.62,0l-7.292-4.413,7.292-4.413h0c.189-.115,.427-.116,.62,0l7.292,4.413-7.293,4.413Zm11.69,6.587c0,.828-.671,1.5-1.5,1.5h-1.5v1.5c0,.828-.671,1.5-1.5,1.5s-1.5-.672-1.5-1.5v-1.5h-1.5c-.829,0-1.5-.672-1.5-1.5s.671-1.5,1.5-1.5h1.5v-1.5c0-.828,.671-1.5,1.5-1.5s1.5,.672,1.5,1.5v1.5h1.5c.829,0,1.5,.672,1.5,1.5Zm-11.214,1.771c-.281,.469-.778,.729-1.288,.729-.263,0-.529-.068-.771-.214L.822,15.843c-.71-.426-.94-1.348-.514-2.058,.426-.711,1.348-.942,2.058-.515l9.906,5.943c.71,.426,.94,1.348,.514,2.058Z"/></svg></button> </div> <div class="main-content"> <div class="chat-header" id="chatHeader">Welcome to BsNote</div> <div class="chat-box" id="chatBox"><span style="display: flex;justify-content: center;align-items: center;height: 10vh;">Take a short note</span> </div> <div class="input-container"> <input class="txtinput" type="text" id="messageInput" placeholder="Enter your note here....." disabled> <label for="imageInput"><?xml version="1.0" encoding="UTF-8"?><svg style="width: 18px;height: 18px;fill: white;background: transparent;" id="clipIcon" onclick="attachImage()" xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="0 0 24 24" width="512" height="512"><path d="M9,5.5c0-.83,.67-1.5,1.5-1.5s1.5,.67,1.5,1.5-.67,1.5-1.5,1.5-1.5-.67-1.5-1.5Zm15-.5v6c0,2.76-2.24,5-5,5H10c-2.76,0-5-2.24-5-5V5C5,2.24,7.24,0,10,0h9c2.76,0,5,2.24,5,5ZM7,11c0,.77,.29,1.47,.77,2.01l5.24-5.24c.98-.98,2.69-.98,3.67,0l1.04,1.04c.23,.23,.62,.23,.85,0l3.43-3.43v-.38c0-1.65-1.35-3-3-3H10c-1.65,0-3,1.35-3,3v6Zm15,0v-2.79l-2.02,2.02c-.98,.98-2.69,.98-3.67,0l-1.04-1.04c-.23-.23-.61-.23-.85,0l-4.79,4.79c.12,.02,.24,.02,.37,.02h9c1.65,0,3-1.35,3-3Zm-3.91,7.04c-.53-.15-1.08,.17-1.23,.7l-.29,1.06c-.21,.77-.71,1.42-1.41,1.81-.7,.4-1.51,.5-2.28,.29l-8.68-2.38c-1.6-.44-2.54-2.09-2.1-3.69l.96-3.56c.14-.53-.17-1.08-.7-1.23-.53-.14-1.08,.17-1.23,.7L.18,15.29c-.73,2.66,.84,5.42,3.5,6.15l8.68,2.38c.44,.12,.89,.18,1.33,.18,.86,0,1.7-.22,2.47-.66,1.16-.66,1.99-1.73,2.35-3.02l.29-1.06c.15-.53-.17-1.08-.7-1.23Z"/></svg></label> <button onclick="sendMessage()" id="sendButton" disabled><?xml version="1.0" encoding="UTF-8"?><svg style="width: 18px;height: 18px;fill: white;background: transparent;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="512" height="512"><g id="_01_align_center" data-name="01 align center"><path d="M1.444,6.669a2,2,0,0,0-.865,3.337l3.412,3.408V20h6.593l3.435,3.43a1.987,1.987,0,0,0,1.408.588,2.034,2.034,0,0,0,.51-.066,1.978,1.978,0,0,0,1.42-1.379L23.991.021ZM2,8.592l17.028-5.02L5.993,16.586v-4Zm13.44,13.424L11.413,18h-4L20.446,4.978Z"/></g></svg></button> </div> </div> </div> <ul class="context-menu" id="contextMenu"> <li id="editOption">Edit</li> <li id="copyOption">Copy</li> <li id="deleteOption">Delete</li> </ul> <div class="popup-overlay" id="popupOverlay"></div> <div class="custom-popup" id="customPopup"> <div class="popup-content"> <div id="popupMessage"></div> <input type="text" id="popupInput" class="popup-input" style="display: none;" placeholder="Enter title here..."> <div class="popup-buttons"> <button class="popup-button" id="popupCancel">Close</button> <button class="popup-button" id="popupConfirm">Save</button> </div> </div> </div>
 <script>
-const folders = JSON.parse(localStorage.getItem('bsnote_minimal_v2')) || {};
-let current = null;
-let ctxItem = null;
 document.addEventListener('contextmenu', e => e.preventDefault());
-const foldersEl    = document.getElementById('folders');
-const notesEl      = document.getElementById('notes');
-const headerEl     = document.getElementById('header');
-const input        = document.getElementById('noteInput');
-const sendBtn      = document.getElementById('sendBtn');
-const popup        = document.getElementById('popup');
-const popupMsg     = document.getElementById('popupMsg');
-const popupExtra   = document.getElementById('popupExtra');
-const popupButtons = document.getElementById('popupButtons');
+        const users = JSON.parse(localStorage.getItem('users')) || {};
+        let activeUser = null;
+        let contextTarget = null;
+        let showingImportantOnly = false;
 
-function save() {
-  localStorage.setItem('bsnote_minimal_v2', JSON.stringify(folders));
-}
+        const userListElement = document.getElementById('userList');
+        const chatHeader = document.getElementById('chatHeader');
+        const chatBox = document.getElementById('chatBox');
+        const messageInput = document.getElementById('messageInput');
+        const sendButton = document.getElementById('sendButton');
+        const contextMenu = document.getElementById('contextMenu');
+        const editOption = document.getElementById('editOption');
+        const copyOption = document.getElementById('copyOption');
+        const deleteOption = document.getElementById('deleteOption');
+        const toggleSidebarBtn = document.getElementById('toggleSidebarBtn');
+        const sidebar = document.querySelector('.sidebar');
 
-function closePopup() {
-  popup.style.display = 'none';
-  popupExtra.innerHTML = '';
-  popupButtons.innerHTML = '';
-}
+        function saveToLocalStorage() {
+            localStorage.setItem('users', JSON.stringify(users));
+        }
 
-function showPopup(message = '', extraHTML = '', buttons = []) {
-  popupMsg.textContent = message;
-  popupExtra.innerHTML = extraHTML;
-  popupButtons.innerHTML = '';
-  buttons.forEach(b => {
-    const btn = document.createElement('button');
-    btn.className = `popup-btn ${b.class || 'confirm'}`;
-    btn.textContent = b.text;
-    btn.onclick = () => { b.action(); closePopup(); };
-    popupButtons.appendChild(btn);
-  });
-  popup.style.display = 'flex';
-}
+        function showPopup(message, isPrompt = false, callback, defaultValue = '') {
+            const popup = document.getElementById('customPopup');
+            const overlay = document.getElementById('popupOverlay');
+            const popupMessage = document.getElementById('popupMessage');
+            const popupInput = document.getElementById('popupInput');
+            const confirmBtn = document.getElementById('popupConfirm');
+            const cancelBtn = document.getElementById('popupCancel');
 
-function showImagePopup(src) {
-  const filename = 'bsnote-image-' + Date.now() + '.png';
+            popup.classList.remove('image-popup');
+            popupMessage.textContent = message;
+            popupInput.style.display = isPrompt ? 'block' : 'none';
+            popupInput.value = defaultValue;
+            popup.style.display = 'block';
+            overlay.style.display = 'block';
 
-  const extra = `<img src="${src}" class="popup-image" alt="Note image">`;
+            function handleConfirm() {
+                const result = isPrompt ? popupInput.value.trim() : true;
+                cleanup();
+                callback(result);
+            }
 
-  const buttons = [
-    { text: 'Download', class: 'download-btn', action: () => {
-      const link = document.createElement('a');
-      link.href = src;
-      link.download = filename;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }},
-    { text: 'Close', class: 'cancel', action: closePopup }
-  ];
+            function handleCancel() {
+                cleanup();
+                callback(isPrompt ? null : false);
+            }
 
-  showPopup('', extra, buttons);
-}
+            function cleanup() {
+                popup.style.display = 'none';
+                overlay.style.display = 'none';
+                confirmBtn.removeEventListener('click', handleConfirm);
+                cancelBtn.removeEventListener('click', handleCancel);
+            }
 
-function getImportantNotes() {
-  const important = [];
-  Object.entries(folders).forEach(([folderName, notes]) => {
-    notes.forEach((note, idx) => {
-      if (note.important) {
-        important.push({ folder: folderName, index: idx, note });
-      }
-    });
-  });
-  return important;
-}
+            confirmBtn.addEventListener('click', handleConfirm);
+            cancelBtn.addEventListener('click', handleCancel);
 
-function renderFolders() {
-  foldersEl.innerHTML = '';
+            if (isPrompt) {
+                popupInput.focus();
+                popupInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') handleConfirm();
+                });
+            }
+        }
 
-  const addBtn = document.createElement('button');
-  addBtn.className = 'add-folder-fixed';
-  addBtn.innerHTML = '<i class="fa-solid fa-plus"></i>';
-  addBtn.onclick = addFolder;
-  foldersEl.appendChild(addBtn);
+        function showImageBulletproof(imageUrl) {
+            const popup = document.getElementById('customPopup');
+            const overlay = document.getElementById('popupOverlay');
+            const popupContent = document.querySelector('.popup-content');
 
-  const impBtn = document.createElement('button');
-  impBtn.className = `folder-btn ${current === 'important' ? 'active' : ''}`;
-  impBtn.innerHTML = '<i class="fas fa-star"></i> Important';
-  impBtn.onclick = () => select('important');
-  foldersEl.appendChild(impBtn);
+            popup.classList.add('image-popup');
+            popupContent.innerHTML = '';
+            const img = document.createElement('img');
+            img.src = imageUrl;
+            img.className = 'popup-image';
+            popupContent.appendChild(img);
+            popup.style.display = 'block';
+            overlay.style.display = 'block';
 
-  Object.keys(folders).sort().forEach(name => {
-    const b = document.createElement('button');
-    b.className = `folder-btn ${name === current ? 'active' : ''}`;
-    b.textContent = name;
-    b.onclick = () => select(name);
-    foldersEl.appendChild(b);
-  });
-}
+            overlay.addEventListener('click', () => {
+                popup.style.display = 'none';
+                overlay.style.display = 'none';
+            }, { once: true });
+        }
 
-function select(name) {
-  current = name;
-  headerEl.textContent = name === 'important' ? 'Important Notes' : (name || 'BsNote');
+        function addUser() {
+            showPopup('Enter title name', true, (username) => {
+                if (username && !users[username]) {
+                    users[username] = [];
+                    saveToLocalStorage();
+                    renderUserList();
+                } else if (users[username]) {
+                    alert("Title already exists!");
+                }
+            });
+        }
 
-  const canWrite = name !== null && name !== 'important' && folders[name] !== undefined;
-  input.disabled = sendBtn.disabled = !canWrite;
+        function renderUserList() {
+            userListElement.innerHTML = '';
+            Object.keys(users).forEach(username => {
+                const li = document.createElement('li');
+                li.textContent = username;
+                li.addEventListener('click', () => selectUser(username));
+                li.addEventListener('contextmenu', (e) => showContextMenu(e, username, 'user'));
+                userListElement.appendChild(li);
+            });
 
-  renderFolders();
+            const starIcon = document.querySelector('.sidebar .fa-star');
+            if (!starIcon) {
+                const newStarIcon = document.createElement('i');
+                newStarIcon.className = 'fa-regular fa-star star-icon';
+                newStarIcon.style.position = 'fixed';
+                newStarIcon.style.right = '60px';
+                newStarIcon.style.fontSize = '17px';
+                newStarIcon.style.padding = '10px';
+                newStarIcon.style.background = 'transparent';
+                newStarIcon.addEventListener('click', toggleImportantNotes);
+                sidebar.appendChild(newStarIcon);
+            }
+        }
 
-  if (name === 'important') {
-    renderImportantNotes();
-  } else if (name && folders[name]) {
-    renderNotes(name);
-  } else {
-    notesEl.innerHTML = '<div class="empty-state">Welcome to BsNotes</div>';
-  }
-}
+        function selectUser(username) {
+            activeUser = username;
+            chatHeader.textContent = `Your notes in: ${username}`;
+            messageInput.disabled = false;
+            sendButton.disabled = false;
+            showingImportantOnly = false;
+            const starIcon = document.querySelector('.sidebar .fa-star');
+            starIcon.classList.remove('fa-solid');
+            starIcon.classList.add('fa-regular');
+            renderMessages();
+            if (window.innerWidth <= 768) {
+                sidebar.classList.remove('show');
+            }
+        }
 
-function renderNotes(folderName) {
-  notesEl.innerHTML = '';
-  const notes = folders[folderName] || [];
+        function toggleImportantNotes() {
+            showingImportantOnly = !showingImportantOnly;
+            const starIcon = document.querySelector('.sidebar .fa-star');
+            starIcon.classList.toggle('fa-solid', showingImportantOnly);
+            starIcon.classList.toggle('fa-regular', !showingImportantOnly);
+            renderMessages();
+        }
 
-  if (notes.length === 0) {
-    notesEl.innerHTML = '<div class="empty-state">This folder is empty<br>Start typing to add notes</div>';
-    return;
-  }
+        function renderMessages() {
+            chatBox.innerHTML = '';
+            if (showingImportantOnly) {
+                chatHeader.textContent = "All Important Notes";
+                Object.keys(users).forEach(username => {
+                    users[username].forEach((message, index) => {
+                        if (message.important) {
+                            appendMessage(username, index, message, username);
+                        }
+                    });
+                });
+            } else if (activeUser) {
+                chatHeader.textContent = `Your notes in: ${activeUser}`;
+                users[activeUser].forEach((message, index) => {
+                    appendMessage(activeUser, index, message);
+                });
+            }
+        }
 
-  notes.forEach((note, i) => {
-    createNoteElement(note, i, folderName);
-  });
-}
+        function appendMessage(username, index, message, displayUsername = null) {
+            const div = document.createElement('div');
+            div.className = `chat-message ${message.type} ${message.important ? 'important' : ''}`;
+            div.dataset.user = username;
+            div.dataset.index = index;
 
-function renderImportantNotes() {
-  notesEl.innerHTML = '';
-  const important = getImportantNotes();
+            const content = document.createElement('span');
+            if (message.type === 'image') {
+                const imgContainer = document.createElement('div');
+                imgContainer.style.position = 'relative';
+                const img = document.createElement('img');
+                img.src = message.text;
+                const expandIcon = document.createElement('i');
+                expandIcon.className = 'fa-solid fa-up-right-and-down-left-from-center';
+                imgContainer.appendChild(img);
+                imgContainer.appendChild(expandIcon);
+                content.appendChild(imgContainer);
+                imgContainer.addEventListener('click', () => showImageBulletproof(message.text));
+            } else {
+                const textToShow = displayUsername ? `[${displayUsername}] ${message.text}` : message.text;
+                content.textContent = textToShow;
+            }
 
-  if (important.length === 0) {
-    notesEl.innerHTML = '<div class="empty-state">No important notes<br>Click on star icon on the notes to pin as important</div>';
-    return;
-  }
+            const starIcon = document.createElement('i');
+            starIcon.className = `fa-regular fa-star star-icon ${message.important ? 'fa-solid' : ''}`;
+            starIcon.addEventListener('click', () => toggleImportance(username, index));
 
-  important.forEach(({folder, index, note}) => {
-    const el = createNoteElement(note, index, folder, true);
-    const badge = document.createElement('div');
-    badge.style.cssText = 'font-size:11px; color:#888; margin-top:6px; opacity:0.7;';
-    badge.textContent = `from ${folder}`;
-    el.appendChild(badge);
-  });
-}
+            div.appendChild(content);
+            div.appendChild(starIcon);
+            div.addEventListener('contextmenu', (e) => showContextMenu(e, { user: username, index }, 'message'));
+            chatBox.appendChild(div);
+        }
 
-function createNoteElement(note, index, folderName, isImportantView = false) {
-  const div = document.createElement('div');
-  div.className = `note ${note.important ? 'important' : ''}`;
-  div.dataset.folder = folderName;
-  div.dataset.index = index;
+        function toggleImportance(username, index) {
+            users[username][index].important = !users[username][index].important;
+            saveToLocalStorage();
+            renderMessages();
+        }
 
-  const star = document.createElement('span');
-  star.className = 'star';
-  star.innerHTML = '★';
-  star.onclick = (e) => {
-    e.stopPropagation();
-    toggleImportant(folderName, index);
-  };
-  div.appendChild(star);
+        function showContextMenu(event, target, type) {
+            event.preventDefault();
+            contextTarget = { target, type };
+            contextMenu.style.display = 'block';
+            contextMenu.style.left = `${event.pageX}px`;
+            contextMenu.style.top = `${event.pageY}px`;
+        }
 
-  if (note.type === 'image') {
-    const img = document.createElement('img');
-    img.src = note.content;
-    img.onclick = () => showImagePopup(note.content);
-    div.appendChild(img);
-  } else {
-    const textDiv = document.createElement('div');
-    textDiv.textContent = note.content;
-    div.appendChild(textDiv);
-  }
+        function hideContextMenu() {
+            contextMenu.style.display = 'none';
+            contextTarget = null;
+        }
 
-  div.oncontextmenu = e => {
-    e.preventDefault();
-    ctxItem = { folder: folderName, index };
-    showContext(e);
-  };
+        copyOption.addEventListener('click', () => {
+            if (contextTarget && contextTarget.type === 'user') {
+                const username = contextTarget.target;
+                navigator.clipboard.writeText(username)
+                    .then(() => showPopup('Title copied to clipboard!', false, () => {}))
+                    .catch(() => alert('Failed to copy title!'));
+            } else if (contextTarget && contextTarget.type === 'message') {
+                const { user, index } = contextTarget.target;
+                const message = users[user][index];
+                if (message.type === 'image') {
+                    alert('Cannot copy image content!');
+                } else {
+                    navigator.clipboard.writeText(message.text)
+                        .then(() => showPopup('Note copied to clipboard!', false, () => {}))
+                        .catch(() => alert('Failed to copy note!'));
+                }
+            }
+            hideContextMenu();
+        });
 
-  let pressTimer;
-  div.onpointerdown = () => {
-    pressTimer = setTimeout(() => {
-      ctxItem = { folder: folderName, index };
-      showContext({ pageX: window.innerWidth/2, pageY: window.innerHeight/2 });
-    }, 500);
-  };
-  div.onpointerup = () => clearTimeout(pressTimer);
-  div.onpointercancel = () => clearTimeout(pressTimer);
-  div.onpointerleave = () => clearTimeout(pressTimer);
+        editOption.addEventListener('click', () => {
+            if (contextTarget && contextTarget.type === 'user') {
+                const oldUsername = contextTarget.target;
+                showPopup(`Edit title: ${oldUsername}`, true, (newUsername) => {
+                    if (newUsername && newUsername !== oldUsername && !users[newUsername]) {
+                        users[newUsername] = users[oldUsername];
+                        delete users[oldUsername];
+                        if (activeUser === oldUsername) {
+                            activeUser = newUsername;
+                            chatHeader.textContent = `Your notes in: ${newUsername}`;
+                        }
+                        saveToLocalStorage();
+                        renderUserList();
+                        renderMessages();
+                    } else if (newUsername === oldUsername) {
+                        alert("New title must be different!");
+                    } else {
+                        alert("Title already exists or invalid!");
+                    }
+                    hideContextMenu();
+                }, oldUsername);
+            } else if (contextTarget && contextTarget.type === 'message') {
+                const { user, index } = contextTarget.target;
+                const currentMessage = users[user][index];
+                if (currentMessage.type === 'image') {
+                    alert("Cannot edit image notes!");
+                    hideContextMenu();
+                    return;
+                }
+                showPopup('Edit note:', true, (newMessage) => {
+                    if (newMessage && newMessage.trim()) {
+                        users[user][index] = { ...users[user][index], text: newMessage };
+                        saveToLocalStorage();
+                        renderMessages();
+                    }
+                    hideContextMenu();
+                }, currentMessage.text);
+            }
+        });
 
-  notesEl.appendChild(div);
-  return div;
-}
+        deleteOption.addEventListener('click', () => {
+            if (contextTarget && contextTarget.type === 'user') {
+                const username = contextTarget.target;
+                showPopup(`Delete title "${username}"?`, false, (confirmed) => {
+                    if (confirmed) {
+                        delete users[username];
+                        if (activeUser === username) {
+                            activeUser = null;
+                            chatHeader.textContent = "Welcome to BsNote";
+                            messageInput.disabled = true;
+                            sendButton.disabled = true;
+                        }
+                        saveToLocalStorage();
+                        renderUserList();
+                        renderMessages();
+                    }
+                    hideContextMenu();
+                });
+            } else if (contextTarget && contextTarget.type === 'message') {
+                const { user, index } = contextTarget.target;
+                showPopup(`Delete this note?`, false, (confirmed) => {
+                    if (confirmed) {
+                        users[user].splice(index, 1);
+                        saveToLocalStorage();
+                        renderMessages();
+                    }
+                    hideContextMenu();
+                });
+            }
+        });
 
-function toggleImportant(folderName, index) {
-  if (!folders[folderName]?.[index]) return;
-  folders[folderName][index].important = !folders[folderName][index].important;
-  save();
+        function toggleSidebar() {
+            sidebar.classList.toggle('show');
+        }
 
-  if (current === 'important') {
-    renderImportantNotes();
-  } else if (current === folderName) {
-    renderNotes(folderName);
-  }
-}
+        toggleSidebarBtn.addEventListener('click', toggleSidebar);
 
-function addFolder() {
-  showPopup("Create title", `
-    <input type="text" id="folderNameInput" placeholder="Enter title here..." style="width: 95%; padding: 9px; background: #ffffff3b; border: 1px solid #333; border-radius: 38px; font-size: 17px; color: white; text-align: center;">
-  `, [
-    { text: 'Cancel', class: 'cancel', action: closePopup },
-    { text: 'Create', class: 'confirm', action: () => {
-      const name = document.getElementById('folderNameInput').value.trim();
-      if (!name) return;
-      if (folders[name] || name.toLowerCase() === 'important') {
-        alert("Folder name already exists or not allowed");
-        return;
-      }
-      folders[name] = [];
-      save();
-      renderFolders();
-      select(name);
-    }}
-  ]);
-}
+        function sendMessage() {
+            const text = messageInput.value.trim();
+            if (text && activeUser) {
+                users[activeUser].push({ text, type: 'user', important: false });
+                messageInput.value = '';
+                saveToLocalStorage();
+                renderMessages();
+            }
+        }
 
-function addNote() {
-  const txt = input.value.trim();
-  if (!txt || !current || current === 'important') return;
-  folders[current].push({ type: 'text', content: txt, important: false });
-  input.value = '';
-  save();
-  renderNotes(current);
-}
+        function attachImage() {
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.accept = 'image/*';
+            fileInput.addEventListener('change', () => {
+                const file = fileInput.files[0];
+                if (file && activeUser) {
+                    const reader = new FileReader();
+                    reader.onload = () => {
+                        users[activeUser].push({ text: reader.result, type: 'image', important: false });
+                        saveToLocalStorage();
+                        renderMessages();
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            fileInput.click();
+        }
 
-function attach(e) {
-  const file = e.target.files[0];
-  if (!file || !current || current === 'important') return;
-  const r = new FileReader();
-  r.onload = ev => {
-    folders[current].push({ type: 'image', content: ev.target.result, important: false });
-    save();
-    renderNotes(current);
-  };
-  r.readAsDataURL(file);
-}
+        document.body.addEventListener('click', hideContextMenu);
+        renderUserList();
 
-function showContext(e) {
-  const m = document.getElementById('contextMenu');
-  m.style.left = Math.min(e.pageX, window.innerWidth - 180) + 'px';
-  m.style.top  = Math.min(e.pageY, window.innerHeight - 160) + 'px';
-  m.style.display = 'block';
-}
-
-function hideContext() {
-  document.getElementById('contextMenu').style.display = 'none';
-}
-
-document.getElementById('edit').onclick = () => {
-  hideContext();
-  if (!ctxItem) return;
-  const {folder, index} = ctxItem;
-  const note = folders[folder]?.[index];
-  if (!note || note.type === 'image') return alert("Can't edit images");
-
-  showPopup("Edit note", `
-    <textarea id="editInput" style="width:100%;min-height:140px;padding:14px;background:#1a1a1a;border:1px solid #333;border-radius:10px;font-size:17px;color:white;resize:vertical;">${note.content}</textarea>
-  `, [
-    { text: 'Cancel', class: 'cancel', action: closePopup },
-    { text: 'Save', class: 'confirm', action: () => {
-      const newText = document.getElementById('editInput').value.trim();
-      if (newText) {
-        note.content = newText;
-        save();
-        if (current === 'important') renderImportantNotes();
-        else if (current === folder) renderNotes(folder);
-      }
-    }}
-  ]);
-};
-
-document.getElementById('delete').onclick = () => {
-  hideContext();
-  if (!ctxItem) return;
-  showPopup("Delete this note permanently?", '', [
-    { text: 'Cancel', class: 'cancel', action: closePopup },
-    { text: 'Delete', class: 'danger', action: () => {
-      const {folder, index} = ctxItem;
-      if (folders[folder]) {
-        folders[folder].splice(index, 1);
-        save();
-        if (current === 'important') renderImportantNotes();
-        else if (current === folder) renderNotes(folder);
-      }
-    }}
-  ]);
-};
-
-document.getElementById('copy').onclick = () => {
-  hideContext();
-  if (!ctxItem) return;
-  const note = folders[ctxItem.folder]?.[ctxItem.index];
-  if (!note || note.type === 'image') return alert("Can't copy image");
-  navigator.clipboard.writeText(note.content)
-    .then(() => alert("Copied!"))
-    .catch(() => alert("Copy failed"));
-};
-
-sendBtn.onclick = addNote;
-input.onkeypress = e => {
-  if (e.key === 'Enter') {
-    e.preventDefault();
-    addNote();
-  }
-};
-document.getElementById('imageInput').onchange = attach;
-document.body.onclick = e => {
-  if (!e.target.closest('#contextMenu') && !e.target.closest('.popup-box')) hideContext();
-};
-popup.onclick = e => {
-  if (e.target === popup) closePopup();
-};
-
-renderFolders();
-select(null);
-</script>
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+    </script>
 </body>
 </html>
