@@ -145,9 +145,9 @@
     cursor: pointer;
     color: #ffffff91;
     transition: color 0.2s;
-    background: linear-gradient(270deg, #ffffff26, transparent 80%);
+    background: #ffffff26;
     width: 35px;
-    height: 30vh;
+    height: 35px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -383,7 +383,7 @@ const folders = JSON.parse(localStorage.getItem('bsnote_minimal_v2')) || {};
 let current = null;
 let ctxNote = null;    
 let ctxFolder = null;   
-document.addEventListener('contextmenu', e => e.preventDefault());
+// document.addEventListener('contextmenu', e => e.preventDefault());
 
 const foldersEl    = document.getElementById('folders');
 const notesEl      = document.getElementById('notes');
