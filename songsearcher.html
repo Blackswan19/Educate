@@ -1,10 +1,8 @@
 <!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>BSongsearch</title> <link rel="icon" type="image/x-icon" href="https://i.ibb.co/gW8Py0B/BS.png"> <style> @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Orbitron:wght@400..900&family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&family=Strait&display=swap'); * { color: #ededed; font-family: "Red Hat Display", sans-serif; letter-spacing: 0.5px; box-sizing: border-box; } * { -webkit-tap-highlight-color: transparent; } body { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; } body { font-family: 'Arial', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; background-color: #121212; color: #ffffff; font-size: 16px; } .container { text-align: center; } .logo { font-size: 30px; font-weight: bold; color: #0045ff; margin-bottom: 1rem; } input[type="text"] { padding: 10px; width: 85%; margin: 0.5rem auto; border: 1px solid #333; border-radius: 100px; background-color: #282828; color: #ffffff; font-size: 20px; outline: none; box-sizing: border-box; text-align: center; } input[type="text"]::placeholder { color: #b3b3b3; } input[type="text"]:focus { border: solid 2px white; } .options { display: flex; justify-content: center; gap: 0.75rem; margin: 0.75rem 0; flex-wrap: wrap; } .option-btn { padding: 8px 20px; background-color: #ffffff11; color: #ffffff; border: none; border-radius: 40px; cursor: pointer; font-size: 0.9rem; font-weight: 400; transition: background-color 0.2s; } .option-btn:hover { background-color: #ffffff2b; } .option-btn.selected { background-color: #0045ff; border: 2px solid #0045ff; } .add-btn { background-color: #ffffff; color: #000000; } .add-btn:hover { background-color: #ffffffb3; } .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7); justify-content: center; align-items: center; z-index: 1000; overflow: auto; } .modal-content { background-color: #1c1c1c; padding: 1.5rem; border-radius: 12px; width: 90%; max-width: 400px; text-align: center; margin: 1rem; } .modal-content h2 { font-size: 1.2rem; margin: 0 0 1rem; } .modal-content input { width: 100%; margin: 0.5rem 0; padding: 0.75rem; border: 1px solid #333; border-radius: 8px; background-color: #282828; color: #ffffff; font-size: 1rem; box-sizing: border-box; } .modal-content input::placeholder { color: #b3b3b3; } .modal-content button { padding: 0.75rem 1.25rem; margin: 0.5rem; border: none; border-radius: 20px; cursor: pointer; font-size: 0.9rem; font-weight: bold; text-transform: uppercase; min-height: 44px; } .modal-content .add-site-btn { background-color: #ffffff; color: #000000; } .modal-content .add-site-btn:hover { background-color: #1C86EE; } .modal-content .cancel-btn { background-color: #ff4d4d; color: #ffffff; } .modal-content .cancel-btn:hover { background-color: #cc0000; } @media (max-width: 600px) { body { font-size: 14px; } .container { padding: 1rem; margin: 0.5rem; } .logo { font-size: 2rem; } input[type="text"] { width: 100%; } .option-btn, .modal-content button { padding: 0.6rem 1rem; font-size: 0.8rem; min-height: 40px; } .options { gap: 0.5rem; } .modal-content { padding: 1rem; } .modal-content h2 { font-size: 1rem; } .modal-content input { padding: 0.6rem; font-size: 0.9rem; } } </style> </head> <body> <div class="container"> <div class="logo">BSongsearch</div> <input type="text" id="searchInput" placeholder="Enter search query"> <div class="options" id="siteOptions"> <button class="option-btn" data-url="https://www.google.com/search?q=">Chrome</button> <button class="option-btn" data-url="https://www.youtube.com/results?search_query=">YouTube</button> <button class="option-btn" data-url="https://music.youtube.com/search?q=">YTMusic</button> <button class="option-btn" data-url="https://open.spotify.com/search/">Spotify</button> <button class="option-btn" data-url="https://music.apple.com/us/search?term=">Apple Music</button> <button class="add-btn option-btn" onclick="toggleAddSiteModal()">Add</button> </div> </div> <div id="addSiteModal" class="modal"> <div class="modal-content"> <h2>Add New Site</h2> <input type="text" id="newSiteName" placeholder="Site Name"> <input type="text" id="newSiteUrl" placeholder="Search URL (e.g., https://example.com/search?q=)"> <button class="add-site-btn" onclick="addNewSite()">Add Site</button> <button class="cancel-btn" onclick="toggleAddSiteModal()">Cancel</button> </div> </div>
 <script>
-        let selectedSite = 'https://www.google.com/search?q='; // Default to Chrome
+        let selectedSite = 'https://www.google.com/search?q=';
         let selectedButton = document.querySelector('.option-btn[data-url="https://www.google.com/search?q="]');
         selectedButton.classList.add('selected');
-
-        // Load saved sites from localStorage
         const siteOptions = document.getElementById('siteOptions');
         const savedSites = JSON.parse(localStorage.getItem('customSites')) || [];
         savedSites.forEach(site => {
@@ -15,31 +13,29 @@
             button.onclick = () => selectSite(button, site.url);
             siteOptions.insertBefore(button, siteOptions.lastElementChild);
         });
-
-        // Select a site and trigger search if query exists
         function selectSite(button, url) {
             document.querySelectorAll('.option-btn').forEach(btn => btn.classList.remove('selected'));
             button.classList.add('selected');
             selectedSite = url;
-            performSearch(); // Trigger search immediately
+            performSearch();
         }
-
-        // Show/hide the add site modal
         function toggleAddSiteModal() {
             const modal = document.getElementById('addSiteModal');
             modal.style.display = modal.style.display === 'none' ? 'flex' : 'none';
         }
 
-        // Perform search when a site is selected
-        function performSearch() {
-            const query = document.getElementById('searchInput').value.trim();
-            if (selectedSite && query) {
-                const searchUrl = selectedSite + encodeURIComponent(query);
-                window.open(searchUrl, '_blank');
-            }
+       function performSearch() {
+    let query = document.getElementById('searchInput').value.trim();
+
+    if (selectedSite && query) {
+        if (selectedSite.includes("google.com/search")) {
+            query = query + " song official audio";
         }
 
-        // Add event listeners to site buttons
+        const searchUrl = selectedSite + encodeURIComponent(query);
+        window.open(searchUrl, '_blank');
+    }
+}
         document.querySelectorAll('.option-btn[data-url]').forEach(button => {
             button.onclick = () => selectSite(button, button.dataset.url);
         });
@@ -49,7 +45,6 @@
             const siteUrl = document.getElementById('newSiteUrl').value.trim();
 
             if (siteName && siteUrl) {
-                // Validate URL format
                 try {
                     new URL(siteUrl);
                     const button = document.createElement('button');
@@ -58,17 +53,11 @@
                     button.textContent = siteName;
                     button.onclick = () => selectSite(button, siteUrl);
                     siteOptions.insertBefore(button, siteOptions.lastElementChild);
-
-                    // Save to localStorage
                     savedSites.push({ name: siteName, url: siteUrl });
                     localStorage.setItem('customSites', JSON.stringify(savedSites));
-
-                    // Reset form and hide modal
                     document.getElementById('newSiteName').value = '';
                     document.getElementById('newSiteUrl').value = '';
                     toggleAddSiteModal();
-
-                    // Select the new site
                     selectSite(button, siteUrl);
                 } catch (e) {
                     alert('Please enter a valid URL.');
@@ -77,9 +66,6 @@
                 alert('Please enter both a site name and a valid search URL.');
             }
         }
-    </script>
-    <script>
-        
         document.addEventListener("DOMContentLoaded", () => {
             const customMenu = document.querySelector(".custom-menu");
 
@@ -91,7 +77,6 @@
                     customMenu.style.left = `${event.pageX}px`;
                 }
             });
-
             document.addEventListener("click", () => {
                 if (customMenu) {
                     customMenu.style.display = "none";
