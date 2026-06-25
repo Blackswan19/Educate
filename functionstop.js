@@ -97,8 +97,8 @@ function updateSubmitButton() {
     submitContainer.innerHTML = '';
     if (!autoToggle.checked) {
         submitContainer.innerHTML = `
-            <button onclick="manualPlay()" style="width: 45%; max-width:150px; white-space: nowrap;">
-                Play Now
+            <button onclick="manualPlay()" style="white-space: nowrap;">
+                Play
             </button>`;
     }
 }
