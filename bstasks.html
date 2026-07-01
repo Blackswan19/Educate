@@ -1,63 +1,106 @@
-<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>BsTasks</title> <link rel="icon" type="image/x-icon" href="https://i.ibb.co/j5cg3w3/note.png"> <style> @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Orbitron:wght@400..900&family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&family=Strait&display=swap'); * { font-family: "Red Hat Display", sans-serif; list-style: none; margin: 0; padding: 0; box-sizing: border-box; color: #ffffffd4; } * { -webkit-tap-highlight-color: transparent; scrollbar-color: gray transparent; } body { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; } body { width: 100%; background-color: #000000; padding: 10px; margin: 0; overflow-x: hidden; } .container{ position: relative; left: 30%; width: 40%; } .container h1{ text-align: center; position: relative; top: 25px; color: rgb(0 76 255); font-size: 20px; } .todo { filter: drop-shadow(0px -15px 12px black); background-color: #1f1f1f; width: 40%; padding: 25px; border-radius: 35px; border: solid 1px #171717; position: fixed; bottom: 10px; left: 30%; } .todo h1 { display: flex; align-items: center; font-size: 23px; color: rgb(0 76 255); margin-top: -10px; justify-content: center; top: 0px; } .todo h1 img { width: 25px; margin-left: 10px; } .search { display: grid; } input { border: none; outline: none; background: none; padding: 16px; font-size: 1rem; text-align: center; } button { background: rgb(0 6 255); border-radius: 55px; border: none; color: white; text-align: center; cursor: pointer; font-size: 1rem; padding: 14px 45px; /* border: solid 1px #898989; */ } button:hover { transition: 0.5s; background-color: rgba(0, 4, 255, 0.687); } ul#list-container { position: relative; top: 50px; overflow: scroll; height: 540px; overflow-x: hidden; padding-bottom: 10px; scrollbar-width: thin; } ul li { font-size: 16px; padding: 16px 49px 14px 38px; user-select: none; position: relative; cursor: pointer; border-bottom: 1px solid #ffffff29; width: 100%; } ul li::before { content: ''; position: absolute; height: 15px; width: 15px; border-radius: 50%; background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5iP9aTTmIkrw9KVS8bWzYCqgXK5XAImAgg_Z9FUdMTMxsRlkb85jIzB_PtV-6m9_CSCk&usqp=CAU'); background-size: cover; background-position: center; top: 20px; left: 15px; } ul li.checked { color: rgba(0, 0, 0, 0.4); text-decoration: line-through; } ul li.checked::before { background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToor318Vv50HIWt-UchwIecF0JGVznEE-KAgkBmXXWNoQ-_NOYPrcX8_7fyFqnXqK_ZjY&usqp=CAU"); opacity: 15%; } ul li span { position: absolute; right: 10px; top: 6px; font-size: 30px; color: #ffffff; cursor: pointer; } .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: transparent; justify-content: center; align-items: center; backdrop-filter: blur(5px); } .modal-content { background-color: #282828; padding: 20px; border-radius: 30px; text-align: center; } .modal-content h2 { margin-bottom: 10px; font-size: 17px; font-weight: 400; } .modal-content button { background-color: rgb(0, 45, 255); padding: 6px 17px; color: white; border: none; border-radius: 39px; cursor: pointer; } .modal-content button:hover { background-color: rgba(0, 47, 255, 0.822); } video{ width: 6%; position: fixed; left: 34%; } @media screen and (max-width: 480px) { .container{ left: 0px; width: 100%; /* margin: 45% auto; */ } video{ width: 20%; position: fixed; left: 5%; } .todo { width: 97%; border-radius: 35px; position: fixed; bottom: 0px; left: 0px; padding: 25px; margin: 5px; }ul#list-container { position: relative; top: 50px; overflow: scroll; height: 500px; overflow-x: hidden; padding-bottom: 65px; scrollbar-width: none;} } </style> </head> <body> <div class="container"> <div class="titlogo"> <video src="https://v1.pinimg.com/videos/iht/720p/3a/0e/d0/3a0ed08132b15629e5d1971ca513dc20.mp4" muted autoplay></video> <h1>BsTasks</h1> </div> <ul id="list-container"></ul> <div class="todo"> <h1>BsTasks</h1> <div class="search"> <input type="text" id="search-bar" placeholder="Enter your task here....."><br> <button onclick="addTask()">Add this task now</button> </div> </div> </div> <div id="modal" class="modal"> <div class="modal-content"> <h2>You didn't enter any task to add..!</h2> <button onclick="closeModal()">Close</button> </div> </div>
+<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>BsTasks</title> <link rel="icon" type="image/x-icon" href="https://i.ibb.co/j5cg3w3/note.png"> <style> @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap'); * { font-family: 'Poppins', sans-serif; list-style: none; margin: 0;scrollbar-width: none; padding: 0;scrollbar-color: #292929 transparent; box-sizing: border-box; color: #ffffffd4; } * { -webkit-tap-highlight-color: transparent; } body { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; width: 100%; background-color: #000000; padding: 0; margin: 0; overflow-x: hidden; } .container { position: relative; left: 30%; width: 40%; gap: 20px; display: flex; justify-content: center; align-items: center; flex-direction: column; } .container h1{ text-align: center; position: relative; font-weight: 500; font-size: 20px; color: white; } .todo { width: 100%; padding: 15px; border-radius: 35px; box-shadow: 0px 0px 8px rgb(0 0 0 / 21%); background: rgb(255 255 255 / 10%); backdrop-filter: blur(30px); font-weight: 200; z-index: 1000; border: 0.5px solid rgba(255, 255, 255, 0.1); max-width: 600px; position: sticky; bottom: 10px; } .todo h1 { display: flex; align-items: center; justify-content: center; margin-bottom: 10px; } ul#list-container { width: 100%; max-width: 600px; } ul li { font-size: 16px; padding: 10px 0 10px 45px; user-select: none; position: relative; cursor: pointer; border-bottom: 1px solid #ffffff1f; width: 100%; text-transform: capitalize; display: flex; align-items: center; gap: 0px; } /* Unchecked SVG Icon */ ul li::before { content: ''; position: absolute; height: 20px; width: 20px; left: 15px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3C/svg%3E") no-repeat center; background-size: contain; } /* Checked SVG Icon */ ul li.checked::before { background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2300ff88' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='M9 12l2 2 4-4'/%3E%3C/svg%3E") no-repeat center; background-size: contain; } ul li.checked { opacity: 30%; border-bottom: 1px solid #ffffff61; } .modal-content h2 { font-size: 17px; font-weight: 200; padding: 0 0 15px 0; } .delete-btn { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; padding: 5px; border-radius: 50%; transition: 0.3s; width: 30px; height: 30px; display: flex; justify-content: center; align-items: center; z-index: 10; } .delete-btn:hover { background-color: #470000; } span.delete-btn svg { fill: red; } .link { color: white; text-decoration: none; font-size: 12px; margin-left: 10px; padding: 0px 3px; border-radius: 999px; box-shadow: 0px 0px 8px rgb(0 0 0 / 21%); background: rgb(255 255 255 / 16%); backdrop-filter: blur(30px); font-weight: 200; transition: background 0.2s ease-in; border: 0.5px solid rgba(255, 255, 255, 0.1); display: flex; justify-content: center; align-items: center; opacity: 60%; } .link svg { width: 15px; height: 15px; } .link:hover{ opacity: 100%; background: rgba(255, 255, 255, 0.201); } .search { display: grid; } input { border: none; outline: none; padding: 10px; font-size: 18px; text-align: center; margin-bottom: 15px; background: #00000087; border-radius: 999px; } button { background: #0022ff; border-radius: 9999px; border: none; color: white; text-align: center; cursor: pointer; font-size: 18px; padding: 10px; font-weight: 300; width: 100%; display: flex; justify-content: center; align-items: center; gap: 5px; } button:hover { transition: 0.5s; background-color: #0022ffd4; } .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #000000d4; justify-content: center; align-items: center; } .modal-content { background-color: #282828; padding: 20px; border-radius: 30px; text-align: center; } .modal-content button { background-color: rgb(0, 45, 255); padding: 6px 17px; color: white; border: none; border-radius: 39px; cursor: pointer; } .titlogo { display: flex; justify-content: center; align-items: center; gap: 10px; background: black; position: sticky; top: 0; z-index: 100000; } video{ width: 15%; } @media screen and (max-width: 480px) { .container{ left: 0px; width: 100%; } ul#list-container { height: 500px; padding-bottom: 10px; scrollbar-width: none; } } </style> </head> <body> <div class="container"> <div class="titlogo"> <video src="https://v1.pinimg.com/videos/iht/720p/3a/0e/d0/3a0ed08132b15629e5d1971ca513dc20.mp4" muted autoplay loop></video> <h1>BsTasks</h1> </div> <ul id="list-container"></ul> <div class="todo"> <h1>BsTasks</h1> <div class="search"> <input type="text" id="search-bar" placeholder="Enter your task here..."> <input type="url" id="link-bar" class="link-input" placeholder="Paste your link here..." style="display: none;"> <div style="display: flex; gap: 10px; justify-content: space-between; width: 100%;"> <button class="add-link-btn" id="add-link-btn">+ Link</button> <button id="add-task-btn">+ Task</button> </div> </div> </div> </div> <div id="modal" class="modal"> <div class="modal-content"> <h2>You didn't enter any task..!</h2> <button onclick="closeModal()">Close</button> </div> </div>
     <script>
         const searchBar = document.getElementById("search-bar");
+        const linkBar = document.getElementById("link-bar");
+        const addLinkBtn = document.getElementById("add-link-btn");
         const listcontainer = document.getElementById("list-container");
         const modal = document.getElementById("modal");
-        function addTask(){
-            if(searchBar.value === ''){
-                openModal();
-            } else {
-                let li = document.createElement("li");
-                li.innerHTML = searchBar.value;
-                listcontainer.appendChild(li);
+        const addTaskBtn = document.getElementById("add-task-btn");
 
-                let span = document.createElement("span");
-                span.innerHTML = "\u00d7";
-                li.appendChild(span);
+        let linkMode = false;
+document.addEventListener('contextmenu', e => e.preventDefault());
+        addLinkBtn.addEventListener("click", () => {
+            linkMode = !linkMode;
+            if (linkMode) {
+                linkBar.style.display = "block";
+                addLinkBtn.textContent = "− Link";
+            } else {
+                linkBar.style.display = "none";
+                linkBar.value = "";
+                addLinkBtn.textContent = "+ Link";
             }
+        });
+
+        function addTask() {
+            if (searchBar.value.trim() === '') {
+                openModal();
+                return;
+            }
+
+            const taskText = searchBar.value.trim();
+            const link = linkBar.value.trim();
+
+            let li = document.createElement("li");
+            
+            li.innerHTML = `
+                <span class="task-text">${taskText}</span>
+                ${link ? `<a href="${link}" target="_blank" class="link">
+    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M323-140q-75.85 0-129.42-53.58Q140-247.15 140-323q0-36.92 13.66-70.23 13.65-33.31 39.73-59.38L299.16-558q8.92-8.92 21.19-9.11 12.27-.2 21.57 9.11 9.31 9.31 9.31 21.08 0 11.77-9.31 21.07l-106.38 106q-17.77 17.77-26.85 40.23-9.07 22.47-9.07 46.62 0 51.31 36.03 87.15Q271.69-200 323-200q24.15 0 46.92-9.08 22.77-9.07 40.54-26.84l105.77-106q8.92-8.31 20.89-8.5 11.96-.2 21.26 9.11 9.31 9.31 9.31 21.08 0 11.77-9.31 21.07L452.61-193.77q-26.07 26.08-59.38 39.92Q359.92-140 323-140Zm54.62-238q-8.93-8.92-8.93-21.19 0-12.27 8.93-21.19l162-162q8.92-8.93 21.19-9.12 12.27-.19 21.57 9.12 9.31 9.3 9.31 21.38 0 12.08-9.31 21.38L420.38-378q-8.92 8.92-21.38 9.11-12.46.2-21.38-9.11Zm240.46-23.62q-9.31-8.92-9.12-21.07.19-12.16 9.12-21.08l106.38-105.77q17.39-17.38 26.16-39.34 8.76-21.97 8.76-46.12 0-51.92-35.73-88.46Q687.92-760 636-760q-24.15 0-46.62 9.08-22.46 9.07-39.84 26.46L443.77-618.08q-8.92 8.93-21.08 9.12-12.15.19-21.07-9.12-8.93-8.92-8.93-21.19 0-12.27 8.93-21.19l105.77-105.77q26.07-26.08 59.38-39.92Q600.08-820 637-820q75.85 0 129.11 53.77 53.27 53.77 53.27 130.23 0 36.31-13.34 69.42-13.35 33.12-39.43 59.19L660.46-401.62q-8.92 8.93-21.19 8.93-12.27 0-21.19-8.93Z"/></svg> Link
+</a>` : ''}
+            `;
+
+            // Delete Button with SVG
+            let deleteBtn = document.createElement("span");
+            deleteBtn.className = "delete-btn";
+            deleteBtn.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3">
+                    <path d="M480-437.85 277.08-234.92q-8.31 8.3-20.89 8.5-12.57.19-21.27-8.5-8.69-8.7-8.69-21.08 0-12.38 8.69-21.08L437.85-480 234.92-682.92q-8.3-8.31-8.5-20.89-.19-12.57 8.5-21.27 8.7-8.69 21.08-8.69 12.38 0 21.08 8.69L480-522.15l202.92-202.93q8.31-8.3 20.89-8.5 12.57-.19 21.27 8.5 8.69 8.7 8.69 21.08 0 12.38-8.69 21.08L522.15-480l202.93 202.92q8.3 8.31 8.5 20.89.19 12.57-8.5 21.27-8.7 8.69-21.08 8.69-12.38 0-21.08-8.69L480-437.85Z"/>
+                </svg>
+            `;
+            li.appendChild(deleteBtn);
+
+            listcontainer.appendChild(li);
+
+            // Reset
             searchBar.value = "";
+            linkBar.value = "";
+            if (linkMode) {
+                linkMode = false;
+                linkBar.style.display = "none";
+                addLinkBtn.textContent = "+ Add Link";
+            }
+
             saveData();
         }
-        listcontainer.addEventListener("click", function(e){
-            if(e.target.tagName === "LI"){
-                e.target.classList.toggle("checked");
+
+        // Click handler (Fixed for links + delete)
+        listcontainer.addEventListener("click", function(e) {
+            const deleteBtn = e.target.closest(".delete-btn");
+            
+            if (deleteBtn) {
+                deleteBtn.parentElement.remove();
                 saveData();
-            } else if(e.target.tagName === "SPAN"){
-                e.target.parentElement.remove();
+                return;
+            }
+
+            // Toggle check
+            if (e.target.tagName === "LI" || e.target.classList.contains("task-text")) {
+                e.target.closest("li").classList.toggle("checked");
                 saveData();
             }
         });
-        function saveData(){
+
+        function saveData() {
             localStorage.setItem("data", listcontainer.innerHTML);
         }
-        function showTask(){
-            listcontainer.innerHTML = localStorage.getItem("data");
+
+        function showTask() {
+            listcontainer.innerHTML = localStorage.getItem("data") || "";
         }
+
         function openModal() {
             modal.style.display = "flex";
         }
         function closeModal() {
             modal.style.display = "none";
         }
+
+        // Event Listeners
+        addTaskBtn.addEventListener("click", addTask);
+        searchBar.addEventListener("keypress", (e) => { if (e.key === "Enter") addTask(); });
+        linkBar.addEventListener("keypress", (e) => { if (e.key === "Enter") addTask(); });
+
         showTask();
-        document.addEventListener("DOMContentLoaded", () => {
-            const customMenu = document.querySelector(".custom-menu");
-
-            document.addEventListener("contextmenu", (event) => {
-                event.preventDefault();
-                if (customMenu) {
-                    customMenu.style.display = "block";
-                    customMenu.style.top = `${event.pageY}px`;
-                    customMenu.style.left = `${event.pageX}px`;
-                }
-            });
-
-            document.addEventListener("click", () => {
-                if (customMenu) {
-                    customMenu.style.display = "none";
-                }
-            });
-        });
     </script>
 </body>
 </html>
