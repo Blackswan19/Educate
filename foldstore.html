@@ -41,13 +41,13 @@
     }
 
     header {
-        text-align: center;
-    padding: 10px;
+text-align: center;
+    padding:10px;
     background: black;
     position: sticky;
     top: 0;
-    z-index: 10000;
-    }
+    z-index: 100;
+}
 
     h2 {
           font-size: 30px;
@@ -57,8 +57,8 @@
 
     .file-list {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-    gap: 25px 10px;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
     padding: 30px 10px 10px 10px;
     }
 
@@ -227,6 +227,7 @@ input[type="file"] {
       color: #88889a;
       font-size: 28px;
       cursor: pointer;
+          z-index: 1000000000;
     }
 
     .uploaded-files {
@@ -255,8 +256,8 @@ input[type="file"] {
     width: 180px;
     }
 .file svg {
-    width: 60px;
-    height: 60px;
+    width: 90px;
+    height: 90px;
     fill: #0200ff;
     cursor: pointer;
 }
