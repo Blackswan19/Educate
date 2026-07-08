@@ -1,3 +1,4 @@
+document.addEventListener('contextmenu', e => e.preventDefault());
 let imagesArray = [];
 let textInputs = [];
 const storageKey = 'userInputs';
@@ -47,7 +48,7 @@ function addThumbnailToDOM(imgUrl, thumbnailsContainer, displayImage) {
   thumbnail.src = imgUrl;
 
   const deleteIcon = document.createElement('span');
-  deleteIcon.innerHTML = '<i class="fa-solid fa-ban delete-icon"></i>';
+  deleteIcon.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M480-437.85 277.08-234.92q-8.31 8.3-20.89 8.5-12.57.19-21.27-8.5-8.69-8.7-8.69-21.08 0-12.38 8.69-21.08L437.85-480 234.92-682.92q-8.3-8.31-8.5-20.89-.19-12.57 8.5-21.27 8.7-8.69 21.08-8.69 12.38 0 21.08 8.69L480-522.15l202.92-202.93q8.31-8.3 20.89-8.5 12.57-.19 21.27 8.5 8.69 8.7 8.69 21.08 0 12.38-8.69 21.08L522.15-480l202.93 202.92q8.3 8.31 8.5 20.89.19 12.57-8.5 21.27-8.7 8.69-21.08 8.69-12.38 0-21.08-8.69L480-437.85Z"/></svg>';
   deleteIcon.onclick = function() {
     deleteImage(imgUrl);
   };
