@@ -98,7 +98,7 @@ function updateSubmitButton() {
     if (!autoToggle.checked) {
         submitContainer.innerHTML = `
             <button onclick="manualPlay()" style="white-space: nowrap;">
-                Play
+                Play Now
             </button>`;
     }
 }
@@ -215,9 +215,7 @@ function showRecommendations(searchQuery = '') {
                     <img src="${video.thumbnail}"
                          class="thumbnail-circle"
                          onclick="openThumbPopup('${vid}', '${escapeJsString(video.title)}', '${video.url}')"
-                         style="cursor:pointer; transition:transform .2s;"
-                         onmouseover="this.style.transform='scale(1.1)'"
-                         onmouseout="this.style.transform='scale(1)'">
+                         style="cursor:pointer;">
                     <div class="afterimageoptions">
     <a href="${video.url}" target="_self" style="flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
                         ${video.isPinned ? 'Pinned ' : ''}#BS// ${video.title} //Adstoper
@@ -228,7 +226,7 @@ function showRecommendations(searchQuery = '') {
   ${video.isPinned 
     ? `
       <!-- Toggle ON SVG (blue) -->
-      <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M280-240q-100 0-170-70T40-480q0-100 70-170t170-70h400q100 0 170 70t70 170q0 100-70 170t-170 70H280Zm485-155q35-35 35-85t-35-85q-35-35-85-35t-85 35q-35 35-35 85t35 85q35 35 85 35t85-35Z"/></svg>
+      <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#00e1ff"><path d="M280-240q-100 0-170-70T40-480q0-100 70-170t170-70h400q100 0 170 70t70 170q0 100-70 170t-170 70H280Zm485-155q35-35 35-85t-35-85q-35-35-85-35t-85 35q-35 35-35 85t35 85q35 35 85 35t85-35Z"/></svg>
       ` 
     : `
       <!-- Toggle OFF SVG (gray) -->
