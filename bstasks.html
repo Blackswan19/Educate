@@ -1,106 +1,298 @@
-<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>BsTasks</title> <link rel="icon" type="image/x-icon" href="tasksave_logo.png"> <style> @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap'); * { font-family: 'Poppins', sans-serif; list-style: none; margin: 0;scrollbar-width: none; padding: 0;scrollbar-color: #292929 transparent; box-sizing: border-box; color: #ffffffd4; } * { -webkit-tap-highlight-color: transparent; } body { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; width: 100%; background-color: #000000; padding: 0; margin: 0; overflow-x: hidden; } .container { position: absolute; left: 50%; width: 100%; gap: 20px; display: flex; justify-content: center; align-items: center; flex-direction: column; max-width: 600px; transform: translate(-50%, 0); } .container h1{ text-align: center; position: relative; font-weight: 500; font-size: 20px; color: white; } .todo { width: 95%; padding: 15px; border-radius: 35px; box-shadow: 0px 0px 8px rgb(0 0 0 / 21%); background: rgb(255 255 255 / 10%); backdrop-filter: blur(30px); font-weight: 200; z-index: 1000; border: 0.5px solid rgba(255, 255, 255, 0.1); max-width: 600px; position: sticky; bottom: 10px; } .todo h1 { display: flex; align-items: center; justify-content: center; margin-bottom: 10px; } ul#list-container { width: 100%; max-width: 600px; } ul li { font-size: 16px; padding: 10px 0 10px 45px; user-select: none; position: relative; cursor: pointer; border-bottom: 1px solid #ffffff1f; width: 100%; text-transform: capitalize; display: flex; align-items: center; gap: 0px; } /* Unchecked SVG Icon */ ul li::before { content: ''; position: absolute; height: 20px; width: 20px; left: 15px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3C/svg%3E") no-repeat center; background-size: contain; } /* Checked SVG Icon */ ul li.checked::before { background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2300ff88' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='M9 12l2 2 4-4'/%3E%3C/svg%3E") no-repeat center; background-size: contain; } ul li.checked { opacity: 30%; border-bottom: 1px solid #ffffff61; } .modal-content h2 { font-size: 17px; font-weight: 200; padding: 0 0 15px 0; } span.task-text { width: 90%; } .delete-btn { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; padding: 5px; border-radius: 50%; transition: 0.3s; width: 30px; height: 30px; display: flex; justify-content: center; align-items: center; z-index: 10; } .delete-btn:hover { background-color: #470000; } span.delete-btn svg { fill: red; } .link { color: white; text-decoration: none; font-size: 12px; margin-left: 10px; padding: 0px 3px; border-radius: 999px; box-shadow: 0px 0px 8px rgb(0 0 0 / 21%); background: rgb(255 255 255 / 16%); backdrop-filter: blur(30px); font-weight: 200; transition: background 0.2s ease-in; border: 0.5px solid rgba(255, 255, 255, 0.1); display: flex; justify-content: center; align-items: center; opacity: 60%; } .link svg { width: 15px; height: 15px; } .link:hover{ opacity: 100%; background: rgba(255, 255, 255, 0.201); } .search { display: grid; } input { border: none; outline: none; padding: 10px; font-size: 18px; text-align: center; margin-bottom: 15px; background: #00000087; border-radius: 999px; } button { background: #0022ff; border-radius: 9999px; border: none; color: white; text-align: center; cursor: pointer; font-size: 18px; padding: 10px 0; font-weight: 300; width: 100%; display: flex; justify-content: center; align-items: center; gap: 5px; } button:hover { transition: 0.5s; background-color: #0022ffd4; } .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #000000d4; justify-content: center; align-items: center; } .modal-content { background-color: #282828; padding: 20px; border-radius: 30px; text-align: center; } .modal-content button { background-color: rgb(0, 45, 255); padding: 6px 17px; color: white; border: none; border-radius: 39px; cursor: pointer; } .titlogo { display: flex; justify-content: center; align-items: center; gap: 10px; background: linear-gradient(180deg, black 10%, transparent); position: sticky; top: 0; z-index: 100000; width: 100%; padding: 10px; } video{ width: 15%; } </style> </head> <body> <div class="container"> <div class="titlogo"> <img style=" width: 70px; " src="tasksave_logo.png" alt=""> <!-- <h1>BsTasks</h1> --> </div> <ul id="list-container"></ul> <div class="todo"> <h1>BsTasks</h1> <div class="search"> <input type="text" id="search-bar" placeholder="Enter your task here..."> <input type="url" id="link-bar" class="link-input" placeholder="Paste your link here..." style="display: none;"> <div style="display: flex; gap: 10px; justify-content: space-between; width: 100%;"> <button class="add-link-btn" id="add-link-btn">+ Link</button> <button id="add-task-btn">+ Task</button> </div> </div> </div> </div> <div id="modal" class="modal"> <div class="modal-content"> <h2>You didn't enter any task..!</h2> <button onclick="closeModal()">Close</button> </div> </div>
-<script>
-        const searchBar = document.getElementById("search-bar");
+<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>BsTasks</title> <link rel="icon" type="image/x-icon" href="tasksave_logo.png"> <style> @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap'); * { font-family: 'Poppins', sans-serif; list-style: none; margin: 0; padding: 0; box-sizing: border-box; color: #ffffffd4; scrollbar-width: none; } *::-webkit-scrollbar { display: none; } * { -webkit-tap-highlight-color: transparent; } * { -webkit-tap-highlight-color: transparent; } body { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; } body { -webkit-user-select: none; user-select: none; width: 100%; background-color: #000000; padding: 0; margin: 0; overflow-x: hidden; min-height: 100vh; } .container { position: absolute; left: 50%; width: 100%; gap: 16px; display: flex; justify-content: flex-start; align-items: center; flex-direction: column; max-width: 600px; transform: translate(-50%, 0); padding-bottom: 235px; padding-top: 10px; } .titlogo { display: flex; justify-content: center; align-items: center; gap: 10px; background: linear-gradient(180deg, black 70%, transparent); position: sticky; top: 0; z-index: 100000; width: 100%; padding: 10px; } .titlogo img { width: 50px; } /* Category Section */ .category { width: 95%; background: rgb(255 255 255 / 8%); backdrop-filter: blur(30px); border: 0.5px solid rgba(255, 255, 255, 0.1); border-radius: 24px; padding: 12px 12px 8px; margin-bottom: 8px; } .category-header { display: flex; align-items: center; justify-content: space-between; padding: 6px 8px 10px; gap: 10px; } .category-name { font-size: 17px; font-weight: 500; color: #ffffff; flex: 1; text-transform: capitalize; outline: none; background: transparent; border: none; min-width: 0; } .category-name:focus { background: rgba(255, 255, 255, 0.08); border-radius: 8px; padding: 4px 8px; } .cat-actions { display: flex; gap: 6px; align-items: center; } .cat-delete-btn { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; background: transparent; border: none; transition: 0.2s; } div#categories-container { width: 100%; display: flex; justify-content: center; align-items: center; flex-direction: column; } .cat-delete-btn:hover { background: #470000; } .cat-delete-btn svg { width: 18px; height: 18px; fill: #ff5555; } .task-count { font-size: 12px; opacity: 0.5; white-space: nowrap; } /* Tasks inside category */ .tasks-list { width: 100%; } .tasks-list li { font-size: 15px; padding: 11px 40px 11px 42px; position: relative; cursor: pointer; border-bottom: 1px solid #ffffff12; display: flex; align-items: center; gap: 0; text-transform: capitalize; } .tasks-list li:last-child { border-bottom: none; } /* Unchecked */ .tasks-list li::before { content: ''; position: absolute; height: 20px; width: 20px; left: 12px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3C/svg%3E") no-repeat center; background-size: contain; } /* Checked */ .tasks-list li.checked::before { background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2300ff88' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='M9 12l2 2 4-4'/%3E%3C/svg%3E") no-repeat center; background-size: contain; } .tasks-list li.checked { opacity: 0.35; } .tasks-list li.checked .task-text { text-decoration: line-through; } span.task-text { width: 85%; word-break: break-word; } .delete-btn { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); cursor: pointer; width: 28px; height: 28px; display: flex; justify-content: center; align-items: center; border-radius: 50%; z-index: 10; transition: 0.2s; } .delete-btn:hover { background-color: #470000; } .delete-btn svg { width: 16px; height: 16px; fill: #ff5555; } .link { color: white; text-decoration: none; font-size: 11px; margin-left: 8px; padding: 2px 7px; border-radius: 999px; background: rgb(255 255 255 / 14%); border: 0.5px solid rgba(255, 255, 255, 0.1); display: inline-flex; align-items: center; gap: 3px; opacity: 0.7; flex-shrink: 0; } .link svg { width: 13px; height: 13px; } .link:hover { opacity: 1; background: rgba(255, 255, 255, 0.22); } /* Bottom sticky panel */ .todo { width: 98%; max-width: 600px; padding: 16px; border-radius: 28px; box-shadow: 0px 0px 20px rgb(0 0 0 / 40%); background: rgb(255 255 255 / 10%); backdrop-filter: blur(30px); border: 0.5px solid rgba(255, 255, 255, 0.12); position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%); z-index: 1000; } .todo h1 { text-align: center; font-weight: 500; font-size: 18px; color: white; margin-bottom: 12px; } .search { display: flex; flex-direction: column; gap: 8px; } input { border: none; outline: none; padding: 11px 16px; font-size: 15px; text-align: center; background: #00000087; border-radius: 999px; width: 100%; color: #fff; } input::placeholder { color: #ffffff70; } .btn-row { display: flex; gap: 8px; width: 100%; } button { background: #0022ff; border-radius: 9999px; border: none; color: white; cursor: pointer; font-size: 15px; padding: 11px 0; font-weight: 400; flex: 1; display: flex; justify-content: center; align-items: center; gap: 5px; transition: 0.25s; } button:hover { background-color: #0022ffd4; } button.secondary { background: rgba(255, 255, 255, 0.12); } button.secondary:hover { background: rgba(255, 255, 255, 0.2); } button.active { background: #00aa55; } /* Category selector */ .cat-select-wrap { display: none; width: 100%; } .cat-select-wrap.show { display: block; } select#category-select { width: 100%; padding: 11px 16px; border-radius: 999px; background: #00000087; border: none; color: #fff; font-size: 14px; outline: none; text-align: center; appearance: none; cursor: pointer; } select#category-select option { background: #1a1a1a; color: #fff; } /* Modal */ .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #000000d4; justify-content: center; align-items: center; z-index: 9999; } .modal-content { background-color: #282828; padding: 24px; border-radius: 24px; text-align: center; width: 85%; max-width: 320px; } .modal-content h2 { font-size: 16px; font-weight: 400; margin-bottom: 18px; line-height: 1.4; } .modal-content button { background-color: rgb(0, 45, 255); padding: 8px 24px; border-radius: 39px; width: auto; flex: none; } .empty-state { text-align: center; padding: 40px 20px; opacity: 0.45; font-size: 15px; } .empty-state span { display: block; font-size: 32px; margin-bottom: 8px; } </style> </head> <body> <div class="container"> <div class="titlogo"> <img src="tasksave_logo.png" alt="BsTasks"> </div> <div id="categories-container"></div> </div> <!-- Bottom panel --> <div class="todo"> <h1>BsTasks</h1> <div class="search"> <input type="text" id="main-input" placeholder="Enter task or category name..."> <input type="url" id="link-bar" placeholder="Paste link (optional)..." style="display:none;"> <div class="cat-select-wrap" id="cat-select-wrap"> <select id="category-select"> <option value="">Select category</option> </select> </div> <div class="btn-row"> <button class="secondary" id="toggle-link-btn">+ Link</button> <button class="secondary" id="add-category-btn">+ Category</button> <button id="add-task-btn">+ Task</button> </div> </div> </div> <!-- Modal --> <div id="modal" class="modal"> <div class="modal-content"> <h2 id="modal-message">Something went wrong</h2> <button onclick="closeModal()">Close</button> </div> </div>
+    <script>
+        // ========== DATA ==========
+        let data = {
+            categories: [] // { id, name, tasks: [{ id, text, link, checked }] }
+        };
+
+        const categoriesContainer = document.getElementById("categories-container");
+        const mainInput = document.getElementById("main-input");
         const linkBar = document.getElementById("link-bar");
-        const addLinkBtn = document.getElementById("add-link-btn");
-        const listcontainer = document.getElementById("list-container");
-        const modal = document.getElementById("modal");
+        const toggleLinkBtn = document.getElementById("toggle-link-btn");
+        const addCategoryBtn = document.getElementById("add-category-btn");
         const addTaskBtn = document.getElementById("add-task-btn");
-
+        const catSelectWrap = document.getElementById("cat-select-wrap");
+        const categorySelect = document.getElementById("category-select");
+        const modal = document.getElementById("modal");
+        const modalMessage = document.getElementById("modal-message");
+        // document.addEventListener('contextmenu', e => e.preventDefault());
         let linkMode = false;
-document.addEventListener('contextmenu', e => e.preventDefault());
-        addLinkBtn.addEventListener("click", () => {
-            linkMode = !linkMode;
-            if (linkMode) {
-                linkBar.style.display = "block";
-                addLinkBtn.textContent = "− Link";
-            } else {
-                linkBar.style.display = "none";
-                linkBar.value = "";
-                addLinkBtn.textContent = "+ Link";
+        let uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+
+        // ========== LOAD / SAVE ==========
+        function loadData() {
+            const saved = localStorage.getItem("bstasks_data");
+            if (saved) {
+                try {
+                    data = JSON.parse(saved);
+                } catch (e) {
+                    data = { categories: [] };
+                }
             }
-        });
-
-        function addTask() {
-            if (searchBar.value.trim() === '') {
-                openModal();
-                return;
-            }
-
-            const taskText = searchBar.value.trim();
-            const link = linkBar.value.trim();
-
-            let li = document.createElement("li");
-            
-            li.innerHTML = `
-                <span class="task-text">${taskText}</span>
-                ${link ? `<a href="${link}" target="_blank" class="link">
-    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M323-140q-75.85 0-129.42-53.58Q140-247.15 140-323q0-36.92 13.66-70.23 13.65-33.31 39.73-59.38L299.16-558q8.92-8.92 21.19-9.11 12.27-.2 21.57 9.11 9.31 9.31 9.31 21.08 0 11.77-9.31 21.07l-106.38 106q-17.77 17.77-26.85 40.23-9.07 22.47-9.07 46.62 0 51.31 36.03 87.15Q271.69-200 323-200q24.15 0 46.92-9.08 22.77-9.07 40.54-26.84l105.77-106q8.92-8.31 20.89-8.5 11.96-.2 21.26 9.11 9.31 9.31 9.31 21.08 0 11.77-9.31 21.07L452.61-193.77q-26.07 26.08-59.38 39.92Q359.92-140 323-140Zm54.62-238q-8.93-8.92-8.93-21.19 0-12.27 8.93-21.19l162-162q8.92-8.93 21.19-9.12 12.27-.19 21.57 9.12 9.31 9.3 9.31 21.38 0 12.08-9.31 21.38L420.38-378q-8.92 8.92-21.38 9.11-12.46.2-21.38-9.11Zm240.46-23.62q-9.31-8.92-9.12-21.07.19-12.16 9.12-21.08l106.38-105.77q17.39-17.38 26.16-39.34 8.76-21.97 8.76-46.12 0-51.92-35.73-88.46Q687.92-760 636-760q-24.15 0-46.62 9.08-22.46 9.07-39.84 26.46L443.77-618.08q-8.92 8.93-21.08 9.12-12.15.19-21.07-9.12-8.93-8.92-8.93-21.19 0-12.27 8.93-21.19l105.77-105.77q26.07-26.08 59.38-39.92Q600.08-820 637-820q75.85 0 129.11 53.77 53.27 53.77 53.27 130.23 0 36.31-13.34 69.42-13.35 33.12-39.43 59.19L660.46-401.62q-8.92 8.93-21.19 8.93-12.27 0-21.19-8.93Z"/></svg> Link
-</a>` : ''}
-            `;
-
-            // Delete Button with SVG
-            let deleteBtn = document.createElement("span");
-            deleteBtn.className = "delete-btn";
-            deleteBtn.innerHTML = `
-                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3">
-                    <path d="M480-437.85 277.08-234.92q-8.31 8.3-20.89 8.5-12.57.19-21.27-8.5-8.69-8.7-8.69-21.08 0-12.38 8.69-21.08L437.85-480 234.92-682.92q-8.3-8.31-8.5-20.89-.19-12.57 8.5-21.27 8.7-8.69 21.08-8.69 12.38 0 21.08 8.69L480-522.15l202.92-202.93q8.31-8.3 20.89-8.5 12.57-.19 21.27 8.5 8.69 8.7 8.69 21.08 0 12.38-8.69 21.08L522.15-480l202.93 202.92q8.3 8.31 8.5 20.89.19 12.57-8.5 21.27-8.7 8.69-21.08 8.69-12.38 0-21.08-8.69L480-437.85Z"/>
-                </svg>
-            `;
-            li.appendChild(deleteBtn);
-
-            listcontainer.appendChild(li);
-
-            // Reset
-            searchBar.value = "";
-            linkBar.value = "";
-            if (linkMode) {
-                linkMode = false;
-                linkBar.style.display = "none";
-                addLinkBtn.textContent = "+ Add Link";
-            }
-
-            saveData();
+            render();
         }
-
-        // Click handler (Fixed for links + delete)
-        listcontainer.addEventListener("click", function(e) {
-            const deleteBtn = e.target.closest(".delete-btn");
-            
-            if (deleteBtn) {
-                deleteBtn.parentElement.remove();
-                saveData();
-                return;
-            }
-
-            // Toggle check
-            if (e.target.tagName === "LI" || e.target.classList.contains("task-text")) {
-                e.target.closest("li").classList.toggle("checked");
-                saveData();
-            }
-        });
 
         function saveData() {
-            localStorage.setItem("data", listcontainer.innerHTML);
+            localStorage.setItem("bstasks_data", JSON.stringify(data));
         }
 
-        function showTask() {
-            listcontainer.innerHTML = localStorage.getItem("data") || "";
+        // ========== RENDER ==========
+        function render() {
+            categoriesContainer.innerHTML = "";
+
+            if (data.categories.length === 0) {
+                categoriesContainer.innerHTML = `
+                    <div class="empty-state">
+                        <span>📂</span>
+                        Create a category to get started
+                    </div>`;
+                updateCategorySelect();
+                return;
+            }
+
+            data.categories.forEach(cat => {
+                const catEl = document.createElement("div");
+                catEl.className = "category";
+                catEl.dataset.id = cat.id;
+
+                const completed = cat.tasks.filter(t => t.checked).length;
+                const total = cat.tasks.length;
+
+                catEl.innerHTML = `
+                    <div class="category-header">
+                        <input class="category-name" value="${escapeHtml(cat.name)}" data-id="${cat.id}">
+                        <div class="cat-actions">
+                            <span class="task-count">${completed}/${total}</span>
+                            <button class="cat-delete-btn" data-id="${cat.id}" title="Delete category">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                    <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <ul class="tasks-list" data-cat="${cat.id}"></ul>
+                `;
+
+                const tasksList = catEl.querySelector(".tasks-list");
+
+                cat.tasks.forEach(task => {
+                    const li = document.createElement("li");
+                    if (task.checked) li.classList.add("checked");
+                    li.dataset.id = task.id;
+                    li.dataset.cat = cat.id;
+
+                    li.innerHTML = `
+                        <span class="task-text">${escapeHtml(task.text)}</span>
+                        ${task.link ? `
+                            <a href="${escapeHtml(task.link)}" target="_blank" class="link" onclick="event.stopPropagation()">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24" fill="#e3e3e3">
+                                    <path d="M440-280H280q-83 0-141.5-58.5T80-480q0-83 58.5-141.5T280-680h160v80H280q-50 0-85 35t-35 85q0 50 35 85t85 35h160v80ZM320-440v-80h320v80H320Zm200 160v-80h160q50 0 85-35t35-85q0-50-35-85t-85-35H520v-80h160q83 0 141.5 58.5T880-480q0 83-58.5 141.5T680-280H520Z"/>
+                                </svg>
+                                Link
+                            </a>` : ""}
+                        <span class="delete-btn" data-task="${task.id}" data-cat="${cat.id}">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/>
+                            </svg>
+                        </span>
+                    `;
+                    tasksList.appendChild(li);
+                });
+
+                categoriesContainer.appendChild(catEl);
+            });
+
+            updateCategorySelect();
+            attachEvents();
         }
 
-        function openModal() {
+        function updateCategorySelect() {
+            categorySelect.innerHTML = `<option value="">Select category</option>`;
+            data.categories.forEach(cat => {
+                const opt = document.createElement("option");
+                opt.value = cat.id;
+                opt.textContent = cat.name;
+                categorySelect.appendChild(opt);
+            });
+
+            if (data.categories.length > 0) {
+                catSelectWrap.classList.add("show");
+            } else {
+                catSelectWrap.classList.remove("show");
+            }
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement("div");
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // ========== EVENTS ==========
+        function attachEvents() {
+            // Delete category
+            document.querySelectorAll(".cat-delete-btn").forEach(btn => {
+                btn.onclick = (e) => {
+                    e.stopPropagation();
+                    const id = btn.dataset.id;
+                    if (confirm("Delete this category and all its tasks?")) {
+                        data.categories = data.categories.filter(c => c.id !== id);
+                        saveData();
+                        render();
+                    }
+                };
+            });
+
+            // Rename category
+            document.querySelectorAll(".category-name").forEach(input => {
+                input.onchange = () => {
+                    const id = input.dataset.id;
+                    const cat = data.categories.find(c => c.id === id);
+                    if (cat) {
+                        cat.name = input.value.trim() || "Untitled";
+                        saveData();
+                        updateCategorySelect();
+                    }
+                };
+                input.onkeydown = (e) => {
+                    if (e.key === "Enter") input.blur();
+                };
+            });
+
+            // Task click (toggle / delete)
+            document.querySelectorAll(".tasks-list li").forEach(li => {
+                li.onclick = (e) => {
+                    if (e.target.closest(".delete-btn") || e.target.closest("a")) return;
+
+                    const taskId = li.dataset.id;
+                    const catId = li.dataset.cat;
+                    const cat = data.categories.find(c => c.id === catId);
+                    if (!cat) return;
+
+                    const task = cat.tasks.find(t => t.id === taskId);
+                    if (task) {
+                        task.checked = !task.checked;
+                        saveData();
+                        render();
+                    }
+                };
+            });
+
+            // Delete task
+            document.querySelectorAll(".delete-btn").forEach(btn => {
+                btn.onclick = (e) => {
+                    e.stopPropagation();
+                    const taskId = btn.dataset.task;
+                    const catId = btn.dataset.cat;
+                    const cat = data.categories.find(c => c.id === catId);
+                    if (cat) {
+                        cat.tasks = cat.tasks.filter(t => t.id !== taskId);
+                        saveData();
+                        render();
+                    }
+                };
+            });
+        }
+
+        // ========== ACTIONS ==========
+        function showModal(msg) {
+            modalMessage.textContent = msg;
             modal.style.display = "flex";
         }
+
         function closeModal() {
             modal.style.display = "none";
         }
 
-        // Event Listeners
-        addTaskBtn.addEventListener("click", addTask);
-        searchBar.addEventListener("keypress", (e) => { if (e.key === "Enter") addTask(); });
-        linkBar.addEventListener("keypress", (e) => { if (e.key === "Enter") addTask(); });
+        // Toggle link input
+        toggleLinkBtn.addEventListener("click", () => {
+            linkMode = !linkMode;
+            linkBar.style.display = linkMode ? "block" : "none";
+            toggleLinkBtn.textContent = linkMode ? "− Link" : "+ Link";
+            toggleLinkBtn.classList.toggle("active", linkMode);
+            if (!linkMode) linkBar.value = "";
+        });
 
-        showTask();
+        // Add Category
+        addCategoryBtn.addEventListener("click", () => {
+            const name = mainInput.value.trim();
+            if (!name) {
+                showModal("Enter a category name first");
+                return;
+            }
+
+            // Prevent duplicate names
+            if (data.categories.some(c => c.name.toLowerCase() === name.toLowerCase())) {
+                showModal("Category already exists");
+                return;
+            }
+
+            data.categories.push({
+                id: uid(),
+                name: name,
+                tasks: []
+            });
+
+            mainInput.value = "";
+            saveData();
+            render();
+        });
+
+        // Add Task
+        addTaskBtn.addEventListener("click", addTask);
+        mainInput.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") addTask();
+        });
+        linkBar.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") addTask();
+        });
+
+        function addTask() {
+            const text = mainInput.value.trim();
+            if (!text) {
+                showModal("You didn't enter any task..!");
+                return;
+            }
+
+            if (data.categories.length === 0) {
+                showModal("Create a category first");
+                return;
+            }
+
+            let catId = categorySelect.value;
+            if (!catId) {
+                // default to last category
+                catId = data.categories[data.categories.length - 1].id;
+            }
+
+            const cat = data.categories.find(c => c.id === catId);
+            if (!cat) {
+                showModal("Selected category not found");
+                return;
+            }
+
+            cat.tasks.push({
+                id: uid(),
+                text: text,
+                link: linkBar.value.trim() || "",
+                checked: false
+            });
+
+            mainInput.value = "";
+            linkBar.value = "";
+            if (linkMode) {
+                linkMode = false;
+                linkBar.style.display = "none";
+                toggleLinkBtn.textContent = "+ Link";
+                toggleLinkBtn.classList.remove("active");
+            }
+
+            saveData();
+            render();
+        }
+
+        // Init
+        loadData();
     </script>
 </body>
 </html>
